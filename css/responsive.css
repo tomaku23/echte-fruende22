@@ -1,0 +1,211 @@
+/* =====================================================
+   ECHTE FRÜNDE '22
+   RESPONSIVE.CSS
+   VERSION 3.1
+   MOBILE FIRST
+===================================================== */
+
+
+
+/* =====================================================
+   TABLET
+   ab 768px
+===================================================== */
+
+@media (min-width:768px){
+
+    .container{
+
+        width:min(100% - 60px,var(--container));
+
+    }
+
+    .button-group{
+
+        justify-content:flex-start;
+
+    }
+
+}
+
+/* =====================================================
+   LAPTOP
+   ab 992px
+===================================================== */
+
+@media (min-width:992px){
+
+    .story{
+
+        grid-template-columns:1fr 1fr;
+
+        gap:80px;
+
+    }
+
+    .story.reverse{
+
+        direction:rtl;
+
+    }
+
+    .story.reverse > *{
+
+        direction:ltr;
+
+    }
+
+    .card-grid{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+    .facts{
+
+        grid-template-columns:repeat(4,1fr);
+
+    }
+
+}
+
+/* =====================================================
+   SMARTPHONE
+   bis 767px
+===================================================== */
+
+@media (max-width:767px){
+
+    /* Header */
+
+    .header-inner{
+
+        min-height:90px;
+
+    }
+
+    .logo img{
+
+        height:52px;
+
+    }
+
+    /* Navigation */
+
+    .nav-top{
+
+        gap:18px;
+
+        flex-wrap:wrap;
+
+    }
+
+    .nav-top a{
+
+        font-size:.95rem;
+
+    }
+
+    /* Hero */
+
+    .hero{
+
+        min-height:70svh;
+
+    }
+
+    .hero-content{
+
+        bottom:6%;
+
+    }
+
+    /* Story */
+
+    .story{
+
+        grid-template-columns:1fr;
+
+        gap:40px;
+
+    }
+
+    /* Cards */
+
+    .card-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    /* Facts */
+
+    .facts{
+
+        grid-template-columns:1fr;
+
+    }
+
+    /* Polaroids */
+
+    .polaroid{
+
+        max-width:320px;
+
+        margin:auto;
+
+    }
+
+    .polaroid-group{
+
+        gap:30px;
+
+    }
+
+    /* Footer */
+
+    .footer-links{
+
+        flex-direction:column;
+
+        gap:16px;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SMALL SMARTPHONE
+   bis 400px
+===================================================== */
+
+@media (max-width:400px){
+
+    .container{
+
+        width:min(100% - 24px,var(--container));
+
+    }
+
+    h1{
+
+        font-size:2.3rem;
+
+    }
+
+    h2{
+
+        font-size:1.8rem;
+
+    }
+
+    .btn,
+    .btn-outline{
+
+        width:100%;
+
+    }
+
+}

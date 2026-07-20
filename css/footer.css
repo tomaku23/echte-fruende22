@@ -1,0 +1,127 @@
+/*
+=====================================================
+ ECHTE FRÜNDE '22
+ FOOTER.CSS
+ Version 4.0
+
+ EF22 FRAMEWORK
+=====================================================
+*/
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.footer{
+
+    min-height:200px;
+
+    padding:48px 20px 32px;
+
+    background:var(--black);
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+/* ==========================================
+   CONTAINER
+========================================== */
+
+.footer .container{
+
+    width:min(100% - 40px,var(--container));
+
+    margin:0 auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    min-height:120px;
+
+    text-align:center;
+
+}
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
+.footer-navigation{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:32px;
+
+    flex-wrap:wrap;
+
+    margin-top:-18px;
+
+    margin-bottom:32px;
+
+}
+
+/* ==========================================
+   NAVIGATION LINKS
+========================================== */
+
+.footer-navigation a{
+
+    color:rgba(255,255,255,.92);
+
+    text-decoration:none;
+
+    font-weight:500;
+
+    transition:
+
+        color .25s ease,
+
+        transform .25s ease;
+
+}
+
+.footer-navigation a:hover{
+
+    color:var(--green);
+
+    transform:translateY(-2px);
+
+}
+
+/* ==========================================
+   COPYRIGHT
+========================================== */
+
+.footer p{
+
+    margin:20px 0 0;
+
+    text-align:center;
+
+}
+
+.footer-copyright{
+
+    font-size:.95rem;
+
+    color:rgba(255,255,255,.82);
+
+}
+
+.footer-rights{
+
+    font-size:.78rem;
+
+    color:rgba(255,255,255,.60);
+
+}

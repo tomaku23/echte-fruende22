@@ -1,0 +1,760 @@
+<!--
+=====================================================
+ ECHTE FRÜNDE '22
+ TERMINE.HTML
+ Version 4.0
+
+ EF22 FRAMEWORK REFERENCE
+
+ Status
+
+ ✔ Architektur
+ ✔ Komponenten
+ ✔ Dokumentation
+ ✔ Referenzdatei
+
+=====================================================
+-->
+
+<!DOCTYPE html>
+
+<html lang="de">
+
+<head>
+
+    <!-- ==========================================
+         META
+    =========================================== -->
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Kalender, Veranstaltungen und Highlights der Echten Fründe '22.">
+
+    <meta
+        name="theme-color"
+        content="#0A0A0A">
+
+    <!-- ==========================================
+         TITLE
+    =========================================== -->
+
+    <title>
+
+        Termine | Echte Fründe '22'
+
+    </title>
+
+    <!-- ==========================================
+         FORMAT DETECTION
+    =========================================== -->
+
+    <meta
+        name="format-detection"
+        content="telephone=no, address=no, email=no">
+
+    <!-- ==========================================
+         GOOGLE FONTS
+    =========================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- ==========================================
+         EXTERNE BIBLIOTHEKEN
+    =========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css">
+
+    <!-- ==========================================
+     FRAMEWORK CSS
+========================================== -->
+
+<link
+    rel="stylesheet"
+    href="css/framework.css">
+
+<link
+    rel="stylesheet"
+    href="css/header.css">
+
+<link
+    rel="stylesheet"
+    href="css/hero.css">
+
+<link
+    rel="stylesheet"
+    href="css/footer.css">
+
+<link
+    rel="stylesheet"
+    href="css/navigation-indicator.css">
+    
+    <!-- ==========================================
+         KOMPONENTEN CSS
+    =========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/header.css">
+        
+    <link
+        rel="stylesheet"
+        href="css/hero.css">
+
+    <link
+        rel="stylesheet"
+        href="css/footer.css">
+        
+    <link
+        rel="stylesheet"
+        href="css/components.css">
+
+    <!-- ==========================================
+         SEITE CSS
+    =========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/calendar.css">
+
+    <!-- ==========================================
+         ANIMATIONEN CSS
+    =========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/animations.css">
+
+    <!-- ==========================================
+         RESPONSIVE CSS
+    =========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/responsive.css">
+
+</head>
+
+<body>
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <header class="header">
+
+        <div class="header-inner">
+
+            <!-- ======================================
+                 LOGO
+            ======================================= -->
+
+            <div class="logo-track">
+
+                <div class="logo-progress"></div>
+
+                <div
+                    class="logo-slider"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Startseite">
+
+                    <img
+                        src="images/logo.png"
+                        alt="Logo der Echten Fründe '22'">
+
+                </div>
+
+                <div class="chapter-indicator"></div>
+
+            </div>
+
+            <!-- ======================================
+                 NAVIGATION
+            ======================================= -->
+
+            <nav
+                id="navigation"
+                class="nav-top"
+                aria-label="Hauptnavigation">
+
+                <a href="index.php">
+
+                    Startseite
+
+                </a>
+
+                <a href="ueber-uns.php">
+
+                    Über uns
+
+                </a>
+
+                <a href="zugkoenig.php">
+
+                    Zugkönig
+
+                </a>
+
+                <a
+                    href="termine.php"
+                    class="active"
+                    aria-current="page">
+
+                    Termine
+
+                </a>
+
+            </nav>
+
+            <!-- ======================================
+                 BURGER MENU
+            ======================================= -->
+
+            <button
+                class="burger"
+                type="button"
+                aria-label="Navigation öffnen"
+                aria-expanded="false"
+                aria-controls="navigation">
+
+                <span></span>
+
+                <span></span>
+
+                <span></span>
+
+            </button>
+
+        </div>
+
+    </header>
+    
+    <!-- ==========================================
+         HERO
+    =========================================== -->
+
+    <section
+        id="calendarHero"
+        class="hero hero--calendar"
+        data-hero
+        tabindex="0"
+        aria-label="Nächster Termin">
+
+        <div
+            id="heroBackground"
+            class="hero-background">
+
+        </div>
+
+        <div class="hero-overlay">
+
+            <div class="container">
+
+                <div class="hero-content">
+
+                    <span
+                        id="heroBadge"
+                        class="hero-badge">
+
+                        Termin
+
+                    </span>
+
+                    <h1 id="heroTitle">
+
+                        Termine werden geladen …
+
+                    </h1>
+
+                    <p
+                        id="heroDate"
+                        class="hero-date">
+
+                        Bitte warten …
+
+                    </p>
+
+                    <div class="hero-info">
+
+                        <div class="hero-item">
+
+                            <span class="hero-icon">
+
+                                🕒
+
+                            </span>
+
+                            <span id="heroTime">
+
+                            </span>
+
+                        </div>
+
+                        <div class="hero-item">
+
+                            <span class="hero-icon">
+
+                                📍
+
+                            </span>
+
+                            <span id="heroLocation">
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="heroCountdown"
+                        class="hero-countdown">
+
+                        --
+
+                    </div>
+
+                    <div
+                        id="heroHint"
+                        class="hero-hint">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div
+            class="hero-scroll"
+            aria-hidden="true">
+
+            <span>
+
+                ▼
+
+            </span>
+
+        </div>
+
+    </section>
+    
+    <!-- ==========================================
+         MAIN
+    =========================================== -->
+
+    <main id="main-content">
+
+        <!-- ==========================================
+             KALENDER
+        =========================================== -->
+
+        <section
+            id="calendar-section"
+            class="calendar-section">
+
+            <div class="container">
+
+                <div class="section-header">
+
+                    <span class="section-kicker">
+
+                        Termine
+
+                    </span>
+
+                    <h2>
+
+                        Alle Veranstaltungen auf einen Blick
+
+                    </h2>
+
+                    <p>
+
+                        Hier findet ihr alle Termine der Echten Fründe '22.
+                        Ein Klick auf einen Termin öffnet alle Details.
+
+                    </p>
+
+                </div>
+
+                <div
+                    id="calendarCard"
+                    class="calendar-card">
+
+                    <div id="calendar">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+             HIGHLIGHTS
+        =========================================== -->
+
+        <section
+            id="highlights-section"
+            class="highlights-section">
+
+            <div class="container">
+
+                <div class="section-header">
+
+                    <span class="section-kicker">
+
+                        Highlights
+
+                    </span>
+
+                    <h2>
+
+                        Besondere Veranstaltungen
+
+                    </h2>
+
+                    <p>
+
+                        Hier findet ihr die wichtigsten Veranstaltungen
+                        der Echten Fründe '22.
+
+                    </p>
+
+                </div>
+
+                <div
+                    id="highlights"
+                    class="highlight-grid">
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+    
+    <!-- ==========================================
+         EVENT MODAL
+    =========================================== -->
+
+    <div
+        id="eventModal"
+        class="modal-overlay"
+        hidden>
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalTitle">
+
+            <button
+                id="closeModal"
+                class="modal-close"
+                type="button"
+                aria-label="Modal schließen">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+            <div
+                id="modalBadge"
+                class="modal-badge">
+
+            </div>
+
+            <h2 id="modalTitle">
+
+            </h2>
+
+            <div class="modal-meta">
+
+                <div
+                    id="modalLocationRow"
+                    class="modal-row">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <div>
+
+                        <strong>Veranstaltungsort</strong>
+
+                        <div id="modalLocation"></div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-row">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    <div>
+
+                        <strong>Datum</strong>
+
+                        <div id="modalDate"></div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-row">
+
+                    <i class="fa-regular fa-clock"></i>
+
+                    <div>
+
+                        <strong>Uhrzeit</strong>
+
+                        <div id="modalTime"></div>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="modalDresscodeRow"
+                    class="modal-row">
+
+                    <i class="fa-solid fa-shirt"></i>
+
+                    <div>
+
+                        <strong>Dresscode</strong>
+
+                        <div id="modalDresscode"></div>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="modalMeetingRow"
+                    class="modal-row">
+
+                    <i class="fa-solid fa-people-group"></i>
+
+                    <div>
+
+                        <strong>Treffpunkt</strong>
+
+                        <div id="modalMeeting"></div>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="modalContactRow"
+                    class="modal-row">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    <div>
+
+                        <strong>Ansprechpartner</strong>
+
+                        <div id="modalContact"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <section
+                id="modalDescriptionSection"
+                class="modal-description-section">
+
+                <h3>
+
+                    Beschreibung
+
+                </h3>
+
+                <div
+                    id="modalDescription"
+                    class="modal-description">
+
+                </div>
+
+            </section>
+
+            <div class="modal-buttons">
+
+                <a
+                    id="mapsLink"
+                    class="btn-outline"
+                    href="#"
+                    target="_blank"
+                    rel="noopener"
+                    hidden>
+
+                    <i class="fa-solid fa-map-location-dot"></i>
+
+                    Route öffnen
+
+                </a>
+
+                <a
+                    id="ticketLink"
+                    class="btn"
+                    href="#"
+                    target="_blank"
+                    rel="noopener"
+                    hidden>
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                    Tickets
+
+                </a>
+
+                <button
+                    id="closeModalButton"
+                    class="btn-outline"
+                    type="button">
+
+                    Schließen
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+     <!-- ==========================================
+         FOOTER
+    =========================================== -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <nav
+                class="footer-navigation"
+                aria-label="Footer Navigation">
+
+                <a href="datenschutz.html">
+
+                    Datenschutz
+
+                </a>
+
+                <a href="impressum.html">
+
+                    Impressum
+
+                </a>
+
+            </nav>
+
+            <p id="footerCopyright">
+
+                © 2026 Echte Fründe '22 · Alle Rechte vorbehalten.
+
+            </p>
+
+        </div>
+
+    </footer>
+
+<!-- ==========================================
+     NAVIGATION INDICATOR
+========================================== -->
+
+<button
+    id="navigationIndicator"
+    class="navigation-indicator"
+    type="button"
+    aria-label="Nach unten scrollen">
+
+    <i class="fa-solid fa-chevron-down"></i>
+
+</button>
+
+    <!-- ==========================================
+         SCROLL TO TOP
+    =========================================== -->
+
+    <button
+        id="scrollTop"
+        class="scroll-top"
+        type="button"
+        aria-label="Nach oben scrollen">
+
+        <i class="fa-solid fa-chevron-up"></i>
+
+    </button>
+    
+        <!-- ==========================================
+         JAVASCRIPT
+    =========================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+
+    <!-- ==========================================
+     FRAMEWORK JS
+========================================== -->
+
+<script src="js/header.js"></script>
+
+<script src="js/navigation.js"></script>
+
+<script src="js/scroll.js"></script>
+
+<script src="js/navigation-indicator.js"></script>
+
+    <!-- ==========================================
+         SEITE JS
+    =========================================== -->
+
+    <script src="js/calendar.js"></script>
+
+    <!-- ==========================================
+         ANIMATIONEN JS
+    =========================================== -->
+
+    <script src="js/animations.js"></script>
+
+    <!-- ==========================================
+         APP JS
+    =========================================== -->
+
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>

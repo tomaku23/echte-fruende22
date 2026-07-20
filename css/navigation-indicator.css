@@ -1,0 +1,172 @@
+/*
+=====================================================
+ ECHTE FRÜNDE '22
+ NAVIGATION-INDICATOR.CSS
+ Version 3.0
+=====================================================
+*/
+
+/* ==========================================
+   NAVIGATION INDICATOR
+========================================== */
+
+.navigation-indicator{
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:24px;
+
+    transform:translateX(-50%);
+
+    scale:1;
+
+    width:56px;
+
+    height:56px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:rgba(10,10,10,.88);
+
+    color:var(--white);
+
+    cursor:pointer;
+
+    z-index:950;
+
+    transition:
+
+        scale .35s ease,
+
+        bottom .35s ease,
+
+        opacity .35s ease,
+
+        transform .35s ease;
+
+}
+
+/* ==========================================
+   ICON
+========================================== */
+
+.navigation-indicator i{
+
+    font-size:1.15rem;
+
+    line-height:1;
+
+    pointer-events:none;
+
+    transition:
+
+        transform .35s ease;
+
+}
+
+/* ==========================================
+   STATES
+========================================== */
+
+.navigation-indicator--compact{
+
+    scale:.82;
+
+}
+
+.navigation-indicator--park{
+
+    bottom:95px;
+
+}
+
+.navigation-indicator--up i{
+
+    transform:rotate(180deg);
+
+}
+
+.navigation-indicator--bounce{
+
+    animation:
+
+        navigationIndicatorFloat
+
+        1.5s
+
+        ease-in-out
+
+        infinite;
+
+}
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes navigationIndicatorFloat{
+
+    0%,
+    100%{
+
+        transform:
+            translateX(-50%)
+            translateY(0)
+            scale(1);
+
+    }
+
+    50%{
+
+        transform:
+            translateX(-50%)
+            translateY(-8px)
+            scale(1);
+
+    }
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width:768px){
+
+    .navigation-indicator{
+
+        width:52px;
+
+        height:52px;
+
+    }
+
+}
+
+@media (max-width:480px){
+
+    .navigation-indicator{
+
+        width:48px;
+
+        height:48px;
+
+    }
+
+    .navigation-indicator i{
+
+        font-size:1rem;
+
+    }
+
+}

@@ -1,0 +1,107 @@
+/* =====================================================
+   SCROLL TO TOP
+===================================================== */
+
+#scrollTop{
+
+    transition:
+
+        opacity .35s ease,
+
+        transform .35s ease,
+
+        background-color .35s ease;
+
+}
+
+#scrollTop:hover{
+
+    transform:
+
+        translateY(-4px);
+
+}
+
+
+
+/* =====================================================
+   UTILITY
+===================================================== */
+
+.no-animation{
+
+    transition:none !important;
+
+    animation:none !important;
+
+}
+
+.animate{
+
+    will-change:
+
+        transform,
+
+        opacity;
+
+}
+
+
+
+/* =====================================================
+   KEYFRAMES
+===================================================== */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+@keyframes fadeOut{
+
+    from{
+
+        opacity:1;
+
+    }
+
+    to{
+
+        opacity:0;
+
+    }
+
+}
+
+@keyframes pulse{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.04);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
