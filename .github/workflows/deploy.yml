@@ -16,9 +16,9 @@ jobs:
       - name: Upload per SFTP
         uses: Dylan700/sftp-upload-action@latest
         with:
-          server: ${{ secrets.5020498334.ssh.w2.strato.hosting }}
-          username: ${{ secrets.su952993 }}
-          password: ${{ secrets.kuxxaw-misne8-tepheF }}
+          server: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASSWORD }}
           port: 22
           uploads: |
             ./ => /
