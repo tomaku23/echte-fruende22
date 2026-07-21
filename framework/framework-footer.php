@@ -89,17 +89,25 @@
 
 <script src="js/config.js"></script>
 
+<script src="js/utilities.js"></script>
+
+<script src="js/dom.js"></script>
+
 <script src="js/icons.js"></script>
 
 <script src="js/modal.js"></script>
+
+<script src="js/hero.js"></script>
+
+<script src="js/highlights.js"></script>
+
+<script src="js/calendar.js"></script>
 
 <script src="js/header.js"></script>
 
 <script src="js/navigation.js"></script>
 
 <script src="js/navigation-indicator.js"></script>
-
-<script src="js/hero.js"></script>
 
 <script src="js/animations.js"></script>
 
