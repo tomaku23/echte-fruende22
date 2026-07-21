@@ -249,6 +249,10 @@ renderHeader() {
             this.elements.badge.textContent =
                 props.category;
 
+        } else {
+
+            this.elements.badge.textContent = "";
+
         }
 
     }
@@ -302,8 +306,7 @@ renderMeta() {
 
             label: "Ort",
 
-            value: props.address
-                ?? props.location
+            value: props.address ?? props.location
 
         });
 
@@ -368,3 +371,79 @@ renderMeta() {
         .join("");
 
 },
+
+renderContent() {
+
+    if (!this.elements.content) {
+
+        return;
+
+    }
+
+    const props = EF22.utils.getProps(
+        this.state.event
+    );
+
+    this.elements.content.innerHTML =
+        props.description
+            ? `<p>${props.description}</p>`
+            : "";
+
+},
+
+renderActions() {
+
+    if (!this.elements.actions) {
+
+        return;
+
+    }
+
+    const props = EF22.utils.getProps(
+        this.state.event
+    );
+
+    const actions = [];
+
+    if (props.address) {
+
+        actions.push(`
+
+            <a
+                class="btn btn-outline"
+                href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(props.address)}"
+                target="_blank"
+                rel="noopener">
+
+                Route
+
+            </a>
+
+        `);
+
+    }
+
+    if (props.ticket) {
+
+        actions.push(`
+
+            <a
+                class="btn"
+                href="${props.ticket}"
+                target="_blank"
+                rel="noopener">
+
+                Tickets
+
+            </a>
+
+        `);
+
+    }
+
+    this.elements.actions.innerHTML =
+        actions.join("");
+
+}
+
+};
