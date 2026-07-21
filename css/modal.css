@@ -1,102 +1,168 @@
 /* =====================================================
    ECHTE FRÜNDE '22
    MODAL.CSS
-   VERSION 1.0
+   Version 2.0
 ===================================================== */
 
 
-
 /* =====================================================
-   MODAL OVERLAY
+   MODAL
 ===================================================== */
 
 .modal{
 
     position:fixed;
-
     inset:0;
 
     display:flex;
-
     justify-content:center;
-
     align-items:center;
 
-    padding:24px;
+    padding:2rem;
 
     background:rgba(0,0,0,.75);
-
-    backdrop-filter:blur(12px);
+    backdrop-filter:blur(10px);
 
     opacity:0;
-
     visibility:hidden;
 
     transition:
-
-        opacity .35s ease,
-
-        visibility .35s ease;
+        opacity .3s ease,
+        visibility .3s ease;
 
     z-index:2000;
 
 }
 
-.modal.open{
+.modal.show{
 
     opacity:1;
-
     visibility:visible;
 
 }
 
 
-
 /* =====================================================
-   MODAL CONTAINER
+   OVERLAY
 ===================================================== */
 
-.modal-content{
+.modal-overlay{
 
-    width:min(100%,640px);
+    position:absolute;
+    inset:0;
 
+}
+
+
+/* =====================================================
+   WINDOW
+===================================================== */
+
+.modal-window{
+
+    position:relative;
+
+    width:min(100%,720px);
     max-height:90vh;
 
+    overflow:hidden;
     overflow-y:auto;
 
     background:var(--white);
 
     border-radius:var(--radius);
 
-    box-shadow:0 30px 80px rgba(0,0,0,.30);
+    box-shadow:0 25px 60px rgba(0,0,0,.35);
 
     transform:translateY(30px);
 
-    transition:transform .35s ease;
+    transition:transform .3s ease;
+
+    z-index:1;
 
 }
 
-.modal.open .modal-content{
+.modal.show .modal-window{
 
     transform:translateY(0);
 
 }
 
+
 /* =====================================================
-   MODAL HEADER
+   CLOSE BUTTON
+===================================================== */
+
+.modal-close{
+
+    position:absolute;
+
+    top:1rem;
+    right:1rem;
+
+    width:42px;
+    height:42px;
+
+    border:none;
+    border-radius:50%;
+
+    background:rgba(255,255,255,.85);
+
+    color:var(--text-dark);
+
+    font-size:1.5rem;
+
+    cursor:pointer;
+
+    transition:
+        background-color .25s ease,
+        transform .25s ease;
+
+    z-index:20;
+
+}
+
+.modal-close:hover{
+
+    background:#ffffff;
+
+    transform:rotate(90deg);
+
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.modal-hero{
+
+    height:240px;
+
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
+
+    background-color:var(--light);
+
+}
+
+
+/* =====================================================
+   HEADER
 ===================================================== */
 
 .modal-header{
 
-    display:flex;
+    padding:2rem;
 
-    align-items:center;
+}
 
-    justify-content:space-between;
+.modal-badge{
 
-    padding:28px 32px;
+    display:inline-flex;
 
-    border-bottom:1px solid rgba(0,0,0,.08);
+    margin-bottom:1rem;
 
 }
 
@@ -109,52 +175,56 @@
 }
 
 
-
 /* =====================================================
-   CLOSE BUTTON
+   META
 ===================================================== */
 
-.modal-close{
+.modal-meta{
 
-    width:42px;
+    display:grid;
 
-    height:42px;
+    gap:1rem;
 
-    border:none;
+    padding:0 2rem 2rem;
 
-    border-radius:50%;
+}
 
-    background:transparent;
+.modal-meta-item{
+
+    display:flex;
+
+    gap:1rem;
+
+    align-items:flex-start;
+
+}
+
+.modal-meta-label{
+
+    min-width:120px;
+
+    font-weight:600;
+
+    color:var(--green);
+
+}
+
+.modal-meta-value{
+
+    flex:1;
 
     color:var(--text-dark);
 
-    font-size:1.5rem;
-
-    cursor:pointer;
-
-    transition:
-
-        background-color .35s ease,
-
-        transform .35s ease;
-
 }
 
-.modal-close:hover{
-
-    background:rgba(0,0,0,.06);
-
-    transform:rotate(90deg);
-
-}
 
 /* =====================================================
-   MODAL BODY
+   CONTENT
 ===================================================== */
 
-.modal-body{
+.modal-content{
 
-    padding:32px;
+    padding:0 2rem 2rem;
 
     color:var(--text-dark);
 
@@ -162,229 +232,104 @@
 
 }
 
-.modal-body p:last-child{
+.modal-content p:last-child{
 
     margin-bottom:0;
 
 }
 
 
-
 /* =====================================================
-   MODAL FOOTER
+   ACTIONS
 ===================================================== */
 
-.modal-footer{
+.modal-actions{
 
     display:flex;
 
+    gap:1rem;
+
     justify-content:flex-end;
 
-    gap:16px;
-
-    padding:24px 32px;
+    padding:2rem;
 
     border-top:1px solid rgba(0,0,0,.08);
 
 }
 
 
-
 /* =====================================================
-   MODAL BUTTONS
-===================================================== */
-
-.modal-footer .btn,
-.modal-footer .btn-outline{
-
-    min-width:140px;
-
-}
-
-/* =====================================================
-   CONTACT MODAL
-===================================================== */
-
-.contact-list{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
-
-    margin-top:10px;
-
-}
-
-.contact-item{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:16px;
-
-    padding:16px 18px;
-
-    border-radius:var(--radius);
-
-    background:var(--light);
-
-    transition:
-
-        background-color .35s ease,
-
-        transform .35s ease;
-
-}
-
-.contact-item:hover{
-
-    background:#ececec;
-
-    transform:translateX(6px);
-
-}
-
-.contact-icon{
-
-    width:42px;
-
-    height:42px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:rgba(111,191,115,.15);
-
-    color:var(--green);
-
-    font-size:1.2rem;
-
-}
-
-.contact-content{
-
-    flex:1;
-
-}
-
-.contact-content h4{
-
-    margin-bottom:4px;
-
-    color:var(--text-dark);
-
-}
-
-.contact-content p{
-
-    margin:0;
-
-    color:#666;
-
-}
-
-/* ==========================================================
    RESPONSIVE
-========================================================== */
+===================================================== */
 
-@media (max-width: 768px) {
+@media (max-width:768px){
 
-    .modal {
+    .modal{
 
-        padding: 1rem;
-        align-items: flex-end;
+        padding:1rem;
+
+        align-items:flex-end;
+
     }
 
-    .modal-window {
+    .modal-window{
 
-        width: 100%;
-        max-height: 90vh;
+        width:100%;
 
-        border-radius: var(--radius-large) var(--radius-large) 0 0;
+        max-height:92vh;
+
+        border-radius:
+            var(--radius)
+            var(--radius)
+            0
+            0;
+
     }
 
-    .modal-hero {
+    .modal-hero{
 
-        height: 180px;
+        height:180px;
+
     }
 
-    .modal-header-content,
+    .modal-header,
     .modal-meta,
     .modal-content,
-    .modal-actions {
+    .modal-actions{
 
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+        padding-left:1.5rem;
+        padding-right:1.5rem;
+
     }
 
-    .modal-header-content {
+    .modal-actions{
 
-        padding-top: 1.5rem;
-        padding-bottom: 1.5rem;
+        flex-direction:column;
+
     }
 
-    .modal-meta {
+    .modal-actions a,
+    .modal-actions button{
 
-        padding-bottom: 1.5rem;
+        width:100%;
+
     }
 
-    .modal-content {
-
-        padding-bottom: 1.5rem;
-    }
-
-    .modal-actions {
-
-        flex-direction: column;
-
-        padding-bottom: 1.5rem;
-    }
-
-    .modal-action {
-
-        width: 100%;
-        min-width: 0;
-    }
 }
+
 
 /* =====================================================
    UTILITIES
 ===================================================== */
 
-.modal-center{
-
-    text-align:center;
-
-}
-
-.modal-full{
-
-    width:min(100%,900px);
-
-}
-
-.modal-small{
-
-    width:min(100%,480px);
-
-}
-
-.modal-large{
-
-    width:min(100%,1100px);
-
-}
-
 .modal-hidden{
 
-    display:none;
+    display:none !important;
+
+}
+
+.no-scroll{
+
+    overflow:hidden;
 
 }
