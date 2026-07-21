@@ -22,6 +22,6 @@ jobs:
             -P 22 \
             ${{ secrets.SFTP_USER }}@${{ secrets.SFTP_HOST }} <<EOF
           mkdir EchteFruende
-          put -r * EchteFruende
+          put -r * 
           bye
-          EOF
+          EO
