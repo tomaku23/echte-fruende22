@@ -147,7 +147,7 @@ if (isset($pageCss)) {
 
     </div>
 
-    <div class="chapter-indicator"></div>
+    <div class="chapter-indicator">
 
 </div>
 
@@ -209,8 +209,6 @@ if (isset($pageCss)) {
 </button>
 
 </div>
-
-    </div>
 
 <!--=========================================
      OVERLAY
