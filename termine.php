@@ -134,8 +134,12 @@ include "framework/framework-header.php";
      EVENT MODAL
 ========================================== -->
 
+<?php
+
 require_once __DIR__ . "/framework/modal.php";
 
 renderModal();
+
+?>
 
 <?php include "framework/framework-footer.php"; ?>
