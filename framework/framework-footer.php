@@ -83,40 +83,43 @@
      
 </footer>
 
-    
+    <!-- ==========================================
+     FRAMEWORK JAVASCRIPT
+========================================== -->
+
+<script src="js/config.js"></script>
+
+<script src="js/icons.js"></script>
+
+<script src="js/modal.js"></script>
+
+<script src="js/header.js"></script>
+
+<script src="js/navigation.js"></script>
+
+<script src="js/navigation-indicator.js"></script>
+
+<script src="js/hero.js"></script>
+
+<script src="js/animations.js"></script>
 
     <!-- ==========================================
-         SEITEN JAVASCRIPT
-    ========================================== -->
+     SEITEN JAVASCRIPT
+========================================== -->
 
-    <?php
+<?php
 
-    if (isset($pageJs)) {
+if (!empty($pageJs)) {
 
-        foreach ($pageJs as $js) {
+    foreach ($pageJs as $js) {
 
-            echo '<script src="' .
-                $js .
-                '"></script>' .
-                PHP_EOL;
-
-        }
+        echo '<script src="' .
+            htmlspecialchars($js, ENT_QUOTES) .
+            '"></script>' .
+            PHP_EOL;
 
     }
 
-    ?>
+}
 
-    <!-- ==========================================
-         FRAMEWORK JAVASCRIPT
-    ========================================== -->
-
-    <script src="js/header.js"></script>
-
-    <script src="js/navigation.js"></script>
-
-    <script src="js/navigation-indicator.js"></script>
-
-    </body>
-
-    </html>
-
+?>

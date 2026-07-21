@@ -23,10 +23,6 @@ $pageJs = [
 
     "js/calendar.js",
 
-    "js/animations.js",
-
-    "js/app.js"
-
 ];
 
 include "framework/framework-header.php";
