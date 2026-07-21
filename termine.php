@@ -21,6 +21,16 @@ $pageCss = [
 
 $pageJs = [
 
+    "js/config.js",
+
+    "js/utilities.js",
+
+    "js/modal.js",
+
+    "js/hero.js",
+
+    "js/highlights.js",
+
     "js/calendar.js",
 
 ];

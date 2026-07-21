@@ -15,7 +15,10 @@
 
 <div id="modal" class="modal hidden" aria-hidden="true">
 
-    <div class="modal-overlay"></div>
+    <div
+    id="modalOverlay"
+    class="modal-overlay">
+</div>
 
     <div class="modal-window" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
 
@@ -38,7 +41,8 @@
         <header id="modalHeader" class="modal-header">
 
             <!-- Hero (optional) -->
-            <div id="modalHero" class="modal-hero hidden">
+            <div id="modalImageContainer"
+                 class="modal-hero hidden">
                 <img
                     id="modalImage"
                     src=""
