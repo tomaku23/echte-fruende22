@@ -403,13 +403,23 @@ const Calendar = (() => {
 
     }
 
-    /* ==========================================
+        /* ==========================================
        FULLCALENDAR
     ========================================== */
 
     function renderCalendar(){
 
+        console.log("renderCalendar gestartet");
+
+        console.log("DOM.calendar =", DOM.calendar);
+
+        console.log("FullCalendar =", typeof FullCalendar);
+
+        console.log("Events =", STATE.events);
+
         if(!DOM.calendar){
+
+            console.error("Calendar-Div nicht gefunden.");
 
             return;
 
@@ -417,70 +427,11 @@ const Calendar = (() => {
 
         if(typeof FullCalendar === "undefined"){
 
-            console.error(
-                "FullCalendar wurde nicht geladen."
-            );
-
-            DOM.calendar.innerHTML = `
-                <div class="card">
-                    <h3>Kalender konnte nicht geladen werden.</h3>
-                    <p>Bitte lade die Seite erneut.</p>
-                </div>
-            `;
+            console.error("FullCalendar wurde nicht geladen.");
 
             return;
 
         }
-
-        if(STATE.calendar){
-
-            STATE.calendar.destroy();
-
-        }
-
-        STATE.calendar = new FullCalendar.Calendar(
-            DOM.calendar,
-            {
-
-                locale            : CONFIG.locale,
-                initialView       : "dayGridMonth",
-                height            : "auto",
-                firstDay          : 1,
-                fixedWeekCount    : false,
-                navLinks          : true,
-                nowIndicator      : true,
-                dayMaxEvents      : true,
-                displayEventTime  : false,
-                eventDisplay      : "block",
-                moreLinkClick     : "popover",
-                eventOrder        : "start,title",
-
-                headerToolbar : {
-
-                    left   : "prev,next today",
-                    center : "title",
-                    right  : "dayGridMonth,listMonth"
-
-                },
-
-                buttonText : {
-
-                    today : "Heute",
-                    month : "Monat",
-                    list  : "Liste"
-
-                },
-
-                events         : STATE.events,
-                eventClick     : onEventClick,
-                eventDidMount  : onEventRender
-
-            }
-        );
-
-        STATE.calendar.render();
-
-    }
 
     /* ==========================================
        EVENT GERENDERT
