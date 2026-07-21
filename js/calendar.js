@@ -33,7 +33,7 @@ const Calendar = (() => {
 
     };
 
-    /* ==========================================
+        /* ==========================================
        DOM
     ========================================== */
 
@@ -53,18 +53,33 @@ const Calendar = (() => {
         highlights              : null,
 
         modal                   : null,
+        modalHero               : null,
+        modalImage              : null,
+        modalContent            : null,
+        modalMeta               : null,
+        modalButtons            : null,
+
         modalBadge              : null,
         modalTitle              : null,
-        modalDate               : null,
-        modalTime               : null,
+
         modalLocation           : null,
         modalLocationRow        : null,
+
+        modalDate               : null,
+        modalDateRow            : null,
+
+        modalTime               : null,
+        modalTimeRow            : null,
+
         modalDresscode          : null,
         modalDresscodeRow       : null,
+
         modalMeeting            : null,
         modalMeetingRow         : null,
+
         modalContact            : null,
         modalContactRow         : null,
+
         modalDescription        : null,
         modalDescriptionSection : null,
 
@@ -92,7 +107,7 @@ const Calendar = (() => {
 
     }
 
-    /* ==========================================
+        /* ==========================================
        DOM EINLESEN
     ========================================== */
 
@@ -112,18 +127,34 @@ const Calendar = (() => {
         DOM.highlights              = document.getElementById("highlights");
 
         DOM.modal                   = document.getElementById("eventModal");
+
+        DOM.modalHero               = document.getElementById("modalHero");
+        DOM.modalImage              = document.getElementById("modalImage");
+        DOM.modalContent            = document.getElementById("modalContent");
+        DOM.modalMeta               = document.getElementById("modalMeta");
+        DOM.modalButtons            = document.getElementById("modalButtons");
+
         DOM.modalBadge              = document.getElementById("modalBadge");
         DOM.modalTitle              = document.getElementById("modalTitle");
-        DOM.modalDate               = document.getElementById("modalDate");
-        DOM.modalTime               = document.getElementById("modalTime");
+
         DOM.modalLocation           = document.getElementById("modalLocation");
         DOM.modalLocationRow        = document.getElementById("modalLocationRow");
+
+        DOM.modalDate               = document.getElementById("modalDate");
+        DOM.modalDateRow            = document.getElementById("modalDateRow");
+
+        DOM.modalTime               = document.getElementById("modalTime");
+        DOM.modalTimeRow            = document.getElementById("modalTimeRow");
+
         DOM.modalDresscode          = document.getElementById("modalDresscode");
         DOM.modalDresscodeRow       = document.getElementById("modalDresscodeRow");
+
         DOM.modalMeeting            = document.getElementById("modalMeeting");
         DOM.modalMeetingRow         = document.getElementById("modalMeetingRow");
+
         DOM.modalContact            = document.getElementById("modalContact");
         DOM.modalContactRow         = document.getElementById("modalContactRow");
+
         DOM.modalDescription        = document.getElementById("modalDescription");
         DOM.modalDescriptionSection = document.getElementById("modalDescriptionSection");
 
@@ -134,7 +165,7 @@ const Calendar = (() => {
         DOM.closeModalButton        = document.getElementById("closeModalButton");
 
     }
-
+    
     /* ==========================================
        EVENTS
     ========================================== */
@@ -599,7 +630,7 @@ const Calendar = (() => {
 
     }
 
-    /* ==========================================
+        /* ==========================================
        MODAL
     ========================================== */
 
@@ -619,6 +650,21 @@ const Calendar = (() => {
             ? new Date(event.end)
             : null;
 
+        /* ------------------------------------------
+           Hero
+        ------------------------------------------ */
+
+        if(DOM.modalImage){
+
+            DOM.modalImage.style.backgroundImage =
+                `url("${props.image || "images/hero-bg.png"}")`;
+
+        }
+
+        /* ------------------------------------------
+           Badge
+        ------------------------------------------ */
+
         DOM.modalBadge.className = "modal-badge";
 
         addBadgeClass(
@@ -632,8 +678,22 @@ const Calendar = (() => {
         DOM.modalTitle.textContent =
             event.title || "";
 
+        /* ------------------------------------------
+           Datum
+        ------------------------------------------ */
+
         DOM.modalDate.textContent =
             formatDate(start);
+
+        if(DOM.modalDateRow){
+
+            DOM.modalDateRow.hidden = false;
+
+        }
+
+        /* ------------------------------------------
+           Uhrzeit
+        ------------------------------------------ */
 
         DOM.modalTime.textContent =
             event.allDay
@@ -643,6 +703,16 @@ const Calendar = (() => {
                         ? `${formatTime(start)} – ${formatTime(end)}`
                         : formatTime(start)
                 );
+
+        if(DOM.modalTimeRow){
+
+            DOM.modalTimeRow.hidden = false;
+
+        }
+
+        /* ------------------------------------------
+           Ort
+        ------------------------------------------ */
 
         DOM.modalLocation.innerHTML =
             props.address
@@ -655,11 +725,19 @@ const Calendar = (() => {
         DOM.modalLocationRow.hidden =
             !(props.address || props.location);
 
+        /* ------------------------------------------
+           Dresscode
+        ------------------------------------------ */
+
         DOM.modalDresscode.textContent =
             props.dresscode || "";
 
         DOM.modalDresscodeRow.hidden =
             !props.dresscode;
+
+        /* ------------------------------------------
+           Treffpunkt
+        ------------------------------------------ */
 
         DOM.modalMeeting.textContent =
             props.meeting || "";
@@ -667,17 +745,29 @@ const Calendar = (() => {
         DOM.modalMeetingRow.hidden =
             !props.meeting;
 
+        /* ------------------------------------------
+           Kontakt
+        ------------------------------------------ */
+
         DOM.modalContact.textContent =
             props.contact || "";
 
         DOM.modalContactRow.hidden =
             !props.contact;
 
+        /* ------------------------------------------
+           Beschreibung
+        ------------------------------------------ */
+
         DOM.modalDescription.textContent =
             props.description || "";
 
         DOM.modalDescriptionSection.hidden =
             !props.description;
+
+        /* ------------------------------------------
+           Google Maps
+        ------------------------------------------ */
 
         if(props.address){
 
@@ -687,26 +777,26 @@ const Calendar = (() => {
                 "https://www.google.com/maps/search/?api=1&query=" +
                 encodeURIComponent(props.address);
 
-        }
-
-        else{
+        }else{
 
             DOM.mapsLink.hidden = true;
-
             DOM.mapsLink.removeAttribute("href");
 
         }
+        
+        /* ------------------------------------------
+
+           Tickets
+
+        ------------------------------------------ */
 
         if(props.ticket){
 
             DOM.ticketLink.hidden = false;
 
-            DOM.ticketLink.href =
-                props.ticket;
+            DOM.ticketLink.href = props.ticket;
 
-        }
-
-        else{
+        }else{
 
             DOM.ticketLink.hidden = true;
 
@@ -717,20 +807,6 @@ const Calendar = (() => {
         DOM.modal.classList.add("show");
 
         document.body.classList.add("no-scroll");
-
-    }
-
-    function closeModal(){
-
-        if(!DOM.modal){
-
-            return;
-
-        }
-
-        DOM.modal.classList.remove("show");
-
-        document.body.classList.remove("no-scroll");
 
     }
 
