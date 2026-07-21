@@ -489,17 +489,97 @@ function renderCalendar(){
 
     }
 
-    /* ==========================================
-       EVENT CLICK
-    ========================================== */
+    /* ==========================================================
+   EVENT-KLICK
+========================================================== */
 
-    function onEventClick(info){
+eventClick(info) {
 
-        info.jsEvent.preventDefault();
+    const event = info.event;
 
-        openModal(info.event);
+    const meta = [];
 
+    if (event.extendedProps.date) {
+        meta.push({
+            icon: EF22.icons.calendar,
+            label: "Datum",
+            value: event.extendedProps.date
+        });
     }
+
+    if (event.extendedProps.time) {
+        meta.push({
+            icon: EF22.icons.clock,
+            label: "Uhrzeit",
+            value: event.extendedProps.time
+        });
+    }
+
+    if (event.extendedProps.location) {
+        meta.push({
+            icon: EF22.icons.location,
+            label: "Ort",
+            value: event.extendedProps.location
+        });
+    }
+
+    if (event.extendedProps.meetingPoint) {
+        meta.push({
+            icon: EF22.icons.people,
+            label: "Treffpunkt",
+            value: event.extendedProps.meetingPoint
+        });
+    }
+
+    if (event.extendedProps.dresscode) {
+        meta.push({
+            icon: EF22.icons.shirt,
+            label: "Dresscode",
+            value: event.extendedProps.dresscode
+        });
+    }
+
+    const actions = [];
+
+    if (event.extendedProps.maps) {
+        actions.push({
+            icon: EF22.icons.map,
+            text: "Route öffnen",
+            href: event.extendedProps.maps,
+            target: "_blank",
+            rel: "noopener"
+        });
+    }
+
+    if (event.extendedProps.tickets) {
+        actions.push({
+            icon: EF22.icons.ticket,
+            text: "Tickets",
+            href: event.extendedProps.tickets,
+            target: "_blank",
+            rel: "noopener"
+        });
+    }
+
+    EF22.modal.open({
+
+        title: event.title,
+
+        badge: event.extendedProps.badge,
+
+        subtitle: event.extendedProps.subtitle,
+
+        image: event.extendedProps.image,
+
+        meta,
+
+        content: event.extendedProps.description,
+
+        actions
+
+    });
+
+}
     
         /* ==========================================
        HIGHLIGHTS

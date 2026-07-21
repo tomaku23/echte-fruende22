@@ -4,310 +4,254 @@
  MODAL.JS
  Version 1.0
 =====================================================
-*/
+*\
 
-const Modal = (() => {
+window.EF22 ??= {};
 
-    "use strict";
+EF22.modal = (() => {
 
-    /* ==========================================
-       DOM
-    ========================================== */
+    /* ==========================================================
+       ELEMENTE
+    ========================================================== */
 
-    const DOM = {
+    const modal = document.getElementById("modal");
+    const overlay = modal.querySelector(".modal-overlay");
 
-        modals: [],
+    const hero = document.getElementById("modalHero");
+    const image = document.getElementById("modalImage");
 
-        openButtons: [],
+    const badge = document.getElementById("modalBadge");
+    const title = document.getElementById("modalTitle");
+    const subtitle = document.getElementById("modalSubtitle");
 
-        closeButtons: []
+    const meta = document.getElementById("modalMeta");
+    const content = document.getElementById("modalContent");
+    const actions = document.getElementById("modalActions");
 
-    };
-
-
-    /* ==========================================
-       STATUS
-    ========================================== */
-
-    const STATE = {
-
-        activeModal: null
-
-    };
+    const closeButton = document.getElementById("closeModalButton");
 
 
-    /* ==========================================
-       INITIALISIERUNG
-    ========================================== */
+    /* ==========================================================
+       ÖFFNEN
+    ========================================================== */
 
-    function init(){
+    function open(data = {}) {
 
-        cacheDom();
+        setData(data);
 
-        bindEvents();
+        modal.classList.remove("hidden");
+        modal.classList.add("show");
 
+        modal.setAttribute("aria-hidden", "false");
+
+        document.body.style.overflow = "hidden";
     }
 
 
-    /* ==========================================
-       DOM EINLESEN
-    ========================================== */
+    /* ==========================================================
+       SCHLIESSEN
+    ========================================================== */
 
-    function cacheDom(){
+    function close() {
 
-        DOM.modals = [
+        modal.classList.remove("show");
+        modal.classList.add("hidden");
 
-            ...document.querySelectorAll(".modal")
+        modal.setAttribute("aria-hidden", "true");
 
-        ];
-
-        DOM.openButtons = [
-
-            ...document.querySelectorAll("[data-modal]")
-
-        ];
-
-        DOM.closeButtons = [
-
-            ...document.querySelectorAll(".modal-close")
-
-        ];
-
+        document.body.style.overflow = "";
     }
 
 
-    /* ==========================================
-       EVENTS
-    ========================================== */
+    /* ==========================================================
+       DATEN SETZEN
+    ========================================================== */
 
-    function bindEvents(){
+    function setData(data = {}) {
 
-        DOM.openButtons.forEach(button => {
+        setHero(data.image);
+        setBadge(data.badge);
+        setTitle(data.title);
+        setSubtitle(data.subtitle);
 
-            button.addEventListener(
+        setMeta(data.meta ?? []);
 
-                "click",
+        content.innerHTML = data.content ?? "";
 
-                onOpen
-
-            );
-
-        });
-
-        DOM.closeButtons.forEach(button => {
-
-            button.addEventListener(
-
-                "click",
-
-                onClose
-
-            );
-
-        });
-
-        DOM.modals.forEach(modal => {
-
-            modal.addEventListener(
-
-                "click",
-
-                onOverlayClick
-
-            );
-
-        });
-
-        document.addEventListener(
-
-            "keydown",
-
-            onKeyDown
-
-        );
-
-    }
-    
-        /* ==========================================
-       MODAL ÖFFNEN
-    ========================================== */
-
-    function onOpen(event){
-
-        event.preventDefault();
-
-        const id =
-            event.currentTarget.dataset.modal;
-
-        open(id);
-
+        setActions(data.actions ?? []);
     }
 
 
-    function open(id){
-
-        const modal =
-            document.getElementById(id);
-
-        if(!modal){
-
-            return;
-
-        }
-
-        closeAll();
-
-        modal.classList.add("open");
-
-        document.body.classList.add("modal-open");
-
-        STATE.activeModal = modal;
-
-    }
-
-
-    /* ==========================================
-       MODAL SCHLIESSEN
-    ========================================== */
-
-    function onClose(){
-
-        close();
-
-    }
-
-
-    function close(){
-
-        if(!STATE.activeModal){
-
-            return;
-
-        }
-
-        STATE.activeModal.classList.remove("open");
-
-        document.body.classList.remove("modal-open");
-
-        STATE.activeModal = null;
-
-    }
-
-
-    function closeAll(){
-
-        DOM.modals.forEach(modal => {
-
-            modal.classList.remove("open");
-
-        });
-
-    }
-
-
-    /* ==========================================
-       OVERLAY CLICK
-    ========================================== */
-
-    function onOverlayClick(event){
-
-        if(event.target !== event.currentTarget){
-
-            return;
-
-        }
-
-        close();
-
-    }
-
-
-    /* ==========================================
-       ESC TASTE
-    ========================================== */
-
-    function onKeyDown(event){
-
-        if(event.key !== "Escape"){
-
-            return;
-
-        }
-
-        close();
-
-    }
-    
-        /* ==========================================
-       AKTUALISIEREN
-    ========================================== */
-
-    function refresh(){
-
-        cacheDom();
-
-        bindEvents();
-
-    }
-
-
-    /* ==========================================
-       DESTROY
-    ========================================== */
-
-    function destroy(){
-
-        DOM.openButtons.forEach(button => {
-
-            button.removeEventListener(
-                "click",
-                onOpen
-            );
-
-        });
-
-        DOM.closeButtons.forEach(button => {
-
-            button.removeEventListener(
-                "click",
-                onClose
-            );
-
-        });
-
-        DOM.modals.forEach(modal => {
-
-            modal.removeEventListener(
-                "click",
-                onOverlayClick
-            );
-
-        });
-
-        document.removeEventListener(
-            "keydown",
-            onKeyDown
-        );
-
-    }
-
-
-    /* ==========================================
-       PUBLIC API
-    ========================================== */
-
-    return{
-
-        init,
-
-        refresh,
-
+    return {
         open,
-
         close,
-
-        destroy
-
+        setData
     };
 
 })();
+
+    /* ==========================================================
+       HEADER-DATEN
+    ========================================================== */
+
+    function setHero(src) {
+
+        if (!src) {
+
+            hero.classList.add("hidden");
+            image.removeAttribute("src");
+
+            return;
+        }
+
+        image.src = src;
+
+        hero.classList.remove("hidden");
+    }
+
+
+    function setBadge(text) {
+
+        if (!text) {
+
+            badge.textContent = "";
+            badge.classList.add("hidden");
+
+            return;
+        }
+
+        badge.textContent = text;
+
+        badge.classList.remove("hidden");
+    }
+
+
+    function setTitle(text) {
+
+        title.textContent = text ?? "";
+    }
+
+
+    function setSubtitle(text) {
+
+        if (!text) {
+
+            subtitle.textContent = "";
+            subtitle.classList.add("hidden");
+
+            return;
+        }
+
+        subtitle.textContent = text;
+
+        subtitle.classList.remove("hidden");
+    }
+    
+        /* ==========================================================
+       METADATEN
+    ========================================================== */
+
+    function setMeta(items = []) {
+
+        meta.innerHTML = "";
+
+        if (!Array.isArray(items) || items.length === 0) {
+            return;
+        }
+
+        items.forEach(item => {
+
+            if (!item?.value) {
+                return;
+            }
+
+            const metaItem = document.createElement("div");
+            metaItem.className = "modal-meta-item";
+
+            const icon = document.createElement("div");
+            icon.className = "modal-meta-icon";
+            icon.innerHTML = item.icon ?? "";
+
+            const text = document.createElement("div");
+            text.className = "modal-meta-text";
+
+            const label = document.createElement("div");
+            label.className = "modal-meta-label";
+            label.textContent = item.label ?? "";
+
+            const value = document.createElement("div");
+            value.className = "modal-meta-value";
+            value.textContent = item.value;
+
+            text.append(label, value);
+            metaItem.append(icon, text);
+
+            meta.appendChild(metaItem);
+
+        });
+
+    }
+    
+        /* ==========================================================
+       AKTIONEN
+    ========================================================== */
+
+    function setActions(items = []) {
+
+        actions.innerHTML = "";
+
+        if (!Array.isArray(items) || items.length === 0) {
+            return;
+        }
+
+        items.forEach(item => {
+
+            if (!item?.text || !item?.href) {
+                return;
+            }
+
+            const button = document.createElement("a");
+
+            button.className = "modal-action";
+            button.href = item.href;
+            button.textContent = item.text;
+
+            if (item.target) {
+                button.target = item.target;
+            }
+
+            if (item.rel) {
+                button.rel = item.rel;
+            }
+
+            if (item.icon) {
+
+                const icon = document.createElement("span");
+
+                icon.className = "modal-action-icon";
+                icon.innerHTML = item.icon;
+
+                button.prepend(icon);
+            }
+
+            actions.appendChild(button);
+
+        });
+
+    }
+    
+        /* ==========================================================
+       EVENTS
+    ========================================================== */
+
+    closeButton.addEventListener("click", close);
+
+    overlay.addEventListener("click", close);
+
+    document.addEventListener("keydown", event => {
+
+        if (event.key === "Escape" && modal.classList.contains("show")) {
+            close();
+        }
+
+    });
