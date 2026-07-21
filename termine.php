@@ -31,8 +31,6 @@ $pageJs = [
 
     "js/highlights.js",
 
-    "js/calendar.js",
-
 ];
 
 include "framework/framework-header.php";

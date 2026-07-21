@@ -50,7 +50,7 @@
     rel="stylesheet">
     
 <!--=========================================
-     EXTERNE BIBLIOTHEKEN
+     EXTERNE CSS-BIBLIOTHEKEN
 ==========================================-->
 
 <link
@@ -93,19 +93,15 @@
      SEITEN CSS
 ==========================================-->
 
-<script
-    src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js">
-</script>
-
 <?php
 
-if (isset($pageCss)) {
+if (!empty($pageCss)) {
 
     foreach ($pageCss as $css) {
 
         echo
             '<link rel="stylesheet" href="' .
-            $css .
+            htmlspecialchars($css, ENT_QUOTES) .
             '">' .
             PHP_EOL;
 

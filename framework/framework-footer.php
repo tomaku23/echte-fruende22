@@ -121,7 +121,8 @@ if (!empty($pageJs)) {
 
     foreach ($pageJs as $js) {
 
-        echo '<script src="' .
+        echo
+            '<script src="' .
             htmlspecialchars($js, ENT_QUOTES) .
             '"></script>' .
             PHP_EOL;
@@ -131,3 +132,7 @@ if (!empty($pageJs)) {
 }
 
 ?>
+
+</body>
+
+</html>
