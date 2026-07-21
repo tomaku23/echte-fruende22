@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     Navigation.init();
 
-    Scroll.init();
+    // Scroll.init();
 
     Animations.init();
 
