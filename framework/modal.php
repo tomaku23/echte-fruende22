@@ -1,10 +1,11 @@
 <?php
-
 /*
 =====================================================
-EF22 FRAMEWORK
-MODAL.PHP
-Version 1.0
+ ECHTE FRÜNDE '22
+ MODAL.PHP
+ Version 1.0
+
+ EF22 FRAMEWORK
 =====================================================
 */
 
@@ -12,62 +13,196 @@ if (!function_exists("renderModal")) {
 
     function renderModal()
     {
+
 ?>
+
+<!-- ==========================================
+     EVENT MODAL
+========================================== -->
 
 <div
     id="eventModal"
-    class="modal"
-    hidden
->
+    class="modal-overlay"
+    hidden>
 
     <div
-        class="modal-content modal-event"
+        class="modal"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="modalTitle"
-    >
+        aria-labelledby="modalTitle">
 
         <button
+            id="closeModal"
             class="modal-close"
             type="button"
-            aria-label="Schließen"
-        >
-            ×
+            aria-label="Modal schließen">
+
+            <i class="fa-solid fa-xmark"></i>
+
         </button>
 
-        <div id="modalHero">
+        <div
+            id="modalBadge"
+            class="modal-badge">
 
         </div>
 
-        <div class="modal-body">
+        <h2 id="modalTitle">
 
-            <h2
-                id="modalTitle"
-                class="modal-title">
-            </h2>
+        </h2>
+
+        <div class="modal-meta">
 
             <div
-                id="modalMeta"
-                class="modal-meta">
+                id="modalLocationRow"
+                class="modal-row">
 
-                <div id="modalDateRow"></div>
+                <i class="fa-solid fa-location-dot"></i>
 
-                <div id="modalTimeRow"></div>
+                <div>
 
-                <div id="modalLocationRow"></div>
+                    <strong>Veranstaltungsort</strong>
 
-                <div id="modalMeetingRow"></div>
+                    <div id="modalLocation"></div>
 
-                <div id="modalDresscodeRow"></div>
+                </div>
 
-                <div id="modalContactRow"></div>
+            </div>
+
+            <div class="modal-row">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <div>
+
+                    <strong>Datum</strong>
+
+                    <div id="modalDate"></div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-row">
+
+                <i class="fa-regular fa-clock"></i>
+
+                <div>
+
+                    <strong>Uhrzeit</strong>
+
+                    <div id="modalTime"></div>
+
+                </div>
+
+            </div>
+            
+                        <div
+                id="modalDresscodeRow"
+                class="modal-row">
+
+                <i class="fa-solid fa-shirt"></i>
+
+                <div>
+
+                    <strong>Dresscode</strong>
+
+                    <div id="modalDresscode"></div>
+
+                </div>
 
             </div>
 
             <div
-                id="modalContent"
-                class="modal-content-text">
+                id="modalMeetingRow"
+                class="modal-row">
+
+                <i class="fa-solid fa-people-group"></i>
+
+                <div>
+
+                    <strong>Treffpunkt</strong>
+
+                    <div id="modalMeeting"></div>
+
+                </div>
+
             </div>
+
+            <div
+                id="modalContactRow"
+                class="modal-row">
+
+                <i class="fa-solid fa-user"></i>
+
+                <div>
+
+                    <strong>Ansprechpartner</strong>
+
+                    <div id="modalContact"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <section
+            id="modalDescriptionSection"
+            class="modal-description-section">
+
+            <h3>
+
+                Beschreibung
+
+            </h3>
+
+            <div
+                id="modalDescription"
+                class="modal-description">
+
+            </div>
+
+        </section>
+        
+                <div class="modal-buttons">
+
+            <a
+                id="mapsLink"
+                class="btn-outline"
+                href="#"
+                target="_blank"
+                rel="noopener"
+                hidden>
+
+                <i class="fa-solid fa-map-location-dot"></i>
+
+                Route öffnen
+
+            </a>
+
+            <a
+                id="ticketLink"
+                class="btn"
+                href="#"
+                target="_blank"
+                rel="noopener"
+                hidden>
+
+                <i class="fa-solid fa-ticket"></i>
+
+                Tickets
+
+            </a>
+
+            <button
+                id="closeModalButton"
+                class="btn-outline"
+                type="button">
+
+                Schließen
+
+            </button>
 
         </div>
 
