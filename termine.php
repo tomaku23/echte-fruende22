@@ -3,7 +3,7 @@
 =====================================================
  ECHTE FRÜNDE '22
  TERMINE.PHP
- Version 1.0
+ Version 2.0
 
  EF22 FRAMEWORK
 =====================================================
@@ -21,26 +21,118 @@ $pageCss = [
 
 $pageJs = [
 
-    "js/config.js",
-
-    "js/utilities.js",
-
-    "js/modal.js",
-
-    "js/hero.js",
-
-    "js/highlights.js",
-
 ];
 
-include "framework/framework-header.php";
+ob_start();
+
 ?>
 
 <!-- ==========================================
-     MAIN
+     HERO
 ========================================== -->
 
-<main id="main-content">
+<section
+    id="hero"
+    class="hero"
+    data-hero="calendar"
+    tabindex="0"
+    aria-label="Hero">
+
+    <div
+        id="heroBackground"
+        class="hero-background">
+
+    </div>
+
+    <div class="hero-overlay">
+
+        <div class="container">
+
+            <div class="hero-content">
+
+                <span
+                    id="heroBadge"
+                    class="hero-badge">
+
+                    Termin
+
+                </span>
+
+                <h1 id="heroTitle">
+
+                    Termine werden geladen …
+
+                </h1>
+
+                <p
+                    id="heroDate"
+                    class="hero-date">
+
+                    Bitte warten …
+
+                </p>
+
+                <div class="hero-info">
+
+                    <div class="hero-item">
+
+                        <span class="hero-icon">
+
+                            🕒
+
+                        </span>
+
+                        <span id="heroTime"></span>
+
+                    </div>
+
+                    <div class="hero-item">
+
+                        <span class="hero-icon">
+
+                            📍
+
+                        </span>
+
+                        <span id="heroLocation"></span>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="heroCountdown"
+                    class="hero-countdown">
+
+                    --
+
+                </div>
+
+                <div
+                    id="heroHint"
+                    class="hero-hint">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div
+        class="hero-scroll"
+        aria-hidden="true">
+
+        <span>
+
+            ▼
+
+        </span>
+
+    </div>
+
+</section>
 
 <!-- ==========================================
      KALENDER
@@ -79,9 +171,7 @@ include "framework/framework-header.php";
             id="calendarCard"
             class="calendar-card">
 
-            <div id="calendar">
-
-            </div>
+            <div id="calendar"></div>
 
         </div>
 
@@ -132,8 +222,6 @@ include "framework/framework-header.php";
 
 </section>
 
-</main>
-
 <!-- ==========================================
      EVENT MODAL
 ========================================== -->
@@ -144,6 +232,6 @@ require_once __DIR__ . "/framework/modal.php";
 
 renderModal();
 
-?>
+$pageContent = ob_get_clean();
 
-<?php include "framework/framework-footer.php"; ?>
+include __DIR__ . "/framework/framework.php";
