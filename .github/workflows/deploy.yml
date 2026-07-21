@@ -10,24 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Repository auschecken
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Dateien nach Strato übertragen
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
-        with:
-          server: ${{ secrets.SFTP_HOST }}
-          username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASSWORD }}
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
 
-          protocol: sftp
-          port: 22
-
-          local-dir: ./
-          server-dir: /EchteFruende/
-
-          exclude: |
-            **/.git*
-            **/.github/**
-            **/README.md
-            **/.DS_Store
+      - name: Deploy
+        run: |
+          sshpass -p "${{ secrets.SFTP_PASSWORD }}" sftp \
+            -o StrictHostKeyChecking=no \
+            -P 22 \
+            ${{ secrets.SFTP_USER }}@${{ secrets.SFTP_HOST }} <<EOF
+          mkdir EchteFruende
+          put -r * EchteFruende
+          bye
+          EOF
