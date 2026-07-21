@@ -13,13 +13,21 @@ jobs:
       - name: Repository auschecken
         uses: actions/checkout@v4
 
-      - name: Upload per SFTP
-        uses: Dylan700/sftp-upload-action@latest
+      - name: Dateien nach Strato übertragen
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.SFTP_HOST }}
           username: ${{ secrets.SFTP_USER }}
           password: ${{ secrets.SFTP_PASSWORD }}
+
+          protocol: sftp
           port: 22
 
-          uploads: |
-            ./=>/
+          local-dir: ./
+          server-dir: /EchteFruende/
+
+          exclude: |
+            **/.git*
+            **/.github/**
+            **/README.md
+            **/.DS_Store
