@@ -404,35 +404,72 @@ const Calendar = (() => {
     }
 
         /* ==========================================
-       FULLCALENDAR
-    ========================================== */
+   FULLCALENDAR
+========================================== */
 
-    function renderCalendar(){
+function renderCalendar(){
 
-        console.log("renderCalendar gestartet");
+    if(!DOM.calendar){
 
-        console.log("DOM.calendar =", DOM.calendar);
+        console.error("Calendar-Div nicht gefunden.");
 
-        console.log("FullCalendar =", typeof FullCalendar);
+        return;
 
-        console.log("Events =", STATE.events);
+    }
 
-        if(!DOM.calendar){
+    if(typeof FullCalendar === "undefined"){
 
-            console.error("Calendar-Div nicht gefunden.");
+        console.error("FullCalendar wurde nicht geladen.");
 
-            return;
+        return;
+
+    }
+
+    if(STATE.calendar){
+
+        STATE.calendar.destroy();
+
+        STATE.calendar = null;
+
+    }
+
+    STATE.calendar = new FullCalendar.Calendar(
+
+        DOM.calendar,
+
+        {
+
+            locale: "de",
+
+            initialView: "dayGridMonth",
+
+            firstDay: 1,
+
+            height: "auto",
+
+            events: STATE.events,
+
+            eventClick: onEventClick,
+
+            eventDidMount: onEventRender,
+
+            headerToolbar: {
+
+                left: "prev,next today",
+
+                center: "title",
+
+                right: "dayGridMonth,listMonth"
+
+            }
 
         }
 
-        if(typeof FullCalendar === "undefined"){
+    );
 
-            console.error("FullCalendar wurde nicht geladen.");
+    STATE.calendar.render();
 
-            return;
-
-        }
-
+}
     /* ==========================================
        EVENT GERENDERT
     ========================================== */
