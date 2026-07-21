@@ -230,8 +230,6 @@ ob_start();
 
 require_once __DIR__ . "/framework/modal.php";
 
-renderModal();
-
 $pageContent = ob_get_clean();
 
 include __DIR__ . "/framework/framework.php";
