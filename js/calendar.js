@@ -76,78 +76,106 @@ async init() {
 },
     
         /* ==========================================
-       ÖFFENTLICHE METHODEN
-    ========================================== */
+   ÖFFENTLICHE METHODEN
+========================================== */
 
-    async loadEvents() {
+async loadEvents() {
 
-        try {
+    try {
 
-            const response = await fetch(
+        const response = await fetch(
 
-                EF22.config.api.calendar
+            EF22.config.api.calendar
 
-            );
+        );
 
-            if (!response.ok) {
+        console.log(
 
-                throw new Error(
+            "API Response:",
 
-                    `HTTP ${response.status}`
+            response
 
-                );
+        );
 
-            }
+        if (!response.ok) {
 
-            const result = await response.json();
+            throw new Error(
 
-            if (!result.success) {
-
-                throw new Error(
-
-                    "API meldet einen Fehler."
-
-                );
-
-            }
-
-            this.state.events =
-
-                EF22.utils.filterCalendar(
-
-                    result.events
-
-                );
-
-            this.refresh();
-
-        }
-
-        catch (error) {
-
-            console.error(
-
-                "Kalender konnte nicht geladen werden.",
-
-                error
+                `HTTP ${response.status}`
 
             );
 
-            this.state.events = [];
+        }
 
-            this.refresh();
+        const result = await response.json();
+
+        console.log(
+
+            "API JSON:",
+
+            result
+
+        );
+
+        if (!result.success) {
+
+            throw new Error(
+
+                "API meldet einen Fehler."
+
+            );
 
         }
 
-    },
+        this.state.events =
 
-    refresh() {
+            EF22.utils.filterCalendar(
 
-        this.updateComponents();
+                result.events
 
-        this.renderCalendar();
+            );
 
-    },
+        this.refresh();
+
+    }
+
+    catch (error) {
+
+        console.error(
+
+            "Kalender konnte nicht geladen werden."
+
+        );
+
+        console.error(
+
+            "Message:",
+
+            error.message
+
+        );
+
+        console.error(
+
+            "Stack:",
+
+            error.stack
+
+        );
+
+        console.error(
+
+            error
+
+        );
+
+        this.state.events = [];
+
+        this.refresh();
+
+    }
+
+},
 
         /* ==========================================
    PRIVATE METHODEN
