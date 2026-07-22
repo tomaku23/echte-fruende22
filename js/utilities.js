@@ -11,124 +11,208 @@
 EF22.utils = {
 
         /* ==========================================
-       DATUM & UHRZEIT
-    ========================================== */
+   DATUM & UHRZEIT
+========================================== */
 
-    formatDate(date) {
+toDate(value) {
 
-        if (!(date instanceof Date) || isNaN(date.getTime())) {
+    if (value instanceof Date) {
 
-            return "";
+        return value;
 
-        }
+    }
 
-        return date.toLocaleDateString(
-            EF22.config.locale,
-            {
-                weekday: "long",
-                day: "2-digit",
-                month: "long",
-                year: "numeric"
-            }
-        );
+    const date = new Date(value);
 
-    },
+    if (isNaN(date.getTime())) {
 
-    formatTime(date) {
+        return null;
 
-        if (!(date instanceof Date) || isNaN(date.getTime())) {
+    }
 
-            return "";
+    return date;
 
-        }
+},
 
-        return date.toLocaleTimeString(
-            EF22.config.locale,
-            {
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
+formatDate(value) {
 
-    },
+    const date = this.toDate(value);
 
-    formatEventTime(event) {
+    if (!date) {
 
-        if (!event) {
+        return "";
 
-            return "";
+    }
 
-        }
+    return date.toLocaleDateString(
 
-        const start = new Date(event.start);
+        EF22.config.locale,
 
-        if (isNaN(start.getTime())) {
+        {
 
-            return "";
+            weekday: "long",
+
+            day: "2-digit",
+
+            month: "long",
+
+            year: "numeric"
 
         }
 
-        if (event.allDay) {
+    );
 
-            return "Ganztägig";
+},
 
-        }
+formatTime(value) {
 
-        const end = event.end
-            ? new Date(event.end)
-            : null;
+    const date = this.toDate(value);
 
-        return end
-            ? `${this.formatTime(start)} – ${this.formatTime(end)}`
-            : this.formatTime(start);
+    if (!date) {
 
-    },
+        return "";
 
-    getCountdown(date) {
+    }
 
-        if (!(date instanceof Date) || isNaN(date.getTime())) {
+    return date.toLocaleTimeString(
 
-            return "";
+        EF22.config.locale,
 
-        }
+        {
 
-        const MS_PER_DAY = 86400000;
+            hour: "2-digit",
 
-        const today = new Date();
-
-        today.setHours(0, 0, 0, 0);
-
-        const target = new Date(date);
-
-        target.setHours(0, 0, 0, 0);
-
-        const days = Math.ceil(
-
-            (target - today) / MS_PER_DAY
-
-        );
-
-        if (days < 0) {
-
-            return "Termin vorbei";
+            minute: "2-digit"
 
         }
 
-        if (days === 0) {
+    );
 
-            return "Heute";
+},
 
-        }
+formatTimeRange(start, end) {
 
-        if (days === 1) {
+    const startDate = this.toDate(start);
 
-            return "Morgen";
+    if (!startDate) {
 
-        }
+        return "";
 
-        return `Noch ${days} Tage`;
+    }
 
-    },
+    const endDate = this.toDate(end);
+
+    if (!endDate) {
+
+        return this.formatTime(startDate);
+
+    }
+
+    return `${
+
+        this.formatTime(startDate)
+
+    } – ${
+
+        this.formatTime(endDate)
+
+    }`;
+
+},
+
+formatEventTime(event) {
+
+    if (!event) {
+
+        return "";
+
+    }
+
+    if (event.allDay) {
+
+        return "Ganztägig";
+
+    }
+
+    return this.formatTimeRange(
+
+        event.start,
+
+        event.end
+
+    );
+
+},
+
+getCountdown(value) {
+
+    const date = this.toDate(value);
+
+    if (!date) {
+
+        return "";
+
+    }
+
+    const MS_PER_DAY = 86400000;
+
+    const today = new Date();
+
+    today.setHours(
+
+        0,
+
+        0,
+
+        0,
+
+        0
+
+    );
+
+    const target = new Date(date);
+
+    target.setHours(
+
+        0,
+
+        0,
+
+        0,
+
+        0
+
+    );
+
+    const days = Math.ceil(
+
+        (target - today) /
+
+        MS_PER_DAY
+
+    );
+
+    if (days < 0) {
+
+        return "Termin vorbei";
+
+    }
+
+    if (days === 0) {
+
+        return "Heute";
+
+    }
+
+    if (days === 1) {
+
+        return "Morgen";
+
+    }
+
+    return `Noch ${days} Tage`;
+
+},
 
         /* ==========================================
        EVENTS
