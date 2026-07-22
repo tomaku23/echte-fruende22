@@ -42,51 +42,18 @@ window.addEventListener("unhandledrejection", event => {
    INITIALISIERUNG
 ========================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
     console.log("=== APP START ===");
 
-    try{
+    try {
 
-        console.log("Header.init()");
-        Header.init();
+        console.log("EF22.calendar.init()");
+        await EF22.calendar.init();
 
-    }catch(error){
+    } catch (error) {
 
-        console.error("Header:", error);
-
-    }
-
-    try{
-
-        console.log("Navigation.init()");
-        Navigation.init();
-
-    }catch(error){
-
-        console.error("Navigation:", error);
-
-    }
-
-    try{
-
-        console.log("Animations.init()");
-        Animations.init();
-
-    }catch(error){
-
-        console.error("Animations:", error);
-
-    }
-
-    try{
-
-        console.log("Calendar.init()");
-        Calendar.init();
-
-    }catch(error){
-
-        console.error("Calendar:", error);
+        console.error("EF22.calendar:", error);
 
     }
 
