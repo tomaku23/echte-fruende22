@@ -73,7 +73,7 @@ async init() {
 
     console.log("8. init beendet");
 
-}
+},
     
         /* ==========================================
        ÖFFENTLICHE METHODEN
