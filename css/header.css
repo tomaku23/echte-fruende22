@@ -128,7 +128,7 @@
    NAVIGATION
 ========================================== */
 
-.header-nav {
+.nav-top {
 
     display: flex;
 
@@ -140,65 +140,91 @@
 
 }
 
-.header-nav a {
+.nav-top a {
 
-    position: relative;
+    color: var(--color-text);
+
+    text-decoration: none;
 
     font-weight: 500;
 
-    color: var(--color-text-light);
+    white-space: nowrap;
 
-    transition: var(--transition-fast);
+    transition: color .2s ease;
 
 }
 
-.header-nav a:hover {
+.nav-top a:hover {
 
     color: var(--color-primary);
 
 }
 
-.header-nav a::after {
+/* ==========================================
+   BURGER
+========================================== */
 
-    content: "";
+.burger {
 
-    position: absolute;
+    display: none;
 
-    left: 0;
+    width: 48px;
 
-    bottom: -.35rem;
+    height: 48px;
 
-    width: 100%;
+    padding: 0;
 
-    height: 2px;
+    border: none;
 
-    background: var(--color-primary);
+    background: transparent;
 
-    transform: scaleX(0);
+    cursor: pointer;
 
-    transform-origin: left;
+    align-items: center;
 
-    transition: var(--transition-fast);
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 5px;
 
 }
 
-.header-nav a:hover::after {
+.burger span {
 
-    transform: scaleX(1);
+    display: block;
+
+    width: 24px;
+
+    height: 2px;
+
+    background: var(--color-text);
+
+    border-radius: 999px;
+
+    transition: .25s ease;
 
 }
 
 /* ==========================================
-   ACTIONS
+   OVERLAY
 ========================================== */
 
-.header-actions {
+.nav-overlay {
 
-    display: flex;
+    display: none;
 
-    align-items: center;
+    position: fixed;
 
-    gap: var(--space-md);
+    inset: 0;
+
+    background: rgba(0,0,0,.45);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: opacity .25s ease;
 
 }
 
@@ -208,9 +234,17 @@
 
 @media (max-width: 900px) {
 
-    .header-nav {
+    .nav-top {
 
         display: none;
+
+    }
+
+    .burger {
+
+        display: flex;
+
+        margin-left: auto;
 
     }
 
