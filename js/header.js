@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HEADER.JS
- Version 7.0
+ Version 9.0
 =====================================================
 */
 
@@ -31,36 +31,34 @@ EF22.header = {
     elements: {},
 
     /* ==========================================
+       EVENTS
+    ========================================== */
+
+    handlers: {},
+
+    /* ==========================================
        INITIALISIERUNG
     ========================================== */
 
     init() {
 
-        this.elements =
+        this.elements = EF22.dom.register(
 
-            EF22.dom.register(
+            document.querySelector(
 
-                document.querySelector(
+                "[data-header=\"root\"]"
 
-                    "[data-header=\"root\"]"
+            ),
 
-                ),
+            "data-header"
 
-                "data-header"
-
-            );
+        );
 
         if (
 
             !this.elements.root
 
         ) {
-
-            console.warn(
-
-                "Header wurde nicht gefunden."
-
-            );
 
             return;
 
@@ -82,9 +80,35 @@ EF22.header = {
 
         );
 
+        this.createHandlers();
+
         this.registerEvents();
 
         this.updateHeader();
+
+    },
+
+    /* ==========================================
+       HANDLER
+    ========================================== */
+
+    createHandlers() {
+
+        this.handlers.scroll = () =>
+
+            this.onScroll();
+
+        this.handlers.burger = () =>
+
+            this.toggleNavigation();
+
+        this.handlers.overlay = () =>
+
+            this.closeNavigation();
+
+        this.handlers.keydown = (event) =>
+
+            this.onKeyDown(event);
 
     },
 
@@ -98,11 +122,7 @@ EF22.header = {
 
             "scroll",
 
-            this.onScroll.bind(
-
-                this
-
-            ),
+            this.handlers.scroll,
 
             {
 
@@ -112,51 +132,11 @@ EF22.header = {
 
         );
 
-        window.addEventListener(
-
-            "resize",
-
-            this.updateHeader.bind(
-
-                this
-
-            )
-
-        );
-
         this.elements.burger?.addEventListener(
 
             "click",
 
-            this.toggleNavigation.bind(
-
-                this
-
-            )
-
-        );
-
-        this.elements.logo?.addEventListener(
-
-            "click",
-
-            this.onLogoClick.bind(
-
-                this
-
-            )
-
-        );
-
-        this.elements.logo?.addEventListener(
-
-            "keydown",
-
-            this.onLogoKeyDown.bind(
-
-                this
-
-            )
+            this.handlers.burger
 
         );
 
@@ -164,11 +144,7 @@ EF22.header = {
 
             "click",
 
-            this.closeNavigation.bind(
-
-                this
-
-            )
+            this.handlers.overlay
 
         );
 
@@ -176,11 +152,7 @@ EF22.header = {
 
             "keydown",
 
-            this.onKeyDown.bind(
-
-                this
-
-            )
+            this.handlers.keydown
 
         );
 
@@ -200,11 +172,7 @@ EF22.header = {
 
                         "click",
 
-                        this.closeNavigation.bind(
-
-                            this
-
-                        )
+                        this.handlers.overlay
 
                     )
 
@@ -232,15 +200,11 @@ EF22.header = {
 
     },
 
-    /* ==========================================
-       HEADER AKTUALISIEREN
-    ========================================== */
-
     updateHeader() {
 
         if (
 
-            window.scrollY === 0
+            window.scrollY < 80
 
         ) {
 
@@ -254,11 +218,9 @@ EF22.header = {
 
     },
 
-    /* ==========================================
-       HEADER GROSS
-    ========================================== */
-
     expandHeader() {
+
+        this.closeNavigation();
 
         if (
 
@@ -279,10 +241,6 @@ EF22.header = {
         );
 
     },
-
-    /* ==========================================
-       HEADER KOMPAKT
-    ========================================== */
 
     compactHeader() {
 
@@ -307,7 +265,7 @@ EF22.header = {
     },
 
     /* ==========================================
-       NAVIGATION ÖFFNEN
+       NAVIGATION
     ========================================== */
 
     openNavigation() {
@@ -348,10 +306,6 @@ EF22.header = {
 
     },
 
-    /* ==========================================
-       NAVIGATION SCHLIESSEN
-    ========================================== */
-
     closeNavigation() {
 
         if (
@@ -390,10 +344,6 @@ EF22.header = {
 
     },
 
-    /* ==========================================
-       NAVIGATION UMSCHALTEN
-    ========================================== */
-
     toggleNavigation() {
 
         if (
@@ -406,63 +356,27 @@ EF22.header = {
 
         }
 
-        if (
+        this.state.isNavigationOpen
 
-            this.state.isNavigationOpen
+            ? this.closeNavigation()
 
-        ) {
-
-            this.closeNavigation();
-
-            return;
-
-        }
-
-        this.openNavigation();
+            : this.openNavigation();
 
     },
 
     /* ==========================================
-       HILFSFUNKTIONEN
+       TASTATUR
     ========================================== */
 
-    onLogoClick() {
+    onKeyDown(
 
-        this.closeNavigation();
+        event
 
-        window.location.href =
-
-            "index.php";
-
-    },
-
-    onLogoKeyDown(event) {
+    ) {
 
         if (
 
-            event.key !== "Enter" &&
-
-            event.key !== " "
-
-        ) {
-
-            return;
-
-        }
-
-        event.preventDefault();
-
-        this.onLogoClick();
-
-    },
-
-    onKeyDown(event) {
-
-        if (
-
-            event.key === "Escape" &&
-
-            this.state.isNavigationOpen
+            event.key === "Escape"
 
         ) {
 
@@ -477,6 +391,62 @@ EF22.header = {
     ========================================== */
 
     destroy() {
+
+        window.removeEventListener(
+
+            "scroll",
+
+            this.handlers.scroll
+
+        );
+
+        document.removeEventListener(
+
+            "keydown",
+
+            this.handlers.keydown
+
+        );
+
+        this.elements.burger?.removeEventListener(
+
+            "click",
+
+            this.handlers.burger
+
+        );
+
+        this.elements.overlay?.removeEventListener(
+
+            "click",
+
+            this.handlers.overlay
+
+        );
+
+        this.elements.navigation
+
+            ?.querySelectorAll(
+
+                "a"
+
+            )
+
+            .forEach(
+
+                (link) =>
+
+                    link.removeEventListener(
+
+                        "click",
+
+                        this.handlers.overlay
+
+                    )
+
+            );
+
+        this.closeNavigation();
 
     }
 

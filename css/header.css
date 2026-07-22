@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HEADER.CSS
- Version 2.0
+ Version 3.1
 =====================================================
 */
 
@@ -20,8 +20,6 @@
 
     width: 100%;
 
-    min-height: var(--header-height);
-
     background: var(--header-background);
 
     backdrop-filter: blur(var(--header-blur));
@@ -29,8 +27,6 @@
     box-shadow: var(--header-shadow);
 
     border-bottom: 1px solid var(--color-border);
-
-    transition: var(--transition-normal);
 
 }
 
@@ -40,13 +36,7 @@
 
 .header-inner {
 
-    max-width: var(--container-width);
-
-    margin: 0 auto;
-
-    min-height: var(--header-height);
-
-    padding: 0 var(--space-lg);
+    position: relative;
 
     display: flex;
 
@@ -54,9 +44,17 @@
 
     justify-content: space-between;
 
-    gap: var(--space-xl);
+    max-width: var(--container-width);
 
-    transition: var(--transition-normal);
+    margin: 0 auto;
+
+    padding: 0 var(--space-lg);
+
+    height: var(--header-height);
+
+    transition:
+        height .30s ease,
+        padding .30s ease;
 
 }
 
@@ -64,17 +62,7 @@
    LOGO
 ========================================== */
 
-.logo-track {
-
-    display: flex;
-
-    align-items: center;
-
-    flex-shrink: 0;
-
-}
-
-.logo-slider {
+.header-logo {
 
     display: flex;
 
@@ -82,24 +70,25 @@
 
     justify-content: center;
 
+    flex-shrink: 0;
+
+    text-decoration: none;
+
     cursor: pointer;
 
 }
 
-.logo-slider img {
+.header-logo img {
 
-    height: 64px;
+    display: block;
 
     width: auto;
 
-    transition: var(--transition-normal);
+    height: 72px;
 
-}
-
-.logo-progress,
-.chapter-indicator {
-
-    display: none;
+    transition:
+        height .30s ease,
+        transform .30s ease;
 
 }
 
@@ -107,7 +96,17 @@
    NAVIGATION
 ========================================== */
 
-.nav-top {
+.header-navigation {
+
+    margin-left: auto;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+
+}
+
+.header-navigation ul {
 
     display: flex;
 
@@ -115,25 +114,72 @@
 
     gap: var(--space-xl);
 
-    margin-left: auto;
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
 
 }
 
-.nav-top a {
+.header-navigation li {
+
+    display: flex;
+
+    align-items: center;
+
+}
+
+.header-navigation a {
 
     position: relative;
 
-    font-weight: 600;
+    display: inline-flex;
+
+    align-items: center;
 
     color: var(--color-text);
 
-    transition: var(--transition-fast);
+    text-decoration: none;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition:
+        color .20s ease;
 
 }
 
-.nav-top a:hover {
+.header-navigation a:hover {
 
     color: var(--color-primary);
+
+}
+
+.header-navigation a.active {
+
+    color: var(--color-text);
+
+}
+
+.header-navigation a.active::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: -8px;
+
+    width: 100%;
+
+    height: 2px;
+
+    border-radius: 999px;
+
+    background: var(--color-primary);
 
 }
 
@@ -141,9 +187,17 @@
    BURGER
 ========================================== */
 
-.burger {
+.header-burger {
 
     display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 5px;
 
     width: 48px;
 
@@ -157,19 +211,11 @@
 
     background: transparent;
 
-    align-items: center;
-
-    justify-content: center;
-
-    flex-direction: column;
-
-    gap: 5px;
-
     cursor: pointer;
 
 }
 
-.burger span {
+.header-burger span {
 
     display: block;
 
@@ -179,36 +225,11 @@
 
     border-radius: 999px;
 
-    background-color: #222;
+    background: var(--color-text);
 
-    transition: transform .25s ease,
-                opacity .25s ease;
-
-}
-
-/* ==========================================
-   BURGER ANIMATION
-========================================== */
-
-.header.expanded .burger span:nth-child(1) {
-
-    transform:
-        translateY(8px)
-        rotate(45deg);
-
-}
-
-.header.expanded .burger span:nth-child(2) {
-
-    opacity: 0;
-
-}
-
-.header.expanded .burger span:nth-child(3) {
-
-    transform:
-        translateY(-8px)
-        rotate(-45deg);
+    transition:
+        transform .30s ease,
+        opacity .30s ease;
 
 }
 
@@ -216,7 +237,7 @@
    OVERLAY
 ========================================== */
 
-.nav-overlay {
+.header-overlay {
 
     position: fixed;
 
@@ -226,9 +247,13 @@
 
     opacity: 0;
 
+    visibility: hidden;
+
     pointer-events: none;
 
-    transition: var(--transition-normal);
+    transition:
+        opacity .30s ease,
+        visibility .30s ease;
 
 }
 
@@ -238,85 +263,135 @@
 
 .header.compact .header-inner {
 
-    min-height: var(--header-height-compact);
+    height: var(--header-height-compact);
 
 }
 
-.header.compact .logo-slider img {
+.header.compact .header-logo img {
 
     height: 46px;
 
 }
 
-/* ==========================================
-   MOBILE
-========================================== */
+.header.compact .header-navigation {
 
-@media (max-width: 900px) {
+    opacity: 0;
 
-    .burger {
+    visibility: hidden;
 
-        display: flex;
+    pointer-events: none;
 
-        margin-left: auto;
+}
 
-    }
+.header.compact .header-burger {
 
-    .nav-top {
-
-        position: fixed;
-
-        top: var(--header-height);
-
-        right: -100%;
-
-        width: min(320px, 80vw);
-
-        height: calc(100vh - var(--header-height));
-
-        background: var(--color-surface);
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: var(--space-lg);
-
-        padding: var(--space-xl);
-
-        box-shadow: var(--shadow-lg);
-
-        transition: right var(--transition-normal);
-
-    }
-
-    .header.expanded .nav-top {
-
-        right: 0;
-
-    }
-
-    .header.expanded .nav-overlay {
-
-        opacity: 1;
-
-        pointer-events: auto;
-
-    }
+    display: flex;
 
 }
 
 /* ==========================================
-   DESKTOP
+   MENU OPEN
 ========================================== */
 
-@media (min-width: 901px) {
+.header.compact.expanded .header-overlay {
 
-    .nav-overlay {
+    opacity: 1;
 
-        display: none !important;
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+.header.compact.expanded .header-navigation {
+
+    position: absolute;
+
+    top: calc(100% + var(--space-sm));
+
+    right: var(--space-lg);
+
+    display: block;
+    
+    .header.compact.expanded .header-navigation ul {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: var(--space-lg);
+
+}
+
+    width: 260px;
+
+    padding: var(--space-xl);
+
+    background: var(--header-background);
+
+    border: 1px solid var(--color-border);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-lg);
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    z-index: 20;
+
+}
+
+/* ==========================================
+   BURGER ANIMATION
+========================================== */
+
+.header.compact.expanded .header-burger span:nth-child(1) {
+
+    transform:
+        translateY(8px)
+        rotate(45deg);
+
+}
+
+.header.compact.expanded .header-burger span:nth-child(2) {
+
+    opacity: 0;
+
+}
+
+.header.compact.expanded .header-burger span:nth-child(3) {
+
+    transform:
+        translateY(-8px)
+        rotate(-45deg);
+
+}
+
+/* ==========================================
+   SMALL DISPLAYS
+========================================== */
+
+@media (max-width: 420px) {
+
+    .header-inner {
+
+        padding-left: var(--space-md);
+
+        padding-right: var(--space-md);
+
+    }
+
+    .header.compact.expanded .header-navigation {
+
+        right: var(--space-md);
+
+        width: min(260px, calc(100vw - (2 * var(--space-md))));
 
     }
 
