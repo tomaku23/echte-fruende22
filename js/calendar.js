@@ -39,31 +39,41 @@ EF22.calendar = {
     },
 
     /* ==========================================
-       INITIALISIERUNG
-    ========================================== */
+   INITIALISIERUNG
+========================================== */
 
-    async init() {
+async init() {
 
-        this.elements.calendar =
-            document.getElementById(
-                "calendar"
-            );
+    console.log("1. calendar.init()");
 
-        if (!this.elements.calendar) {
+    this.elements.calendar =
+        document.getElementById("calendar");
 
-            return;
+    console.log("2. calendar Element:", this.elements.calendar);
 
-        }
+    if (!this.elements.calendar) {
 
-        EF22.modal.init();
+        console.log("3. Kein Calendar-Element gefunden.");
 
-        EF22.hero.init();
+        return;
 
-        EF22.highlights.init();
+    }
 
-        await this.loadEvents();
+    console.log("4. modal.init()");
+    EF22.modal.init();
 
-    },
+    console.log("5. hero.init()");
+    EF22.hero.init();
+
+    console.log("6. highlights.init()");
+    EF22.highlights.init();
+
+    console.log("7. loadEvents()");
+    await this.loadEvents();
+
+    console.log("8. init beendet");
+
+}
     
         /* ==========================================
        ÖFFENTLICHE METHODEN
