@@ -18,20 +18,15 @@
 
     z-index: var(--z-header);
 
-    width: 100%;
+    background: var(--header-background);
 
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(var(--header-blur));
 
-    background: rgba(255,255,255,.92);
+    box-shadow: var(--header-shadow);
 
     border-bottom: 1px solid var(--color-border);
 
-    box-shadow: var(--shadow-sm);
-
-    transition:
-        background .25s ease,
-        box-shadow .25s ease,
-        min-height .25s ease;
+    transition: var(--transition-normal);
 
 }
 
@@ -41,6 +36,14 @@
 
 .header-inner {
 
+    max-width: var(--container-width);
+
+    margin: 0 auto;
+
+    min-height: var(--header-height);
+
+    padding: 0 var(--space-lg);
+
     display: flex;
 
     align-items: center;
@@ -49,19 +52,7 @@
 
     gap: var(--space-xl);
 
-    max-width: 1400px;
-
-    margin: 0 auto;
-
-    padding:
-        0
-        var(--space-lg);
-
-    min-height: var(--header-height);
-
-    transition:
-        min-height .25s ease,
-        padding .25s ease;
+    transition: var(--transition-normal);
 
 }
 
@@ -74,8 +65,6 @@
     display: flex;
 
     align-items: center;
-
-    gap: var(--space-md);
 
     flex-shrink: 0;
 
@@ -91,33 +80,19 @@
 
     cursor: pointer;
 
-    user-select: none;
-
-    transition:
-        transform .25s ease;
-
 }
 
 .logo-slider img {
-
-    display: block;
 
     height: 64px;
 
     width: auto;
 
-    transition:
-        height .25s ease,
-        transform .25s ease;
+    transition: var(--transition-normal);
 
 }
 
-.logo-progress {
-
-    display: none;
-
-}
-
+.logo-progress,
 .chapter-indicator {
 
     display: none;
@@ -142,15 +117,13 @@
 
 .nav-top a {
 
+    position: relative;
+
+    font-weight: 600;
+
     color: var(--color-text);
 
-    text-decoration: none;
-
-    font-weight: 500;
-
-    white-space: nowrap;
-
-    transition: color .2s ease;
+    transition: var(--transition-fast);
 
 }
 
@@ -178,8 +151,6 @@
 
     background: transparent;
 
-    cursor: pointer;
-
     align-items: center;
 
     justify-content: center;
@@ -192,17 +163,15 @@
 
 .burger span {
 
-    display: block;
-
     width: 24px;
 
     height: 2px;
 
-    background: var(--color-text);
-
     border-radius: 999px;
 
-    transition: .25s ease;
+    background: var(--color-text);
+
+    transition: var(--transition-normal);
 
 }
 
@@ -211,8 +180,6 @@
 ========================================== */
 
 .nav-overlay {
-
-    display: none;
 
     position: fixed;
 
@@ -224,7 +191,23 @@
 
     pointer-events: none;
 
-    transition: opacity .25s ease;
+    transition: var(--transition-normal);
+
+}
+
+/* ==========================================
+   COMPACT
+========================================== */
+
+.header.compact .header-inner {
+
+    min-height: var(--header-height-compact);
+
+}
+
+.header.compact .logo-slider img {
+
+    height: 46px;
 
 }
 
@@ -234,17 +217,69 @@
 
 @media (max-width: 900px) {
 
-    .nav-top {
-
-        display: none;
-
-    }
-
     .burger {
 
         display: flex;
 
         margin-left: auto;
+
+    }
+
+    .nav-top {
+
+        position: fixed;
+
+        top: var(--header-height);
+
+        right: -100%;
+
+        width: min(320px, 80vw);
+
+        height: calc(100vh - var(--header-height));
+
+        background: var(--color-surface);
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: var(--space-lg);
+
+        padding: var(--space-xl);
+
+        box-shadow: var(--shadow-lg);
+
+        transition: right var(--transition-normal);
+
+    }
+
+    .header.expanded .nav-top {
+
+        right: 0;
+
+    }
+
+    .header.expanded .nav-overlay {
+
+        opacity: 1;
+
+        pointer-events: auto;
+
+    }
+
+}
+
+/* ==========================================
+   DESKTOP
+========================================== */
+
+@media (min-width: 901px) {
+
+    .nav-overlay {
+
+        display: none !important;
 
     }
 

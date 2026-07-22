@@ -80,7 +80,7 @@
     --shadow-lg:
         0 12px 36px rgba(0,0,0,.18);
 
-    /* ==========================================
+        /* ==========================================
        LAYOUT
     ========================================== */
 
@@ -88,8 +88,16 @@
 
     --header-height: 80px;
 
-    --section-spacing: 6rem;
+    --header-height-compact: 60px;
 
+    --header-background: rgba(255,255,255,.92);
+
+    --header-shadow: var(--shadow-sm);
+
+    --header-blur: 14px;
+
+    --section-spacing: 6rem;
+    
     /* ==========================================
        ANIMATION
     ========================================== */
