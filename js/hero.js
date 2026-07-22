@@ -1,42 +1,36 @@
 /*
 =====================================================
- ECHTE FRÜNDE '22
+ EF22 FRAMEWORK
  HERO.JS
- Version 2.0
+ Version 3.0
 =====================================================
 */
 
 "use strict";
 
+window.EF22 ??= {};
+
 EF22.hero = {
 
     /* ==========================================
-   STATE
-========================================== */
-
-state: {
-
-    event: null
-
-},
-
-    /* ==========================================
-       ELEMENTE
+       STATE
     ========================================== */
 
-    elements: {
+    state: {
 
-        hero: null,
-        background: null,
-        badge: null,
-        title: null,
-        date: null,
-        time: null,
-        location: null,
-        countdown: null,
-        hint: null
+        event: null
 
     },
+
+    /* ==========================================
+   ELEMENTE
+========================================== */
+
+elements: {
+
+    root: null
+
+},
 
     /* ==========================================
    INITIALISIERUNG
@@ -44,66 +38,17 @@ state: {
 
 init() {
 
-    this.elements.hero = document.getElementById("hero");
-    this.elements.background = document.getElementById("heroBackground");
-    this.elements.badge = document.getElementById("heroBadge");
-    this.elements.title = document.getElementById("heroTitle");
-    this.elements.date = document.getElementById("heroDate");
-    this.elements.time = document.getElementById("heroTime");
-    this.elements.location = document.getElementById("heroLocation");
-    this.elements.countdown = document.getElementById("heroCountdown");
-    this.elements.hint = document.getElementById("heroHint");
+    this.elements.root =
 
-    this.registerEvents();
+        document.getElementById("hero");
 
-},
-
-registerEvents() {
-
-    if (!this.elements.hero) {
+    if (!this.elements.root) {
 
         return;
 
     }
 
-    this.elements.hero.addEventListener(
-        "click",
-        () => {
-
-            if (this.state.event) {
-
-                EF22.modal.open(
-                    this.state.event
-                );
-
-            }
-
-        }
-    );
-
-    this.elements.hero.addEventListener(
-        "keydown",
-        (event) => {
-
-            if (
-                event.key === "Enter" ||
-                event.key === " "
-            ) {
-
-                event.preventDefault();
-
-                if (this.state.event) {
-
-                    EF22.modal.open(
-                        this.state.event
-                    );
-
-                }
-
-            }
-
-        }
-    );
+    this.registerElements();
 
 },
 
@@ -115,153 +60,214 @@ refresh(event) {
 
     this.state.event = event;
 
-    this.render();
-
-},
-
-render() {
-
-    if (!this.state.event) {
-
-        this.renderEmpty();
+    if (!this.elements.root) {
 
         return;
 
     }
 
-    this.renderBackground();
+    if (!event) {
 
-    this.renderBadge();
+        this.clear();
 
-    this.renderTitle();
-
-    this.renderDate();
-
-    this.renderTime();
-
-    this.renderLocation();
-
-    this.renderCountdown();
-
-},
-
-            /* ==========================================
-       PRIVATE METHODEN
-    ========================================== */
-
-    renderEmpty() {
-
-        if (!this.elements.background) {
-
-            return;
-
-        }
-
-        this.elements.badge.className = "hero-badge";
-        this.elements.badge.textContent = "Termine";
-
-        this.elements.title.textContent =
-            "Zurzeit sind keine Termine vorhanden.";
-
-        this.elements.date.textContent =
-            "Neue Veranstaltungen folgen bald.";
-
-        this.elements.time.textContent = "";
-
-        this.elements.location.textContent = "";
-
-        this.elements.countdown.textContent = "--";
-
-        this.elements.background.style.backgroundImage =
-            'url("images/hero-bg.png")';
-
-    },
-
-    renderBackground() {
-
-        const props = EF22.utils.getProps(
-            this.state.event
-        );
-
-        this.elements.background.style.backgroundImage =
-            `url("${props.image}")`;
-
-    },
-
-    renderBadge() {
-
-        const props = EF22.utils.getProps(
-            this.state.event
-        );
-
-        this.elements.badge.className =
-            "hero-badge";
-
-        EF22.utils.addBadgeClass(
-            this.elements.badge,
-            props.category
-        );
-
-        this.elements.badge.textContent =
-            props.category;
-
-    },
-
-    renderTitle() {
-
-        this.elements.title.textContent =
-            this.state.event.title ?? "";
-
-    },
-
-    renderDate() {
-
-        this.elements.date.textContent =
-            EF22.utils.formatDate(
-                new Date(this.state.event.start)
-            );
-
-    },
-
-    renderTime() {
-
-        const event = this.state.event;
-
-        const start = new Date(event.start);
-
-        const end = event.end
-            ? new Date(event.end)
-            : null;
-
-        this.elements.time.textContent =
-            event.allDay
-                ? "Ganztägig"
-                : (
-                    end
-                        ? `${EF22.utils.formatTime(start)} – ${EF22.utils.formatTime(end)}`
-                        : EF22.utils.formatTime(start)
-                );
-
-    },
-
-    renderLocation() {
-
-        const props = EF22.utils.getProps(
-            this.state.event
-        );
-
-        this.elements.location.textContent =
-            props.location;
-
-    },
-
-    renderCountdown() {
-
-        this.elements.countdown.textContent =
-            EF22.utils.getCountdown(
-                new Date(this.state.event.start)
-            );
+        return;
 
     }
 
-};
+    this.setText(
+        this.elements.badge,
+        "Nächster Termin"
+    );
+
+    this.setText(
+        this.elements.title,
+        event.title
+    );
+
+    this.setText(
+        this.elements.description,
+        event.description
+    );
+
+    this.setText(
+        this.elements.location,
+        event.extendedProps?.location
+    );
+
+    this.setText(
+        this.elements.date,
+        EF22.utils.formatDate(
+            event.start
+        )
+    );
+
+    this.setText(
+        this.elements.time,
+        EF22.utils.formatTimeRange(
+            event.start,
+            event.end
+        )
+    );
+
+    this.updateCountdown(
+        event.start
+    );
+
+    this.toggle(
+        this.elements.info,
+        !!(
+            event.start ||
+            event.end ||
+            event.extendedProps?.location
+        )
+    );
+
+},
+
+         /* ==========================================
+   PRIVATE METHODEN
+========================================== */
+
+registerElements() {
+
+    const elements =
+
+        this.elements.root.querySelectorAll(
+
+            "[data-hero]"
+
+        );
+
+    elements.forEach(
+
+        (element) => {
+
+            const key =
+
+                element.dataset.hero;
+
+            this.elements[key] =
+
+                element;
+
+        }
+
+    );
+
+},
+
+setText(element, value) {
+
+    if (!element) {
+
+        return;
+
+    }
+
+    if (!value) {
+
+        element.hidden = true;
+
+        element.textContent = "";
+
+        return;
+
+    }
+
+    element.hidden = false;
+
+    element.textContent = value;
+
+},
+
+toggle(element, visible) {
+
+    if (!element) {
+
+        return;
+
+    }
+
+    element.hidden = !visible;
+
+},
+
+clear() {
+
+    Object.values(
+
+        this.elements
+
+    ).forEach(
+
+        (element) => {
+
+            if (
+
+                !element ||
+
+                element === this.elements.root
+
+            ) {
+
+                return;
+
+            }
+
+            element.hidden = true;
+
+        }
+
+    );
+
+},
+
+updateCountdown(start) {
+
+    if (
+
+        !this.elements.countdown ||
+
+        !start
+
+    ) {
+
+        return;
+
+    }
+
+    const now =
+
+        new Date();
+
+    const eventDate =
+
+        new Date(start);
+
+    const diff =
+
+        eventDate.getTime() -
+
+        now.getTime();
+
+    if (diff <= 0) {
+
+        this.elements.countdown.hidden = true;
+
+        return;
+
+    }
+
+    const days = Math.ceil(
+
+        diff / 1000 / 60 / 60 / 24
+
+    );
+
+    this.elements.countdown.hidden = false;
+
+    this.elements.countdown.textContent =
+
+        `Noch ${days} Tag${days !== 1 ? "e" : ""}`;
+
+}

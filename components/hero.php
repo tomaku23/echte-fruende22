@@ -5,219 +5,188 @@ declare(strict_types=1);
 /*
 =====================================================
 EF22 FRAMEWORK
+COMPONENT
 HERO
-Version 1.0
+Version 3.0
 =====================================================
 */
 
-if (!function_exists("renderHero")) {
+$defaults = [
 
-    function renderHero(array $config = []): void
-    {
+    "background" => "",
 
-        $defaults = [
+    "badge" => "",
 
-            "variant"     => "default",
+    "title" => "",
 
-            "badge"       => "",
+    "subtitle" => "",
 
-            "title"       => "",
+    "description" => "",
 
-            "subtitle"    => "",
+    "date" => "",
 
-            "description" => "",
+    "time" => "",
 
-            "image"       => "",
+    "location" => "",
 
-            "buttonText"  => "",
+    "countdown" => "",
 
-            "buttonLink"  => "#"
+    "hint" => "",
 
-        ];
+    "button" => [
 
-        $hero = array_merge($defaults, $config);
+        "text" => "",
+
+        "link" => "#"
+
+    ]
+
+];
+
+$hero = array_replace_recursive(
+
+    $defaults,
+
+    $hero ?? []
+
+);
 
 ?>
 
-<section class="hero hero--<?= htmlspecialchars($hero["variant"]) ?>">
+<section
+    id="hero"
+    class="hero">
 
     <div
         class="hero-background"
-        <?php if ($hero["image"] !== "") : ?>
-            style="background-image:url('<?= htmlspecialchars($hero["image"]) ?>');"
-        <?php endif; ?>>
+        data-hero="background">
+
     </div>
 
-    <div class="hero-overlay"></div>
+    <div class="hero-overlay">
 
-    <div class="container">
+        <div class="container">
 
-        <div class="hero-content">
+            <div class="hero-content">
 
-            <?php if ($hero["badge"] !== "") : ?>
-
-                <span class="hero-badge">
+                <span
+                    class="hero-badge"
+                    data-hero="badge">
 
                     <?= htmlspecialchars($hero["badge"]) ?>
 
                 </span>
 
-            <?php endif; ?>
-
-            <?php if ($hero["title"] !== "") : ?>
-
-                <h1 class="hero-title">
+                <h1
+                    class="hero-title"
+                    data-hero="title">
 
                     <?= htmlspecialchars($hero["title"]) ?>
 
                 </h1>
 
-            <?php endif; ?>
-
-            <?php if ($hero["subtitle"] !== "") : ?>
-
-                <p class="hero-subtitle">
+                <p
+                    class="hero-subtitle"
+                    data-hero="subtitle">
 
                     <?= htmlspecialchars($hero["subtitle"]) ?>
 
                 </p>
 
-            <?php endif; ?>
-
-            <?php if ($hero["description"] !== "") : ?>
-
-                <div class="hero-description">
+                <div
+                    class="hero-description"
+                    data-hero="description">
 
                     <?= nl2br(htmlspecialchars($hero["description"])) ?>
 
                 </div>
 
-            <?php endif; ?>
+                <div
+                    class="hero-info"
+                    data-hero="info">
 
-            <?php if ($hero["buttonText"] !== "") : ?>
+                    <div class="hero-item">
+
+                        <span class="hero-icon">
+
+                            📅
+
+                        </span>
+
+                        <span
+                            data-hero="date">
+
+                            <?= htmlspecialchars($hero["date"]) ?>
+
+                        </span>
+
+                    </div>
+
+                    <div class="hero-item">
+
+                        <span class="hero-icon">
+
+                            🕒
+
+                        </span>
+
+                        <span
+                            data-hero="time">
+
+                            <?= htmlspecialchars($hero["time"]) ?>
+
+                        </span>
+
+                    </div>
+
+                    <div class="hero-item">
+
+                        <span class="hero-icon">
+
+                            📍
+
+                        </span>
+
+                        <span
+                            data-hero="location">
+
+                            <?= htmlspecialchars($hero["location"]) ?>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="hero-countdown"
+                    data-hero="countdown">
+
+                    <?= htmlspecialchars($hero["countdown"]) ?>
+
+                </div>
+
+                <div
+                    class="hero-hint"
+                    data-hero="hint">
+
+                    <?= htmlspecialchars($hero["hint"]) ?>
+
+                </div>
 
                 <a
                     class="button hero-button"
-                    href="<?= htmlspecialchars($hero["buttonLink"]) ?>">
+                    data-hero="button"
+                    href="<?= htmlspecialchars($hero["button"]["link"]) ?>">
 
-                    <?= htmlspecialchars($hero["buttonText"]) ?>
+                    <?= htmlspecialchars($hero["button"]["text"]) ?>
 
                 </a>
 
-            <?php endif; ?>
+            </div>
 
         </div>
 
     </div>
 
 </section>
-
-    <section
-        id="hero"
-        class="hero"
-        data-hero="calendar"
-        tabindex="0"
-        aria-label="Hero">
-
-        <div
-            id="heroBackground"
-            class="hero-background">
-
-        </div>
-
-        <div class="hero-overlay">
-
-            <div class="container">
-
-                <div class="hero-content">
-
-                    <span
-                        id="heroBadge"
-                        class="hero-badge">
-
-                        Termin
-
-                    </span>
-
-                    <h1 id="heroTitle">
-
-                        Termine werden geladen …
-
-                    </h1>
-
-                    <p
-                        id="heroDate"
-                        class="hero-date">
-
-                        Bitte warten …
-
-                    </p>
-
-                    <div class="hero-info">
-
-                        <div class="hero-item">
-
-                            <span class="hero-icon">
-
-                                🕒
-
-                            </span>
-
-                            <span id="heroTime"></span>
-
-                        </div>
-
-                        <div class="hero-item">
-
-                            <span class="hero-icon">
-
-                                📍
-
-                            </span>
-
-                            <span id="heroLocation"></span>
-
-                        </div>
-
-                    </div>
-
-                    <div
-                        id="heroCountdown"
-                        class="hero-countdown">
-
-                        --
-
-                    </div>
-
-                    <div
-                        id="heroHint"
-                        class="hero-hint">
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div
-            class="hero-scroll"
-            aria-hidden="true">
-
-            <span>
-
-                ▼
-
-            </span>
-
-        </div>
-
-    </section>
-
-
-<?php
-
-    }
-
-}

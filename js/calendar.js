@@ -150,109 +150,107 @@ async init() {
     },
 
         /* ==========================================
-       PRIVATE METHODEN
-    ========================================== */
+   PRIVATE METHODEN
+========================================== */
 
-    renderCalendar() {
+renderCalendar() {
 
-        if (!this.elements.calendar) {
+    if (!this.elements.calendar) {
 
-            return;
-
-        }
-
-        if (this.state.calendar) {
-
-            this.state.calendar.destroy();
-
-        }
-
-        this.state.calendar = new FullCalendar.Calendar(
-
-            this.elements.calendar,
-
-            this.getCalendarOptions()
-
-        );
-
-        this.state.calendar.render();
-
-    },
-
-    updateComponents() {
-
-        const nextEvent = EF22.utils.getNextEvent(
-
-            this.state.events
-
-        );
-
-        EF22.hero.refresh(
-
-            nextEvent
-
-        );
-
-        EF22.highlights.refresh(
-
-            EF22.utils.filterHighlights(
-
-                this.state.events
-
-            )
-
-        );
-
-    },
-
-    getCalendarOptions() {
-
-        return {
-
-            locale: "de",
-
-            initialView: "dayGridMonth",
-
-            firstDay: 1,
-
-            height: "auto",
-
-            events: this.state.events,
-
-            headerToolbar: {
-
-                left: "prev,next today",
-
-                center: "title",
-
-                right: "dayGridMonth,listMonth"
-
-            },
-
-            eventClick: (info) => {
-
-                info.jsEvent.preventDefault();
-
-                this.onEventClick(
-
-                    info
-
-                );
-
-            }
-
-        };
-
-    },
-
-    onEventClick(info) {
-
-        EF22.modal.open(
-
-            info.event
-
-        );
+        return;
 
     }
 
-};
+    if (this.state.calendar) {
+
+        this.state.calendar.destroy();
+
+    }
+
+    this.state.calendar = new FullCalendar.Calendar(
+
+        this.elements.calendar,
+
+        this.getCalendarOptions()
+
+    );
+
+    this.state.calendar.render();
+
+},
+
+updateComponents() {
+
+    const nextEvent = EF22.utils.getNextEvent(
+
+        this.state.events
+
+    );
+
+    EF22.hero.refresh(
+
+        nextEvent
+
+    );
+
+    EF22.highlights.refresh(
+
+        EF22.utils.filterHighlights(
+
+            this.state.events
+
+        )
+
+    );
+
+},
+
+getCalendarOptions() {
+
+    return {
+
+        locale: "de",
+
+        initialView: "dayGridMonth",
+
+        firstDay: 1,
+
+        height: "auto",
+
+        events: this.state.events,
+
+        headerToolbar: {
+
+            left: "prev,next today",
+
+            center: "title",
+
+            right: "dayGridMonth,listMonth"
+
+        },
+
+        eventClick: (info) => {
+
+            info.jsEvent.preventDefault();
+
+            this.onEventClick(
+
+                info
+
+            );
+
+        }
+
+    };
+
+},
+
+onEventClick(info) {
+
+    EF22.modal.open(
+
+        info.event
+
+    );
+
+}
