@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HEADER.CSS
- Version 1.0
+ Version 2.0
 =====================================================
 */
 
@@ -18,6 +18,8 @@
 
     z-index: var(--z-header);
 
+    width: 100%;
+
     backdrop-filter: blur(14px);
 
     background: rgba(255,255,255,.92);
@@ -26,13 +28,18 @@
 
     box-shadow: var(--shadow-sm);
 
+    transition:
+        background .25s ease,
+        box-shadow .25s ease,
+        min-height .25s ease;
+
 }
 
 /* ==========================================
-   CONTAINER
+   HEADER INNER
 ========================================== */
 
-.header .container {
+.header-inner {
 
     display: flex;
 
@@ -42,7 +49,19 @@
 
     gap: var(--space-xl);
 
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding:
+        0
+        var(--space-lg);
+
     min-height: var(--header-height);
+
+    transition:
+        min-height .25s ease,
+        padding .25s ease;
 
 }
 
@@ -50,7 +69,7 @@
    LOGO
 ========================================== */
 
-.header-logo {
+.logo-track {
 
     display: flex;
 
@@ -58,11 +77,50 @@
 
     gap: var(--space-md);
 
-    font-size: var(--font-size-xl);
+    flex-shrink: 0;
 
-    font-weight: 700;
+}
 
-    white-space: nowrap;
+.logo-slider {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    transition:
+        transform .25s ease;
+
+}
+
+.logo-slider img {
+
+    display: block;
+
+    height: 64px;
+
+    width: auto;
+
+    transition:
+        height .25s ease,
+        transform .25s ease;
+
+}
+
+.logo-progress {
+
+    display: none;
+
+}
+
+.chapter-indicator {
+
+    display: none;
 
 }
 
