@@ -18,6 +18,10 @@
 
     z-index: var(--z-header);
 
+    width: 100%;
+
+    min-height: var(--header-height);
+
     background: var(--header-background);
 
     backdrop-filter: blur(var(--header-blur));
@@ -145,6 +149,8 @@
 
     height: 48px;
 
+    margin-left: auto;
+
     padding: 0;
 
     border: none;
@@ -159,19 +165,50 @@
 
     gap: 5px;
 
+    cursor: pointer;
+
 }
 
 .burger span {
 
+    display: block;
+
     width: 24px;
 
-    height: 2px;
+    height: 3px;
 
     border-radius: 999px;
 
-    background: var(--color-text);
+    background-color: #222;
 
-    transition: var(--transition-normal);
+    transition: transform .25s ease,
+                opacity .25s ease;
+
+}
+
+/* ==========================================
+   BURGER ANIMATION
+========================================== */
+
+.header.expanded .burger span:nth-child(1) {
+
+    transform:
+        translateY(8px)
+        rotate(45deg);
+
+}
+
+.header.expanded .burger span:nth-child(2) {
+
+    opacity: 0;
+
+}
+
+.header.expanded .burger span:nth-child(3) {
+
+    transform:
+        translateY(-8px)
+        rotate(-45deg);
 
 }
 
