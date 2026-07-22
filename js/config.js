@@ -60,7 +60,7 @@ api: {
 
     images: {
 
-        heroFallback: "images/hero-bg.png"
+        heroFallback: "../images/hero-bg.png"
 
     }
 

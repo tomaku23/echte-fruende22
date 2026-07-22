@@ -222,7 +222,7 @@ getCountdown(value) {
 
         return {
 
-            image: "images/hero-bg.png",
+            image: "../images/hero-bg.png",
 
             category: "Termin",
 
