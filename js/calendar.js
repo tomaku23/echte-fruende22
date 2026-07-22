@@ -177,6 +177,14 @@ async loadEvents() {
 
 },
 
+refresh() {
+
+    this.updateComponents();
+
+    this.renderCalendar();
+
+},
+
         /* ==========================================
    PRIVATE METHODEN
 ========================================== */
