@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HERO.JS
- Version 3.0
+ Version 3.1
 =====================================================
 */
 
@@ -23,251 +23,289 @@ EF22.hero = {
     },
 
     /* ==========================================
-   ELEMENTE
-========================================== */
+       ELEMENTE
+    ========================================== */
 
-elements: {
+    elements: {
 
-    root: null
+        root: null
 
-},
-
-    /* ==========================================
-   INITIALISIERUNG
-========================================== */
-
-init() {
-
-    this.elements.root =
-
-        document.getElementById("hero");
-
-    if (!this.elements.root) {
-
-        return;
-
-    }
-
-    this.registerElements();
-
-},
+    },
 
     /* ==========================================
-   ÖFFENTLICHE METHODEN
-========================================== */
+       INITIALISIERUNG
+    ========================================== */
 
-refresh(event) {
+    init() {
 
-    this.state.event = event;
+        this.elements.root =
+            document.getElementById("hero");
 
-    if (!this.elements.root) {
+        if (!this.elements.root) {
 
-        return;
+            return;
 
-    }
+        }
 
-    if (!event) {
+        this.registerElements();
 
-        this.clear();
+    },
 
-        return;
+    /* ==========================================
+       ÖFFENTLICHE METHODEN
+    ========================================== */
 
-    }
+    refresh(event) {
 
-    this.setText(
-        this.elements.badge,
-        "Nächster Termin"
-    );
+        this.state.event = event;
 
-    this.setText(
-        this.elements.title,
-        event.title
-    );
+        if (!this.elements.root) {
 
-    this.setText(
-        this.elements.description,
-        event.description
-    );
+            return;
 
-    this.setText(
-        this.elements.location,
-        event.extendedProps?.location
-    );
+        }
 
-    this.setText(
-        this.elements.date,
-        EF22.utils.formatDate(
-            event.start
-        )
-    );
+        if (!event) {
 
-    this.setText(
-        this.elements.time,
-        EF22.utils.formatTimeRange(
-            event.start,
-            event.end
-        )
-    );
+            this.clear();
 
-    this.updateCountdown(
-        event.start
-    );
+            return;
 
-    this.toggle(
-        this.elements.info,
-        !!(
-            event.start ||
-            event.end ||
+        }
+
+        this.setText(
+            this.elements.badge,
+            "Nächster Termin"
+        );
+
+        this.setText(
+            this.elements.title,
+            event.title
+        );
+
+        this.setText(
+            this.elements.description,
+            event.description
+        );
+
+        this.setText(
+            this.elements.location,
             event.extendedProps?.location
-        )
-    );
+        );
 
-},
+        if (
 
-         /* ==========================================
-   PRIVATE METHODEN
-========================================== */
+            EF22.utils &&
+            typeof EF22.utils.formatDate === "function"
 
-registerElements() {
+        ) {
 
-    const elements =
+            this.setText(
 
-        this.elements.root.querySelectorAll(
+                this.elements.date,
 
-            "[data-hero]"
+                EF22.utils.formatDate(
+                    event.start
+                )
+
+            );
+
+        }
+
+        if (
+
+            EF22.utils &&
+            typeof EF22.utils.formatTimeRange === "function"
+
+        ) {
+
+            this.setText(
+
+                this.elements.time,
+
+                EF22.utils.formatTimeRange(
+                    event.start,
+                    event.end
+                )
+
+            );
+
+        }
+
+        this.updateCountdown(
+
+            event.start
 
         );
 
-    elements.forEach(
+        this.toggle(
 
-        (element) => {
+            this.elements.info,
 
-            const key =
+            !!(
 
-                element.dataset.hero;
+                event.start ||
 
-            this.elements[key] =
+                event.end ||
 
-                element;
+                event.extendedProps?.location
 
-        }
+            )
 
-    );
+        );
 
-},
+    },
 
-setText(element, value) {
+    /* ==========================================
+       PRIVATE METHODEN
+    ========================================== */
 
-    if (!element) {
+    registerElements() {
 
-        return;
+        const elements =
 
-    }
+            this.elements.root.querySelectorAll(
 
-    if (!value) {
+                "[data-hero]"
 
-        element.hidden = true;
+            );
 
-        element.textContent = "";
+        elements.forEach(
 
-        return;
+            (element) => {
 
-    }
+                const key =
 
-    element.hidden = false;
+                    element.dataset.hero;
 
-    element.textContent = value;
+                this.elements[key] =
 
-},
-
-toggle(element, visible) {
-
-    if (!element) {
-
-        return;
-
-    }
-
-    element.hidden = !visible;
-
-},
-
-clear() {
-
-    Object.values(
-
-        this.elements
-
-    ).forEach(
-
-        (element) => {
-
-            if (
-
-                !element ||
-
-                element === this.elements.root
-
-            ) {
-
-                return;
+                    element;
 
             }
 
-            element.hidden = true;
+        );
+
+    },
+
+    setText(element, value) {
+
+        if (!element) {
+
+            return;
 
         }
 
-    );
+        if (!value) {
 
-},
+            element.hidden = true;
 
-updateCountdown(start) {
+            element.textContent = "";
 
-    if (
+            return;
 
-        !this.elements.countdown ||
+        }
 
-        !start
+        element.hidden = false;
 
-    ) {
+        element.textContent = value;
 
-        return;
+    },
+
+    toggle(element, visible) {
+
+        if (!element) {
+
+            return;
+
+        }
+
+        element.hidden = !visible;
+
+    },
+
+    clear() {
+
+        Object.values(
+
+            this.elements
+
+        ).forEach(
+
+            (element) => {
+
+                if (
+
+                    !element ||
+
+                    element === this.elements.root
+
+                ) {
+
+                    return;
+
+                }
+
+                element.hidden = true;
+
+            }
+
+        );
+
+    },
+
+    updateCountdown(start) {
+
+        if (
+
+            !this.elements.countdown ||
+
+            !start
+
+        ) {
+
+            return;
+
+        }
+
+        const now = new Date();
+
+        const eventDate = new Date(start);
+
+        const diff =
+
+            eventDate.getTime() -
+
+            now.getTime();
+
+        if (diff <= 0) {
+
+            this.elements.countdown.hidden = true;
+
+            return;
+
+        }
+
+        const days = Math.ceil(
+
+            diff /
+
+            1000 /
+
+            60 /
+
+            60 /
+
+            24
+
+        );
+
+        this.elements.countdown.hidden = false;
+
+        this.elements.countdown.textContent =
+
+            `Noch ${days} Tag${days !== 1 ? "e" : ""}`;
 
     }
 
-    const now =
-
-        new Date();
-
-    const eventDate =
-
-        new Date(start);
-
-    const diff =
-
-        eventDate.getTime() -
-
-        now.getTime();
-
-    if (diff <= 0) {
-
-        this.elements.countdown.hidden = true;
-
-        return;
-
-    }
-
-    const days = Math.ceil(
-
-        diff / 1000 / 60 / 60 / 24
-
-    );
-
-    this.elements.countdown.hidden = false;
-
-    this.elements.countdown.textContent =
-
-        `Noch ${days} Tag${days !== 1 ? "e" : ""}`;
-
-}
+};
