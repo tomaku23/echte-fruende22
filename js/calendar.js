@@ -253,4 +253,4 @@ onEventClick(info) {
 
     );
 
-}
+};
