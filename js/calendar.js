@@ -253,4 +253,6 @@ onEventClick(info) {
 
     );
 
-}
+    }
+
+};
