@@ -333,4 +333,6 @@ updateCountdown(start) {
 
         `Noch ${days} Tag${days !== 1 ? "e" : ""}`;
 
-},
+}
+
+};
