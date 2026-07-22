@@ -33,23 +33,53 @@ EF22.hero = {
     },
 
     /* ==========================================
-       INITIALISIERUNG
-    ========================================== */
+   INITIALISIERUNG
+========================================== */
 
-    init() {
+init() {
 
-        this.elements.root =
-            document.getElementById("hero");
+    this.elements.root =
+        document.getElementById("hero");
 
-        if (!this.elements.root) {
+    if (!this.elements.root) {
 
-            return;
+        return;
+
+    }
+
+    this.registerElements();
+
+    this.elements.root.addEventListener(
+
+        "click",
+
+        () => {
+
+            if (
+
+                !this.state.event ||
+
+                !EF22.modal ||
+
+                typeof EF22.modal.open !== "function"
+
+            ) {
+
+                return;
+
+            }
+
+            EF22.modal.open(
+
+                this.state.event
+
+            );
 
         }
 
-        this.registerElements();
+    );
 
-    },
+},
 
     /* ==========================================
        ÖFFENTLICHE METHODEN
