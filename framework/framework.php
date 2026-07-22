@@ -201,6 +201,30 @@ require_once "../components/footer.php";
 
 <script src="../js/calendar.js"></script>
 
+<script>
+
+window.onerror = function(message, source, line, column, error){
+
+    alert(
+
+        "JavaScript-Fehler\n\n" +
+
+        message +
+
+        "\n\nDatei:\n" +
+
+        source +
+
+        "\n\nZeile: " +
+
+        line
+
+    );
+
+};
+
+</script>
+
 <script src="../js/app.js"></script>
 
 </body>
