@@ -63,41 +63,39 @@
 
 <link
     rel="stylesheet"
-    href="css/framework.css">
+    href="../css/framework.css">
 
 <link
     rel="stylesheet"
-    href="css/header.css">
+    href="../css/header.css">
 
 <link
     rel="stylesheet"
-    href="css/footer.css">
+    href="../css/footer.css">
 
 <link
     rel="stylesheet"
-    href="css/navigation-indicator.css">
+    href="../css/navigation-indicator.css">
 
 <!--=========================================
-     SEITEN CSS
+     COMPONENT CSS
 ==========================================-->
 
-<?php
+<link
+    rel="stylesheet"
+    href="../css/hero.css">
 
-if (!empty($pageCss)) {
+<link
+    rel="stylesheet"
+    href="../css/calendar.css">
 
-    foreach ($pageCss as $css) {
+<link
+    rel="stylesheet"
+    href="../css/highlights.css">
 
-        echo
-            '<link rel="stylesheet" href="' .
-            htmlspecialchars($css, ENT_QUOTES) .
-            '">' .
-            PHP_EOL;
-
-    }
-
-}
-
-?>
+<link
+    rel="stylesheet"
+    href="../css/modal.css">
 
 </head>
 
@@ -126,7 +124,7 @@ if (!empty($pageCss)) {
                 aria-label="Startseite">
 
                 <img
-                    src="images/logo.png"
+                    src="../images/logo.png"
                     alt="Logo der Echten Fründe '22'">
 
             </div>
@@ -144,25 +142,25 @@ if (!empty($pageCss)) {
             class="nav-top"
             aria-label="Hauptnavigation">
 
-            <a href="index.php">
+            <a href="../sites/index.php">
 
                 Startseite
 
             </a>
 
-            <a href="ueber-uns.php">
+            <a href="../sites/ueber-uns.php">
 
                 Über uns
 
             </a>
 
-            <a href="zugkoenig.php">
+            <a href="../sites/zugkoenig.php">
 
                 Zugkönig
 
             </a>
 
-            <a href="termine.php">
+            <a href="../sites/termine.php">
 
                 Termine
 
@@ -305,57 +303,35 @@ if (isset($pageContent)) {
      FRAMEWORK JAVASCRIPT
 ==========================================-->
 
-<script src="js/config.js"></script>
+<script src="../js/config.js"></script>
 
-<script src="js/utilities.js"></script>
+<script src="../js/utilities.js"></script>
 
-<script src="js/dom.js"></script>
+<script src="../js/dom.js"></script>
 
-<script src="js/icons.js"></script>
+<script src="../js/icons.js"></script>
 
-<script src="js/modal.js"></script>
+<script src="../js/navigation.js"></script>
 
-<script src="js/hero.js"></script>
+<script src="../js/navigation-indicator.js"></script>
 
-<script src="js/highlights.js"></script>
+<script src="../js/animations.js"></script>
 
-<script src="js/calendar.js"></script>
-
-<!--=========================================
-     UI JAVASCRIPT
-==========================================-->
-
-<script src="js/header.js"></script>
-
-<script src="js/navigation.js"></script>
-
-<script src="js/navigation-indicator.js"></script>
-
-<script src="js/animations.js"></script>
-
-<script src="js/app.js"></script>
+<script src="../js/app.js"></script>
 
 <!--=========================================
-     SEITEN JAVASCRIPT
+     COMPONENT JAVASCRIPT
 ==========================================-->
 
-<?php
+<script src="../js/header.js"></script>
 
-if (!empty($pageJs)) {
+<script src="../js/modal.js"></script>
 
-    foreach ($pageJs as $js) {
+<script src="../js/hero.js"></script>
 
-        echo
-            '<script src="' .
-            htmlspecialchars($js, ENT_QUOTES) .
-            '"></script>' .
-            PHP_EOL;
+<script src="../js/highlights.js"></script>
 
-    }
-
-}
-
-?>
+<script src="../js/calendar.js"></script>
 
 </body>
 
