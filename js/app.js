@@ -1,26 +1,220 @@
 /*
 =====================================================
- ECHTE FRÜNDE '22
+ EF22 FRAMEWORK
  APP.JS
- Version 1.1 DEBUG
+ Version 3.0
 =====================================================
 */
 
 "use strict";
 
+window.EF22 ??= {};
+
+/* ==========================================
+   APP
+========================================== */
+
+EF22.app = {
+
+    /* ==========================================
+       INITIALISIERUNG
+    ========================================== */
+
+    async init() {
+
+        console.log(
+
+            "=== APP START ==="
+
+        );
+
+        try {
+
+            if (
+
+                EF22.header?.init
+
+            ) {
+
+                console.log(
+
+                    "EF22.header.init()"
+
+                );
+
+                EF22.header.init();
+
+            }
+
+            if (
+
+                EF22.modal?.init
+
+            ) {
+
+                console.log(
+
+                    "EF22.modal.init()"
+
+                );
+
+                EF22.modal.init();
+
+            }
+
+            if (
+
+                EF22.hero?.init
+
+            ) {
+
+                console.log(
+
+                    "EF22.hero.init()"
+
+                );
+
+                EF22.hero.init();
+
+            }
+
+            if (
+
+                EF22.highlights?.init
+
+            ) {
+
+                console.log(
+
+                    "EF22.highlights.init()"
+
+                );
+
+                EF22.highlights.init();
+
+            }
+
+            if (
+
+                EF22.calendar?.init
+
+            ) {
+
+                console.log(
+
+                    "EF22.calendar.init()"
+
+                );
+
+                await EF22.calendar.init();
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+
+                "Framework:",
+
+                error
+
+            );
+
+        }
+
+        console.log(
+
+            "=== APP ENDE ==="
+
+        );
+
+    },
+
+    /* ==========================================
+       DESTROY
+    ========================================== */
+
+    destroy() {
+
+        EF22.calendar?.destroy?.();
+
+        EF22.highlights?.destroy?.();
+
+        EF22.hero?.destroy?.();
+
+        EF22.modal?.destroy?.();
+
+        EF22.header?.destroy?.();
+
+    }
+
+};
+
 /* ==========================================
    GLOBALE FEHLER
 ========================================== */
 
-window.onerror = function(message, source, line, column, error){
+window.onerror = function (
 
-    console.group("🚨 GLOBAL SCRIPT ERROR");
+    message,
 
-    console.log("Message:", message);
-    console.log("Source :", source);
-    console.log("Line   :", line);
-    console.log("Column :", column);
-    console.log("Error  :", error);
+    source,
+
+    line,
+
+    column,
+
+    error
+
+) {
+
+    console.group(
+
+        "🚨 GLOBAL SCRIPT ERROR"
+
+    );
+
+    console.log(
+
+        "Message:",
+
+        message
+
+    );
+
+    console.log(
+
+        "Source :",
+
+        source
+
+    );
+
+    console.log(
+
+        "Line   :",
+
+        line
+
+    );
+
+    console.log(
+
+        "Column :",
+
+        column
+
+    );
+
+    console.log(
+
+        "Error  :",
+
+        error
+
+    );
 
     console.groupEnd();
 
@@ -28,35 +222,38 @@ window.onerror = function(message, source, line, column, error){
 
 };
 
-window.addEventListener("unhandledrejection", event => {
+window.addEventListener(
 
-    console.group("🚨 PROMISE ERROR");
+    "unhandledrejection",
 
-    console.log(event.reason);
+    (event) => {
 
-    console.groupEnd();
+        console.group(
 
-});
+            "🚨 PROMISE ERROR"
 
-/* ==========================================
-   INITIALISIERUNG
-========================================== */
+        );
 
-document.addEventListener("DOMContentLoaded", async () => {
+        console.log(
 
-    console.log("=== APP START ===");
+            event.reason
 
-    try {
+        );
 
-        console.log("EF22.calendar.init()");
-        await EF22.calendar.init();
-
-    } catch (error) {
-
-        console.error("EF22.calendar:", error);
+        console.groupEnd();
 
     }
 
-    console.log("=== APP ENDE ===");
+);
 
-});
+/* ==========================================
+   START
+========================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    () => EF22.app.init()
+
+);

@@ -1,25 +1,8 @@
 /*
 =====================================================
- ECHTE FRÜNDE '22
+ EF22 FRAMEWORK
  DOM.JS
- Version 1.0
-=====================================================
-
-DOM-Hilfsfunktionen des EF22 Frameworks.
-
-Verantwortung:
-- Elemente erzeugen
-- Elemente leeren
-- Elemente ein-/ausblenden
-- Klassen verwalten
-- Attribute setzen
-
-Nicht verantwortlich für:
-- Hero
-- Modal
-- Kalender
-- Highlights
-
+ Version 2.0
 =====================================================
 */
 
@@ -27,96 +10,61 @@ Nicht verantwortlich für:
 
 window.EF22 ??= {};
 
-/* ==========================================
-   DOM
-========================================== */
-
 EF22.dom = {
 
     /* ==========================================
-       ELEMENTE
+       ELEMENTE REGISTRIEREN
     ========================================== */
 
-    createElement(tag, className = "", text = "") {
+    register(root, attribute) {
 
-        const element = document.createElement(tag);
+        if (!root) {
 
-        if (className) {
+            return {
 
-            element.className = className;
+                root: null
 
-        }
-
-        if (text !== "") {
-
-            element.textContent = text;
+            };
 
         }
 
-        return element;
+        const elements = {
 
-    },
+            root
 
-    /* ==========================================
-       SICHTBARKEIT
-    ========================================== */
+        };
 
-    show(element) {
+        root.querySelectorAll(
 
-        if (!element) {
-            return;
-        }
+            `[${attribute}]`
 
-        element.classList.remove("hidden");
+        ).forEach(
 
-    },
+            (element) => {
 
-    hide(element) {
+                const key =
 
-        if (!element) {
-            return;
-        }
+                    element.getAttribute(
 
-        element.classList.add("hidden");
+                        attribute
 
-    },
+                    );
 
-    /* ==========================================
-       INHALT
-    ========================================== */
+                if (!key) {
 
-    clear(element) {
+                    return;
 
-        if (!element) {
-            return;
-        }
+                }
 
-        element.replaceChildren();
+                elements[key] =
 
-    },
-
-    /* ==========================================
-       ATTRIBUTE
-    ========================================== */
-
-    setAttributes(element, attributes = {}) {
-
-        if (!element) {
-            return;
-        }
-
-        Object.entries(attributes).forEach(([key, value]) => {
-
-            if (
-                value !== null &&
-                value !== undefined
-            ) {
-
-                element.setAttribute(key, value);
+                    element;
 
             }
 
-        });
+        );
+
+        return elements;
 
     }
 

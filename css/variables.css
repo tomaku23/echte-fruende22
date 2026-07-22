@@ -1,0 +1,109 @@
+/*
+=====================================================
+ EF22 FRAMEWORK
+ VARIABLES.CSS
+ Version 1.0
+=====================================================
+*/
+
+:root {
+
+    /* ==========================================
+       FARBEN
+    ========================================== */
+
+    --color-primary: #2f6f3e;
+    --color-primary-dark: #245632;
+
+    --color-background: #f5f7f5;
+    --color-surface: #ffffff;
+
+    --color-text: #222222;
+    --color-text-light: #666666;
+
+    --color-border: #dddddd;
+
+    --color-success: #3ca55c;
+    --color-warning: #f2a900;
+    --color-error: #d64545;
+
+    /* ==========================================
+       TYPOGRAFIE
+    ========================================== */
+
+    --font-family:
+        "Inter",
+        system-ui,
+        sans-serif;
+
+    --font-size-xs: .75rem;
+    --font-size-sm: .875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+    --font-size-3xl: 3rem;
+
+    --line-height: 1.6;
+
+    /* ==========================================
+       ABSTÄNDE
+    ========================================== */
+
+    --space-xs: .25rem;
+    --space-sm: .5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 5rem;
+
+    /* ==========================================
+       RADIUS
+    ========================================== */
+
+    --radius-sm: .5rem;
+    --radius-md: .75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+
+    /* ==========================================
+       SCHATTEN
+    ========================================== */
+
+    --shadow-sm:
+        0 2px 6px rgba(0,0,0,.08);
+
+    --shadow-md:
+        0 6px 20px rgba(0,0,0,.12);
+
+    --shadow-lg:
+        0 12px 36px rgba(0,0,0,.18);
+
+    /* ==========================================
+       LAYOUT
+    ========================================== */
+
+    --container-width: 1280px;
+
+    --header-height: 80px;
+
+    --section-spacing: 6rem;
+
+    /* ==========================================
+       ANIMATION
+    ========================================== */
+
+    --transition-fast: .2s ease;
+
+    --transition-normal: .35s ease;
+
+    /* ==========================================
+       Z-INDEX
+    ========================================== */
+
+    --z-header: 100;
+
+    --z-modal: 1000;
+
+}

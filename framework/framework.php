@@ -105,7 +105,9 @@
      HEADER
 ==========================================-->
 
-<header class="header">
+<header
+    class="header"
+    data-header="root">
 
     <div class="header-inner">
 
@@ -119,6 +121,7 @@
 
             <div
                 class="logo-slider"
+                data-header="logo"
                 role="button"
                 tabindex="0"
                 aria-label="Startseite">
@@ -140,6 +143,7 @@
         <nav
             id="navigation"
             class="nav-top"
+            data-header="navigation"
             aria-label="Hauptnavigation">
 
             <a href="../sites/index.php">
@@ -174,6 +178,7 @@
 
         <button
             class="burger"
+            data-header="burger"
             type="button"
             aria-label="Navigation öffnen"
             aria-expanded="false"
@@ -195,6 +200,7 @@
 
     <div
         class="nav-overlay"
+        data-header="overlay"
         aria-hidden="true">
 
     </div>

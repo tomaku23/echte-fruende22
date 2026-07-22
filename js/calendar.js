@@ -44,34 +44,57 @@ EF22.calendar = {
 
 async init() {
 
-    console.log("1. calendar.init()");
+    console.log(
+
+        "1. calendar.init()"
+
+    );
 
     this.elements.calendar =
-        document.getElementById("calendar");
 
-    console.log("2. calendar Element:", this.elements.calendar);
+        document.getElementById(
 
-    if (!this.elements.calendar) {
+            "calendar"
 
-        console.log("3. Kein Calendar-Element gefunden.");
+        );
+
+    console.log(
+
+        "2. calendar Element:",
+
+        this.elements.calendar
+
+    );
+
+    if (
+
+        !this.elements.calendar
+
+    ) {
+
+        console.log(
+
+            "3. Kein Calendar-Element gefunden."
+
+        );
 
         return;
 
     }
 
-    console.log("4. modal.init()");
-    EF22.modal.init();
+    console.log(
 
-    console.log("5. hero.init()");
-    EF22.hero.init();
+        "4. loadEvents()"
 
-    console.log("6. highlights.init()");
-    EF22.highlights.init();
+    );
 
-    console.log("7. loadEvents()");
     await this.loadEvents();
 
-    console.log("8. init beendet");
+    console.log(
+
+        "5. init beendet"
+
+    );
 
 },
     

@@ -38,16 +38,29 @@ EF22.hero = {
 
 init() {
 
-    this.elements.root =
-        document.getElementById("hero");
+    this.elements =
 
-    if (!this.elements.root) {
+        EF22.dom.register(
+
+            document.getElementById(
+
+                "hero"
+
+            ),
+
+            "data-hero"
+
+        );
+
+    if (
+
+        !this.elements.root
+
+    ) {
 
         return;
 
     }
-
-    this.registerElements();
 
     this.elements.root.addEventListener(
 
@@ -81,149 +94,139 @@ init() {
 
 },
 
-    /* ==========================================
+        /* ==========================================
        ÖFFENTLICHE METHODEN
     ========================================== */
 
-refresh(event) {
+    refresh(event) {
 
-    this.state.event = event;
+        this.state.event = event;
 
-    if (!this.elements.root) {
+        if (
 
-        return;
+            !this.elements.root
 
-    }
+        ) {
 
-    if (!event) {
-
-        this.clear();
-
-        return;
-
-    }
-
-    const props = EF22.utils.getProps(event);
-
-    this.setBackground(
-
-        props.image
-
-    );
-
-    this.setText(
-
-        this.elements.badge,
-
-        props.category
-
-    );
-
-    this.setText(
-
-        this.elements.title,
-
-        event.title
-
-    );
-
-    this.setText(
-
-        this.elements.description,
-
-        props.description
-
-    );
-
-    this.setText(
-
-        this.elements.location,
-
-        props.location
-
-    );
-
-    this.setText(
-
-        this.elements.date,
-
-        EF22.utils.formatDate(
-
-            event.start
-
-        )
-
-    );
-
-    this.setText(
-
-        this.elements.time,
-
-        EF22.utils.formatTimeRange(
-
-            event.start,
-
-            event.end
-
-        )
-
-    );
-
-    this.updateCountdown(
-
-        event.start
-
-    );
-
-    this.toggle(
-
-        this.elements.info,
-
-        !!(
-
-            event.start ||
-
-            event.end ||
-
-            props.location
-
-        )
-
-    );
-
-},
-
-    /* ==========================================
-       PRIVATE METHODEN
-    ========================================== */
-
-registerElements() {
-
-    const elements =
-
-        this.elements.root.querySelectorAll(
-
-            "[data-hero]"
-
-        );
-
-    elements.forEach(
-
-        (element) => {
-
-            const key =
-
-                element.dataset.hero;
-
-            this.elements[key] =
-
-                element;
+            return;
 
         }
 
-    );
+        if (
 
-},
+            !event
+
+        ) {
+
+            this.clear();
+
+            return;
+
+        }
+
+        const props =
+
+            EF22.utils.getProps(
+
+                event
+
+            );
+
+        this.setBackground(
+
+            props.image
+
+        );
+
+        this.setText(
+
+            this.elements.badge,
+
+            props.category
+
+        );
+
+        this.setText(
+
+            this.elements.title,
+
+            event.title
+
+        );
+
+        this.setText(
+
+            this.elements.description,
+
+            props.description
+
+        );
+
+        this.setText(
+
+            this.elements.location,
+
+            props.location
+
+        );
+
+        this.setText(
+
+            this.elements.date,
+
+            EF22.utils.formatDate(
+
+                event.start
+
+            )
+
+        );
+
+        this.setText(
+
+            this.elements.time,
+
+            EF22.utils.formatTimeRange(
+
+                event.start,
+
+                event.end
+
+            )
+
+        );
+
+        this.updateCountdown(
+
+            event.start
+
+        );
+
+        this.toggle(
+
+            this.elements.info,
+
+            !!(
+
+                event.start ||
+
+                event.end ||
+
+                props.location
+
+            )
+
+        );
+
+    },
+
+    destroy() {
+
+    },
+
+    /* ==========================================
+   PRIVATE METHODEN
+========================================== */
 
 setBackground(image) {
 

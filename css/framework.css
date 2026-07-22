@@ -1,677 +1,142 @@
 /*
 =====================================================
- ECHTE FRÜNDE '22
+ EF22 FRAMEWORK
  FRAMEWORK.CSS
- Version 4.0
+ Version 1.0
 =====================================================
 */
 
+/* ==========================================
+   HTML
+========================================== */
 
+html {
 
-/* =====================================================
-   ROOT
-===================================================== */
+    scroll-behavior: smooth;
 
-:root{
-
-    /* Farben */
-
-    --green:#6FBF73;
-    --green-dark:#4F9B54;
-
-    --black:#0A0A0A;
-    --dark:#181818;
-
-    --white:#FFFFFF;
-    --light:#F5F5F5;
-
-    --text-dark:#222222;
-    --text-light:rgba(255,255,255,.86);
-
-    --border:#E7E7E7;
-
-
-
-    /* Schrift */
-
-    --font:'Inter',sans-serif;
-
-
-
-    /* Größen */
-
-    --container:1200px;
-
-    --radius:24px;
-    --radius-small:16px;
-
-    --header-height:96px;
-
-
-
-    /* Schatten */
-
-    --shadow:
-
-        0 20px 60px rgba(0,0,0,.12);
-
-
-
-    /* Animation */
-
-    --transition:
-
-        .35s ease;
+    box-sizing: border-box;
 
 }
-
-
-
-/* =====================================================
-   RESET
-===================================================== */
 
 *,
 *::before,
-*::after{
+*::after {
 
-    margin:0;
-    padding:0;
-
-    box-sizing:border-box;
+    box-sizing: inherit;
 
 }
 
+/* ==========================================
+   BODY
+========================================== */
 
+body {
 
-html{
+    margin: 0;
 
-    scroll-behavior:smooth;
+    min-height: 100vh;
 
-}
+    display: flex;
 
+    flex-direction: column;
 
+    background: var(--color-background);
 
-body{
+    color: var(--color-text);
 
-    font-family:var(--font);
+    font-family: var(--font-family);
 
-    background:var(--black);
+    font-size: var(--font-size-md);
 
-    color:var(--text-light);
-
-    line-height:1.7;
-
-    overflow-x:hidden;
-
-    -webkit-font-smoothing:antialiased;
-
-}
-
-
-
-img{
-
-    display:block;
-
-    width:100%;
-
-    height:auto;
+    line-height: var(--line-height);
 
 }
 
+/* ==========================================
+   MEDIEN
+========================================== */
 
+img {
 
-picture{
+    display: block;
 
-    display:block;
+    max-width: 100%;
 
-}
-
-
-
-a{
-
-    color:inherit;
-
-    text-decoration:none;
+    height: auto;
 
 }
 
+a {
 
+    color: inherit;
 
-button{
+    text-decoration: none;
 
-    font:inherit;
-
-    cursor:pointer;
-
-    border:none;
-
-    background:none;
+    transition: var(--transition-fast);
 
 }
 
-/* =====================================================
-   TYPOGRAPHY
-===================================================== */
+button {
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6{
-
-    color:var(--white);
-
-    font-weight:700;
-
-    line-height:1.2;
-
-    letter-spacing:-0.02em;
+    font: inherit;
 
 }
 
-h1{
+/* ==========================================
+   CONTAINER
+========================================== */
 
-    font-size:clamp(2.8rem,6vw,4.8rem);
+.container {
 
-}
+    width: min(
+        100% - (2 * var(--space-xl)),
+        var(--container-width)
+    );
 
-h2{
-
-    font-size:clamp(2rem,5vw,3.4rem);
-
-    margin-bottom:24px;
-
-}
-
-h3{
-
-    font-size:1.4rem;
-
-    margin-bottom:14px;
+    margin-inline: auto;
 
 }
 
-p{
+/* ==========================================
+   HEADER
+========================================== */
 
-    color:var(--text-dark);
+header {
 
-    font-size:1rem;
+    position: sticky;
 
-    line-height:1.9;
+    top: 0;
 
-    margin-bottom:24px;
+    z-index: var(--z-header);
 
-}
-
-.section-dark p{
-
-    color:var(--text-light);
+    min-height: var(--header-height);
 
 }
 
+/* ==========================================
+   MAIN
+========================================== */
 
+main {
 
-/* =====================================================
-   SECTION KICKER
-===================================================== */
+    flex: 1;
 
-.section-kicker{
+    display: flex;
 
-    display:inline-block;
+    flex-direction: column;
 
-    margin-bottom:18px;
+    gap: var(--section-spacing);
 
-    color:var(--green);
-
-    font-size:.9rem;
-
-    font-weight:700;
-
-    letter-spacing:.14em;
-
-    text-transform:uppercase;
+    padding-block: var(--space-2xl);
 
 }
 
+/* ==========================================
+   FOOTER
+========================================== */
 
+footer {
 
-/* =====================================================
-   LAYOUT
-===================================================== */
-
-.container{
-
-    width:min(100% - 40px,var(--container));
-
-    margin-inline:auto;
-
-}
-
-.section{
-
-    padding:110px 0;
-
-}
-
-.section-light{
-
-    background:var(--light);
-
-}
-
-.section-dark{
-
-    background:var(--black);
-
-}
-
-.section-title{
-
-    max-width:760px;
-
-    margin:0 auto 70px;
-
-    text-align:center;
-
-}
-
-.section-title p{
-
-    margin-bottom:0;
-
-}
-
-
-
-/* =====================================================
-   CONTENT WIDTH
-===================================================== */
-
-.content{
-
-    max-width:760px;
-
-    margin-inline:auto;
-
-}
-
-/* =====================================================
-   GRID
-===================================================== */
-
-.grid{
-
-    display:grid;
-
-    gap:40px;
-
-}
-
-.grid-2{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:40px;
-
-}
-
-.grid-3{
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:40px;
-
-}
-
-.grid-4{
-
-    display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:30px;
-
-}
-
-
-
-/* =====================================================
-   FLEX
-===================================================== */
-
-.flex{
-
-    display:flex;
-
-}
-
-.flex-center{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-}
-
-.flex-between{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-}
-
-.flex-column{
-
-    display:flex;
-
-    flex-direction:column;
-
-}
-
-
-
-/* =====================================================
-   ALIGNMENT
-===================================================== */
-
-.text-center{
-
-    text-align:center;
-
-}
-
-.text-left{
-
-    text-align:left;
-
-}
-
-.text-right{
-
-    text-align:right;
-
-}
-
-
-
-/* =====================================================
-   WIDTH
-===================================================== */
-
-.w-100{
-
-    width:100%;
-
-}
-
-.max-600{
-
-    max-width:600px;
-
-}
-
-.max-700{
-
-    max-width:700px;
-
-}
-
-.max-800{
-
-    max-width:800px;
-
-}
-
-.max-1000{
-
-    max-width:1000px;
-
-}
-
-
-
-/* =====================================================
-   SPACING
-===================================================== */
-
-.mt-0{margin-top:0;}
-.mt-20{margin-top:20px;}
-.mt-40{margin-top:40px;}
-.mt-60{margin-top:60px;}
-.mt-80{margin-top:80px;}
-
-.mb-0{margin-bottom:0;}
-.mb-20{margin-bottom:20px;}
-.mb-40{margin-bottom:40px;}
-.mb-60{margin-bottom:60px;}
-.mb-80{margin-bottom:80px;}
-
-.pt-0{padding-top:0;}
-.pb-0{padding-bottom:0;}
-
-
-
-/* =====================================================
-   DISPLAY
-===================================================== */
-
-.hidden{
-
-    display:none !important;
-
-}
-
-.visible{
-
-    display:block;
-
-}
-
-
-
-/* =====================================================
-   OVERFLOW
-===================================================== */
-
-.overflow-hidden{
-
-    overflow:hidden;
-
-}
-
-
-
-/* =====================================================
-   BORDER RADIUS
-===================================================== */
-
-.round{
-
-    border-radius:50%;
-
-}
-
-.radius{
-
-    border-radius:var(--radius);
-
-}
-
-.radius-small{
-
-    border-radius:var(--radius-small);
-
-}
-
-
-
-/* =====================================================
-   SHADOW
-===================================================== */
-
-.shadow{
-
-    box-shadow:var(--shadow);
-
-}
-
-/* =====================================================
-   ACCESSIBILITY
-===================================================== */
-
-::selection{
-
-    background:var(--green);
-
-    color:var(--white);
-
-}
-
-:focus-visible{
-
-    outline:3px solid var(--green);
-
-    outline-offset:4px;
-
-    border-radius:6px;
-
-}
-
-
-
-/* =====================================================
-   SCROLLBAR
-===================================================== */
-
-::-webkit-scrollbar{
-
-    width:10px;
-
-}
-
-::-webkit-scrollbar-track{
-
-    background:var(--black);
-
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:var(--green);
-
-    border-radius:999px;
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:var(--green-dark);
-
-}
-
-
-
-/* =====================================================
-   GLOBAL TRANSITIONS
-===================================================== */
-
-a,
-button,
-input,
-textarea,
-select{
-
-    transition:
-        color var(--transition),
-        background-color var(--transition),
-        border-color var(--transition),
-        transform var(--transition),
-        opacity var(--transition),
-        box-shadow var(--transition);
-
-}
-
-
-
-/* =====================================================
-   MEDIA
-===================================================== */
-
-iframe{
-
-    width:100%;
-
-    border:none;
-
-}
-
-video{
-
-    width:100%;
-
-    display:block;
-
-    border-radius:var(--radius);
-
-}
-
-
-
-/* =====================================================
-   UTILITIES
-===================================================== */
-
-.no-scroll{
-
-    overflow:hidden;
-
-}
-
-.pointer{
-
-    cursor:pointer;
-
-}
-
-.relative{
-
-    position:relative;
-
-}
-
-.absolute{
-
-    position:absolute;
-
-}
-
-
-
-/* =====================================================
-   PRINT
-===================================================== */
-
-@media print{
-
-    body{
-
-        background:#fff;
-
-        color:#000;
-
-    }
+    margin-top: auto;
 
 }

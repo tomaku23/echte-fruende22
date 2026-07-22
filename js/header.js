@@ -1,543 +1,483 @@
 /*
 =====================================================
- ECHTE FRÜNDE '22
+ EF22 FRAMEWORK
  HEADER.JS
- Version 6.0
+ Version 7.0
 =====================================================
 */
 
-const Header = (() => {
+"use strict";
 
-    "use strict";
+window.EF22 ??= {};
 
-/* ==========================================
-   STATUS
-========================================== */
+EF22.header = {
 
-const STATE = {
+    /* ==========================================
+       STATE
+    ========================================== */
 
-    compact: false,
+    state: {
 
-    navigationOpen: false
+        isCompact: false,
 
-};
+        isNavigationOpen: false
 
-/* ==========================================
-   DOM
-========================================== */
+    },
 
-const DOM = {
+    /* ==========================================
+       ELEMENTE
+    ========================================== */
 
-    header: null,
+    elements: {},
 
-    logo: null,
+    /* ==========================================
+       INITIALISIERUNG
+    ========================================== */
 
-    navigation: null,
+    init() {
 
-    burger: null,
+        this.elements =
 
-    overlay: null
+            EF22.dom.register(
 
-};
+                document.querySelector(
 
-/* ==========================================
-   INITIALISIERUNG
-========================================== */
+                    "[data-header=\"root\"]"
 
-function init(){
+                ),
 
-    cacheDom();
+                "data-header"
 
-    if(!DOM.header){
+            );
 
-        console.warn(
+        if (
 
-            "Header wurde nicht gefunden."
+            !this.elements.root
 
-        );
+        ) {
 
-        return;
+            console.warn(
 
-    }
+                "Header wurde nicht gefunden."
 
-    DOM.burger?.setAttribute(
+            );
 
-        "aria-expanded",
-
-        "false"
-
-    );
-
-    DOM.navigation?.setAttribute(
-
-        "aria-hidden",
-
-        "true"
-
-    );
-
-    bindEvents();
-
-    updateHeader();
-
-}
-
-/* ==========================================
-   DOM EINLESEN
-========================================== */
-
-function cacheDom(){
-
-    DOM.header =
-
-        document.querySelector(
-
-            ".header"
-
-        );
-
-    DOM.logo =
-
-        document.querySelector(
-
-            ".logo-slider"
-
-        );
-
-    DOM.navigation =
-
-        document.querySelector(
-
-            ".nav-top"
-
-        );
-
-    DOM.burger =
-
-        document.querySelector(
-
-            ".burger"
-
-        );
-
-    DOM.overlay =
-
-        document.querySelector(
-
-            ".nav-overlay"
-
-        );
-
-}
-
-/* ==========================================
-   EVENTS
-========================================== */
-
-function bindEvents(){
-
-    window.addEventListener(
-
-        "scroll",
-
-        onScroll,
-
-        {
-
-            passive: true
+            return;
 
         }
 
-    );
+        this.elements.burger?.setAttribute(
 
-    window.addEventListener(
+            "aria-expanded",
 
-        "resize",
-
-        updateHeader
-
-    );
-
-    DOM.burger?.addEventListener(
-
-        "click",
-
-        toggleNavigation
-
-    );
-
-    DOM.logo?.addEventListener(
-
-        "click",
-
-        onLogoClick
-
-    );
-
-    DOM.logo?.addEventListener(
-
-        "keydown",
-
-        onLogoKeyDown
-
-    );
-
-    DOM.overlay?.addEventListener(
-
-        "click",
-
-        closeNavigation
-
-    );
-
-    document.addEventListener(
-
-        "keydown",
-
-        onKeyDown
-
-    );
-
-    DOM.navigation
-
-        ?.querySelectorAll("a")
-
-        .forEach(
-
-            link =>
-
-                link.addEventListener(
-
-                    "click",
-
-                    closeNavigation
-
-                )
+            "false"
 
         );
 
-}
+        this.elements.navigation?.setAttribute(
 
-/* ==========================================
-   SCROLL
-========================================== */
+            "aria-hidden",
 
-function onScroll(){
-
-    if(STATE.navigationOpen){
-
-        return;
-
-    }
-
-    updateHeader();
-
-}
-
-/* ==========================================
-   HEADER AKTUALISIEREN
-========================================== */
-
-function updateHeader(){
-
-    if(window.scrollY === 0){
-
-        expandHeader();
-
-    }else{
-
-        compactHeader();
-
-    }
-
-}
-
-/* ==========================================
-   HEADER GROSS
-========================================== */
-
-function expandHeader(){
-
-    if(!STATE.compact){
-
-        return;
-
-    }
-
-    STATE.compact = false;
-
-    DOM.header.classList.remove(
-
-        "compact"
-
-    );
-
-}
-
-/* ==========================================
-   HEADER KOMPAKT
-========================================== */
-
-function compactHeader(){
-
-    if(STATE.compact){
-
-        return;
-
-    }
-
-    STATE.compact = true;
-
-    DOM.header.classList.add(
-
-        "compact"
-
-    );
-
-}
-
-/* ==========================================
-   NAVIGATION ÖFFNEN
-========================================== */
-
-function openNavigation(){
-
-    if(STATE.navigationOpen){
-
-        return;
-
-    }
-
-    STATE.navigationOpen = true;
-
-    DOM.header.classList.add(
-
-        "expanded"
-
-    );
-
-    DOM.burger?.setAttribute(
-
-        "aria-expanded",
-
-        "true"
-
-    );
-
-    DOM.navigation?.setAttribute(
-
-        "aria-hidden",
-
-        "false"
-
-    );
-
-}
-
-/* ==========================================
-   NAVIGATION SCHLIESSEN
-========================================== */
-
-function closeNavigation(){
-
-    if(!STATE.navigationOpen){
-
-        return;
-
-    }
-
-    STATE.navigationOpen = false;
-
-    DOM.header.classList.remove(
-
-        "expanded"
-
-    );
-
-    DOM.burger?.setAttribute(
-
-        "aria-expanded",
-
-        "false"
-
-    );
-
-    DOM.navigation?.setAttribute(
-
-        "aria-hidden",
-
-        "true"
-
-    );
-
-}
-
-/* ==========================================
-   NAVIGATION UMSCHALTEN
-========================================== */
-
-function toggleNavigation(){
-
-    if(!STATE.compact){
-
-        return;
-
-    }
-
-    if(STATE.navigationOpen){
-
-        closeNavigation();
-
-    }else{
-
-        openNavigation();
-
-    }
-
-}
-
-/* ==========================================
-   HILFSFUNKTIONEN
-========================================== */
-
-function onLogoClick(){
-
-    closeNavigation();
-
-    window.location.href =
-
-        "index.php";
-
-}
-
-function onLogoKeyDown(event){
-
-    if(
-
-        event.key !== "Enter" &&
-
-        event.key !== " "
-
-    ){
-
-        return;
-
-    }
-
-    event.preventDefault();
-
-    onLogoClick();
-
-}
-
-function onKeyDown(event){
-
-    if(
-
-        event.key === "Escape" &&
-
-        STATE.navigationOpen
-
-    ){
-
-        closeNavigation();
-
-    }
-
-}
-
-/* ==========================================
-   DESTROY
-========================================== */
-
-function destroy(){
-
-    window.removeEventListener(
-
-        "scroll",
-
-        onScroll
-
-    );
-
-    window.removeEventListener(
-
-        "resize",
-
-        updateHeader
-
-    );
-
-    DOM.burger?.removeEventListener(
-
-        "click",
-
-        toggleNavigation
-
-    );
-
-    DOM.logo?.removeEventListener(
-
-        "click",
-
-        onLogoClick
-
-    );
-
-    DOM.logo?.removeEventListener(
-
-        "keydown",
-
-        onLogoKeyDown
-
-    );
-
-    DOM.overlay?.removeEventListener(
-
-        "click",
-
-        closeNavigation
-
-    );
-
-    document.removeEventListener(
-
-        "keydown",
-
-        onKeyDown
-
-    );
-
-    DOM.navigation
-
-        ?.querySelectorAll("a")
-
-        .forEach(
-
-            link =>
-
-                link.removeEventListener(
-
-                    "click",
-
-                    closeNavigation
-
-                )
+            "true"
 
         );
 
-}
+        this.registerEvents();
 
-/* ==========================================
-   PUBLIC API
-========================================== */
+        this.updateHeader();
 
-return {
+    },
 
-    init,
+    /* ==========================================
+       EVENTS
+    ========================================== */
 
-    destroy
+    registerEvents() {
+
+        window.addEventListener(
+
+            "scroll",
+
+            this.onScroll.bind(
+
+                this
+
+            ),
+
+            {
+
+                passive: true
+
+            }
+
+        );
+
+        window.addEventListener(
+
+            "resize",
+
+            this.updateHeader.bind(
+
+                this
+
+            )
+
+        );
+
+        this.elements.burger?.addEventListener(
+
+            "click",
+
+            this.toggleNavigation.bind(
+
+                this
+
+            )
+
+        );
+
+        this.elements.logo?.addEventListener(
+
+            "click",
+
+            this.onLogoClick.bind(
+
+                this
+
+            )
+
+        );
+
+        this.elements.logo?.addEventListener(
+
+            "keydown",
+
+            this.onLogoKeyDown.bind(
+
+                this
+
+            )
+
+        );
+
+        this.elements.overlay?.addEventListener(
+
+            "click",
+
+            this.closeNavigation.bind(
+
+                this
+
+            )
+
+        );
+
+        document.addEventListener(
+
+            "keydown",
+
+            this.onKeyDown.bind(
+
+                this
+
+            )
+
+        );
+
+        this.elements.navigation
+
+            ?.querySelectorAll(
+
+                "a"
+
+            )
+
+            .forEach(
+
+                (link) =>
+
+                    link.addEventListener(
+
+                        "click",
+
+                        this.closeNavigation.bind(
+
+                            this
+
+                        )
+
+                    )
+
+            );
+
+    },
+
+    /* ==========================================
+       SCROLL
+    ========================================== */
+
+    onScroll() {
+
+        if (
+
+            this.state.isNavigationOpen
+
+        ) {
+
+            return;
+
+        }
+
+        this.updateHeader();
+
+    },
+
+    /* ==========================================
+       HEADER AKTUALISIEREN
+    ========================================== */
+
+    updateHeader() {
+
+        if (
+
+            window.scrollY === 0
+
+        ) {
+
+            this.expandHeader();
+
+            return;
+
+        }
+
+        this.compactHeader();
+
+    },
+
+    /* ==========================================
+       HEADER GROSS
+    ========================================== */
+
+    expandHeader() {
+
+        if (
+
+            !this.state.isCompact
+
+        ) {
+
+            return;
+
+        }
+
+        this.state.isCompact = false;
+
+        this.elements.root.classList.remove(
+
+            "compact"
+
+        );
+
+    },
+
+    /* ==========================================
+       HEADER KOMPAKT
+    ========================================== */
+
+    compactHeader() {
+
+        if (
+
+            this.state.isCompact
+
+        ) {
+
+            return;
+
+        }
+
+        this.state.isCompact = true;
+
+        this.elements.root.classList.add(
+
+            "compact"
+
+        );
+
+    },
+
+    /* ==========================================
+       NAVIGATION ÖFFNEN
+    ========================================== */
+
+    openNavigation() {
+
+        if (
+
+            this.state.isNavigationOpen
+
+        ) {
+
+            return;
+
+        }
+
+        this.state.isNavigationOpen = true;
+
+        this.elements.root.classList.add(
+
+            "expanded"
+
+        );
+
+        this.elements.burger?.setAttribute(
+
+            "aria-expanded",
+
+            "true"
+
+        );
+
+        this.elements.navigation?.setAttribute(
+
+            "aria-hidden",
+
+            "false"
+
+        );
+
+    },
+
+    /* ==========================================
+       NAVIGATION SCHLIESSEN
+    ========================================== */
+
+    closeNavigation() {
+
+        if (
+
+            !this.state.isNavigationOpen
+
+        ) {
+
+            return;
+
+        }
+
+        this.state.isNavigationOpen = false;
+
+        this.elements.root.classList.remove(
+
+            "expanded"
+
+        );
+
+        this.elements.burger?.setAttribute(
+
+            "aria-expanded",
+
+            "false"
+
+        );
+
+        this.elements.navigation?.setAttribute(
+
+            "aria-hidden",
+
+            "true"
+
+        );
+
+    },
+
+    /* ==========================================
+       NAVIGATION UMSCHALTEN
+    ========================================== */
+
+    toggleNavigation() {
+
+        if (
+
+            !this.state.isCompact
+
+        ) {
+
+            return;
+
+        }
+
+        if (
+
+            this.state.isNavigationOpen
+
+        ) {
+
+            this.closeNavigation();
+
+            return;
+
+        }
+
+        this.openNavigation();
+
+    },
+
+    /* ==========================================
+       HILFSFUNKTIONEN
+    ========================================== */
+
+    onLogoClick() {
+
+        this.closeNavigation();
+
+        window.location.href =
+
+            "index.php";
+
+    },
+
+    onLogoKeyDown(event) {
+
+        if (
+
+            event.key !== "Enter" &&
+
+            event.key !== " "
+
+        ) {
+
+            return;
+
+        }
+
+        event.preventDefault();
+
+        this.onLogoClick();
+
+    },
+
+    onKeyDown(event) {
+
+        if (
+
+            event.key === "Escape" &&
+
+            this.state.isNavigationOpen
+
+        ) {
+
+            this.closeNavigation();
+
+        }
+
+    },
+
+    /* ==========================================
+       DESTROY
+    ========================================== */
+
+    destroy() {
+
+    }
 
 };
-
-})();
