@@ -69,7 +69,7 @@ elements: {
 
 },
 
-        /* ==========================================
+/* ==========================================
    INITIALISIERUNG
 ========================================== */
 
@@ -105,7 +105,41 @@ init() {
     this.elements.actions =
         document.getElementById("modalActions");
 
-    this.registerEvents();
+    if (this.elements.modal) {
+
+        this.registerEvents();
+
+    }
+
+},
+
+registerEvents() {
+
+    this.elements.overlay?.addEventListener(
+        "click",
+        () => this.close()
+    );
+
+    this.elements.closeButton?.addEventListener(
+        "click",
+        () => this.close()
+    );
+
+    document.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (
+                event.key === "Escape" &&
+                this.state.event
+            ) {
+
+                this.close();
+
+            }
+
+        }
+    );
 
 },
 
