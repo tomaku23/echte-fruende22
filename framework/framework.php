@@ -323,8 +323,6 @@ if (isset($pageContent)) {
 
 <script src="../js/animations.js"></script>
 
-<script src="../js/app.js"></script>
-
 <!--=========================================
      COMPONENT JAVASCRIPT
 ==========================================-->
@@ -338,6 +336,8 @@ if (isset($pageContent)) {
 <script src="../js/highlights.js"></script>
 
 <script src="../js/calendar.js"></script>
+
+<script src="../js/app.js"></script>
 
 </body>
 

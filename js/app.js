@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  APP.JS
- Version 3.0
+ Version 3.1
 =====================================================
 */
 
@@ -22,113 +22,77 @@ EF22.app = {
 
     async init() {
 
-        console.log(
-
-            "=== APP START ==="
-
-        );
+        console.group("=== EF22 APP START ===");
 
         try {
 
-            if (
-
-                EF22.header?.init
-
-            ) {
-
-                console.log(
-
-                    "EF22.header.init()"
-
-                );
-
-                EF22.header.init();
-
-            }
-
-            if (
-
-                EF22.modal?.init
-
-            ) {
-
-                console.log(
-
-                    "EF22.modal.init()"
-
-                );
-
-                EF22.modal.init();
-
-            }
-
-            if (
-
-                EF22.hero?.init
-
-            ) {
-
-                console.log(
-
-                    "EF22.hero.init()"
-
-                );
-
-                EF22.hero.init();
-
-            }
-
-            if (
-
-                EF22.highlights?.init
-
-            ) {
-
-                console.log(
-
-                    "EF22.highlights.init()"
-
-                );
-
-                EF22.highlights.init();
-
-            }
-
-            if (
-
-                EF22.calendar?.init
-
-            ) {
-
-                console.log(
-
-                    "EF22.calendar.init()"
-
-                );
-
-                await EF22.calendar.init();
-
-            }
+            await this.initComponent("header", false);
+            await this.initComponent("modal", false);
+            await this.initComponent("hero", false);
+            await this.initComponent("highlights", false);
+            await this.initComponent("calendar", true);
 
         }
 
         catch (error) {
 
-            console.error(
-
-                "Framework:",
-
-                error
-
-            );
+            console.error("APP FEHLER:", error);
 
         }
 
-        console.log(
+        console.groupEnd();
 
-            "=== APP ENDE ==="
+    },
 
-        );
+    /* ==========================================
+       KOMPONENTEN INITIALISIEREN
+    ========================================== */
+
+    async initComponent(name, isAsync = false) {
+
+        const component = EF22[name];
+
+        if (!component) {
+
+            console.warn(`${name}: nicht gefunden`);
+
+            return;
+
+        }
+
+        if (typeof component.init !== "function") {
+
+            console.warn(`${name}: keine init()-Methode`);
+
+            return;
+
+        }
+
+        console.group(`${name}.init()`);
+
+        try {
+
+            if (isAsync) {
+
+                await component.init();
+
+            } else {
+
+                component.init();
+
+            }
+
+            console.log("✔ OK");
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+        console.groupEnd();
 
     },
 
@@ -138,15 +102,23 @@ EF22.app = {
 
     destroy() {
 
-        EF22.calendar?.destroy?.();
+        [
 
-        EF22.highlights?.destroy?.();
+            "calendar",
+            "highlights",
+            "hero",
+            "modal",
+            "header"
 
-        EF22.hero?.destroy?.();
+        ].forEach(
 
-        EF22.modal?.destroy?.();
+            (name) => {
 
-        EF22.header?.destroy?.();
+                EF22[name]?.destroy?.();
+
+            }
+
+        );
 
     }
 
@@ -156,71 +128,30 @@ EF22.app = {
    GLOBALE FEHLER
 ========================================== */
 
-window.onerror = function (
+window.addEventListener(
 
-    message,
+    "error",
 
-    source,
+    (event) => {
 
-    line,
+        console.group("🚨 JAVASCRIPT FEHLER");
 
-    column,
+        console.log("Datei :", event.filename);
+        console.log("Zeile :", event.lineno);
+        console.log("Spalte:", event.colno);
+        console.log("Fehler:", event.message);
 
-    error
+        if (event.error) {
 
-) {
+            console.log(event.error);
 
-    console.group(
+        }
 
-        "🚨 GLOBAL SCRIPT ERROR"
+        console.groupEnd();
 
-    );
+    }
 
-    console.log(
-
-        "Message:",
-
-        message
-
-    );
-
-    console.log(
-
-        "Source :",
-
-        source
-
-    );
-
-    console.log(
-
-        "Line   :",
-
-        line
-
-    );
-
-    console.log(
-
-        "Column :",
-
-        column
-
-    );
-
-    console.log(
-
-        "Error  :",
-
-        error
-
-    );
-
-    console.groupEnd();
-
-    return false;
-
-};
+);
 
 window.addEventListener(
 
@@ -228,17 +159,9 @@ window.addEventListener(
 
     (event) => {
 
-        console.group(
+        console.group("🚨 PROMISE FEHLER");
 
-            "🚨 PROMISE ERROR"
-
-        );
-
-        console.log(
-
-            event.reason
-
-        );
+        console.log(event.reason);
 
         console.groupEnd();
 
@@ -254,6 +177,10 @@ document.addEventListener(
 
     "DOMContentLoaded",
 
-    () => EF22.app.init()
+    () => {
+
+        EF22.app.init();
+
+    }
 
 );
