@@ -3,7 +3,7 @@
 =====================================================
  EF22 FRAMEWORK
  FRAMEWORK.PHP
- Version 1.0
+ Version 2.0
 =====================================================
 */
 ?>
@@ -105,107 +105,11 @@
      HEADER
 ==========================================-->
 
-<header
-    class="header"
-    data-header="root">
+<?php
 
-    <div class="header-inner">
+require_once "../components/header.php";
 
-<!--=========================================
-     LOGO
-==========================================-->
-
-        <div class="logo-track">
-
-            <div class="logo-progress"></div>
-
-            <div
-                class="logo-slider"
-                data-header="logo"
-                role="button"
-                tabindex="0"
-                aria-label="Startseite">
-
-                <img
-                    src="../images/logo.png"
-                    alt="Logo der Echten Fründe '22'">
-
-            </div>
-
-            <div class="chapter-indicator"></div>
-
-        </div>
-
-<!--=========================================
-     NAVIGATION
-==========================================-->
-
-        <nav
-            id="navigation"
-            class="nav-top"
-            data-header="navigation"
-            aria-label="Hauptnavigation">
-
-            <a href="../sites/index.php">
-
-                Startseite
-
-            </a>
-
-            <a href="../sites/ueber-uns.php">
-
-                Über uns
-
-            </a>
-
-            <a href="../sites/zugkoenig.php">
-
-                Zugkönig
-
-            </a>
-
-            <a href="../sites/termine.php">
-
-                Termine
-
-            </a>
-
-        </nav>
-
-<!--=========================================
-     BURGER
-==========================================-->
-
-        <button
-            class="burger"
-            data-header="burger"
-            type="button"
-            aria-label="Navigation öffnen"
-            aria-expanded="false"
-            aria-controls="navigation">
-
-            <span></span>
-
-            <span></span>
-
-            <span></span>
-
-        </button>
-
-    </div>
-
-<!--=========================================
-     OVERLAY
-==========================================-->
-
-    <div
-        class="nav-overlay"
-        data-header="overlay"
-        aria-hidden="true">
-
-    </div>
-
-</header>
+?>
 
 <!--=========================================
      PAGE CONTENT
@@ -253,49 +157,11 @@ if (isset($pageContent)) {
      FOOTER
 ==========================================-->
 
-<footer class="footer">
+<?php
 
-    <div class="container">
+require_once "../components/footer.php";
 
-        <nav
-            class="footer-navigation"
-            aria-label="Footer Navigation">
-
-            <a href="datenschutz.php">
-
-                Datenschutz
-
-            </a>
-
-            <a href="impressum.php">
-
-                Impressum
-
-            </a>
-
-        </nav>
-
-        <p id="footerCopyright">
-
-            <span class="footer-copyright">
-
-                © 2026 Echte Fründe '22'
-
-            </span>
-
-            <br>
-
-            <span class="footer-rights">
-
-                Alle Rechte vorbehalten.
-
-            </span>
-
-        </p>
-
-    </div>
-
-</footer>
+?>
 
 <!--=========================================
      EXTERNE JAVASCRIPT-BIBLIOTHEKEN
@@ -316,8 +182,6 @@ if (isset($pageContent)) {
 <script src="../js/dom.js"></script>
 
 <script src="../js/icons.js"></script>
-
-<script src="../js/navigation.js"></script>
 
 <script src="../js/navigation-indicator.js"></script>
 
