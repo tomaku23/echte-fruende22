@@ -341,6 +341,8 @@ if (isset($pageContent)) {
 
 <script src="js/animations.js"></script>
 
+<script src="js/app.js"></script>
+
 <!--=========================================
      SEITEN JAVASCRIPT
 ==========================================-->
