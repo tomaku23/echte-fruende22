@@ -64,6 +64,10 @@
 <link
     rel="stylesheet"
     href="../css/framework.css">
+    
+    <link
+    rel="stylesheet"
+    href="../css/variables.css">
 
 <link
     rel="stylesheet"
