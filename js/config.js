@@ -66,7 +66,7 @@ EF22.config = {
     heroFallbackLandscape:
         "../assets/images/hero-bgq.png"
 
-}
+},
 
     /* ==========================================
        NAVIGATION INDICATOR
