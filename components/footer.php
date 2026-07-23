@@ -3,37 +3,36 @@
 =====================================================
  EF22 COMPONENT
  FOOTER
- Version 2.0
+ Version 2.1
 =====================================================
 */
 ?>
 
-<div
-    class="navigation-indicator-park-zone"
-    data-navigation-indicator-anchor>
-</div>
-
 <footer class="footer">
 
-    <div class="footer-links">
+    <div class="footer-content">
 
-        <a href="./datenschutz.php">
-            Datenschutz
-        </a>
+        <div class="footer-links">
 
-        <a href="./impressum.php">
-            Impressum
-        </a>
+            <a href="./datenschutz.php">
+                Datenschutz
+            </a>
 
-    </div>
+            <a href="./impressum.php">
+                Impressum
+            </a>
 
-    <div class="footer-copyright">
+        </div>
 
-        © <?php echo date('Y'); ?> Echte Fründe '22
+        <div class="footer-copyright">
 
-        <br>
+            © <?php echo date('Y'); ?> Echte Fründe '22
 
-        Alle Rechte vorbehalten.
+            <br>
+
+            Alle Rechte vorbehalten.
+
+        </div>
 
     </div>
 

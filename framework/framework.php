@@ -148,24 +148,37 @@ if (isset($pageContent)) {
 </button>
 
 <!--=========================================
-     FRAMEWORK MARKER
+     FOOTER AREA
 ==========================================-->
 
-<div
-    id="navigationIndicatorMarker"
-    aria-hidden="true">
+<div class="footer-area">
+
+    <!--=====================================
+         NAVIGATION INDICATOR PARKZONE
+    ======================================-->
+
+    <div
+        class="navigation-indicator-park-zone"
+        data-navigation-indicator-anchor
+        aria-hidden="true">
+
+    </div>
+
+    <!--=====================================
+         FOOTER
+    ======================================-->
+
+    <div class="footer-container">
+
+        <?php
+
+        require_once "../components/footer.php";
+
+        ?>
+
+    </div>
 
 </div>
-
-<!--=========================================
-     FOOTER
-==========================================-->
-
-<?php
-
-require_once "../components/footer.php";
-
-?>
 
 <!--=========================================
      EXTERNE JAVASCRIPT-BIBLIOTHEKEN
