@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HERO.CSS
- Version 3.0
+ Version 3.1
 =====================================================
 */
 
@@ -134,11 +134,13 @@
         var(--space-sm)
         var(--space-md);
 
-    border: 2px solid var(--color-primary);
+    border:
+        2px solid
+        var(--color-ef22-green);
 
     border-radius: 999px;
 
-    color: var(--color-primary);
+    color: var(--color-ef22-green);
 
     font-size: var(--font-size-xs);
 
@@ -230,7 +232,7 @@
 
     background: var(--color-background);
 
-    color: var(--color-primary);
+    color: var(--color-ef22-green);
 
 }
 
@@ -254,7 +256,9 @@
         0
         var(--space-lg);
 
-    border: 1px solid var(--color-border);
+    border:
+        1px solid
+        var(--color-border);
 
     border-radius: var(--radius-lg);
 
@@ -276,7 +280,7 @@
 
     align-self: center;
 
-    color: var(--color-text-light);
+    color: var(--color-text-muted);
 
     font-size: var(--font-size-sm);
 
@@ -292,7 +296,9 @@
 
 .hero--calendar:focus-visible {
 
-    outline: 3px solid var(--color-primary);
+    outline:
+        3px solid
+        var(--color-ef22-green);
 
     outline-offset: -3px;
 

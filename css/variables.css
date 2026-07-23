@@ -2,46 +2,64 @@
 =====================================================
  EF22 FRAMEWORK
  VARIABLES.CSS
- Version 1.0
+ Version 2.0
 =====================================================
 */
 
 :root {
 
     /* ==========================================
-   FARBEN
-========================================== */
+       MARKENFARBEN
+    ========================================== */
 
-/* EF22 */
+    --color-black: #0A0A0A;
+    --color-anthracite: #151515;
+    --color-white: #FFFFFF;
 
---color-primary: #6FBF73;
+    --color-ef22-green: #6FBF73;
 
-/* GRUNDFARBEN */
 
---color-black: #0A0A0A;
---color-white: #FFFFFF;
+    /* ==========================================
+       HINTERGRÜNDE
+    ========================================== */
 
---color-background: #f5f7f5;
---color-surface: #ffffff;
+    --color-background: var(--color-black);
 
---color-text: #222222;
---color-text-light: #666666;
---color-text-muted: #9A9A9A;
+    --color-surface: var(--color-anthracite);
 
---color-border: #dddddd;
+    --color-surface-light: #1C1C1C;
 
-/* TRANSPARENZEN */
 
---color-black-45: rgba(10,10,10,.45);
---color-black-88: rgba(10,10,10,.88);
+    /* ==========================================
+       TEXT
+    ========================================== */
 
---color-white-12: rgba(255,255,255,.12);
+    --color-text: var(--color-white);
 
-/* STATUS */
+    --color-text-muted: rgba(255,255,255,.72);
 
---color-success: #3ca55c;
---color-warning: #f2a900;
---color-error: #d64545;
+    --color-text-subtle: rgba(255,255,255,.55);
+
+
+    /* ==========================================
+       RAHMEN
+    ========================================== */
+
+    --color-border: rgba(255,255,255,.08);
+
+    --color-border-strong: rgba(255,255,255,.16);
+
+
+    /* ==========================================
+       STATUSFARBEN
+    ========================================== */
+
+    --color-success: #3CA55C;
+
+    --color-warning: #F2A900;
+
+    --color-error: #D64545;
+
 
     /* ==========================================
        TYPOGRAFIE
@@ -53,50 +71,69 @@
         sans-serif;
 
     --font-size-xs: .75rem;
+
     --font-size-sm: .875rem;
+
     --font-size-md: 1rem;
+
     --font-size-lg: 1.125rem;
+
     --font-size-xl: 1.5rem;
+
     --font-size-2xl: 2rem;
+
     --font-size-3xl: 3rem;
 
     --line-height: 1.6;
+
 
     /* ==========================================
        ABSTÄNDE
     ========================================== */
 
     --space-xs: .25rem;
+
     --space-sm: .5rem;
+
     --space-md: 1rem;
+
     --space-lg: 1.5rem;
+
     --space-xl: 2rem;
+
     --space-2xl: 3rem;
+
     --space-3xl: 5rem;
+
 
     /* ==========================================
        RADIUS
     ========================================== */
 
     --radius-sm: .5rem;
+
     --radius-md: .75rem;
+
     --radius-lg: 1rem;
+
     --radius-xl: 1.5rem;
+
 
     /* ==========================================
        SCHATTEN
     ========================================== */
 
     --shadow-sm:
-        0 2px 6px rgba(0,0,0,.08);
+        0 2px 6px rgba(0,0,0,.18);
 
     --shadow-md:
-        0 6px 20px rgba(0,0,0,.12);
+        0 6px 20px rgba(0,0,0,.25);
 
     --shadow-lg:
-        0 12px 36px rgba(0,0,0,.18);
+        0 12px 36px rgba(0,0,0,.35);
 
-        /* ==========================================
+
+    /* ==========================================
        LAYOUT
     ========================================== */
 
@@ -106,14 +143,15 @@
 
     --header-height-compact: 60px;
 
-    --header-background: rgba(255,255,255,.92);
+    --header-background: rgba(10,10,10,.92);
 
     --header-shadow: var(--shadow-sm);
 
     --header-blur: 14px;
 
     --section-spacing: 6rem;
-    
+
+
     /* ==========================================
        ANIMATION
     ========================================== */
@@ -121,6 +159,7 @@
     --transition-fast: .2s ease;
 
     --transition-normal: .35s ease;
+
 
     /* ==========================================
        Z-INDEX
@@ -131,3 +170,12 @@
     --z-modal: 1000;
 
 }
+
+/* ==========================================
+   KOMPATIBILITÄT
+========================================== */
+
+--color-primary: var(--color-ef22-green);
+--color-primary-dark: var(--color-ef22-green);
+
+--color-text-light: var(--color-text-muted);

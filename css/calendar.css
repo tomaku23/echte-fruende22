@@ -1,512 +1,114 @@
-/* =====================================================
-   ECHTE FRÜNDE '22
-   CALENDAR.CSS
-   Version 4.0
-===================================================== */
+/*
+=====================================================
+ EF22 FRAMEWORK
+ CALENDAR.CSS
+ Version 5.0
+=====================================================
+*/
 
 /* ==========================================
-   ROOT
+   KALENDER SECTION
 ========================================== */
 
-:root{
+.calendar-section {
 
-    --green:#6FBF73;
+    position: relative;
 
-    --dark:#0A0A0A;
-
-    --card:#151515;
-
-    --light:#F5F5F5;
-
-    --text:#FFFFFF;
-
-    --muted:rgba(255,255,255,.72);
-
-    --border:rgba(255,255,255,.08);
-
-    --radius:24px;
-
-    --shadow:0 24px 60px rgba(0,0,0,.35);
-
-    --transition:.3s ease;
+    padding:
+        var(--space-3xl)
+        0;
 
 }
 
 /* ==========================================
-   ALLGEMEIN
+   SECTION HEADER
 ========================================== */
 
-html{
+.calendar-section .section-header {
 
-    scroll-behavior:smooth;
+    margin-bottom:
+        var(--space-2xl);
 
-}
-
-.container{
-
-    width:min(1180px,92%);
-
-    margin:0 auto;
+    text-align: center;
 
 }
 
-.calendar-section,
-.highlights-section{
+.calendar-section .section-kicker {
 
-    position:relative;
+    display: inline-block;
 
-    padding:120px 0;
+    margin-bottom:
+        var(--space-md);
 
-}
+    color:
+        var(--color-ef22-green);
 
-.section-header{
+    font-weight: 700;
 
-    margin-bottom:60px;
+    letter-spacing: .14em;
 
-    text-align:center;
-
-}
-
-.section-kicker{
-
-    display:inline-block;
-
-    margin-bottom:16px;
-
-    color:var(--green);
-
-    font-weight:700;
-
-    letter-spacing:.14em;
-
-    text-transform:uppercase;
+    text-transform: uppercase;
 
 }
 
-.section-header h2{
+.calendar-section .section-header h2 {
 
-    margin-bottom:20px;
+    margin:
+        0
+        0
+        var(--space-md);
 
-    color:var(--text);
+    color:
+        var(--color-text);
 
-    font-size:clamp(2rem,4vw,3rem);
-
-}
-
-.section-header p{
-
-    max-width:760px;
-
-    margin:0 auto;
-
-    color:var(--muted);
-
-    line-height:1.8;
-
-}
-
-/* ==========================================
-   DYNAMISCHER HERO
-========================================== */
-
-.calendar-hero{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:flex-end;
-
-    height:100vh;
-
-    overflow:hidden;
-
-    cursor:pointer;
-
-    isolation:isolate;
-
-}
-
-.calendar-hero-background{
-
-    position:absolute;
-
-    inset:0;
-
-    background-position:center;
-
-    background-repeat:no-repeat;
-
-    background-size:cover;
-
-    transform:scale(1.08);
-
-    filter:brightness(.92);
-
-    transition:
-        transform 12s ease,
-        filter .4s ease;
-
-    will-change:
-        transform,
-        filter;
-
-}
-
-.calendar-hero:hover .calendar-hero-background{
-
-    transform:scale(1.12);
-
-    filter:brightness(.82);
-
-}
-
-.calendar-hero-overlay{
-
-    position:absolute;
-
-    inset:0;
-
-    display:flex;
-
-    align-items:flex-end;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(0,0,0,0),
-            rgba(10,10,10,.92)
-        ),
-        radial-gradient(
-            circle at top right,
-            rgba(111,191,115,.15),
-            transparent 45%
+    font-size:
+        clamp(
+            2rem,
+            4vw,
+            3rem
         );
 
 }
 
-.calendar-hero .container{
+.calendar-section .section-header p {
 
-    position:relative;
+    max-width: 760px;
 
-    z-index:2;
+    margin: 0 auto;
 
-    width:100%;
+    color:
+        var(--color-text-light);
 
-}
-
-.hero-content{
-
-    position:relative;
-
-    z-index:2;
-
-    max-width:720px;
-
-    padding-bottom:120px;
-
-    animation:heroFade .8s ease;
+    line-height:
+        var(--line-height);
 
 }
 
 /* ==========================================
-   HERO BADGE
+   KALENDER CARD
 ========================================== */
 
-.hero-badge{
+.calendar-card {
 
-    display:inline-flex;
+    position: relative;
 
-    justify-content:center;
+    overflow: hidden;
 
-    align-items:center;
+    padding:
+        var(--space-xl);
 
-    gap:10px;
+    border:
+        1px solid
+        var(--color-border);
 
-    padding:10px 24px;
+    border-radius:
+        var(--radius-xl);
 
-    margin-bottom:28px;
+    background:
+        var(--color-surface);
 
-    border:2px solid currentColor;
-
-    border-radius:999px;
-
-    background:rgba(255,255,255,.10);
-
-    backdrop-filter:blur(18px);
-
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
-
-    color:var(--green);
-
-    font-size:.82rem;
-
-    font-weight:700;
-
-    letter-spacing:.16em;
-
-    text-transform:uppercase;
-
-    white-space:nowrap;
-
-}
-
-/* ==========================================
-   HERO TITEL
-========================================== */
-
-#heroTitle{
-
-    max-width:900px;
-
-    margin-bottom:22px;
-
-    color:#FFFFFF;
-
-    font-size:clamp(3.6rem,7vw,6rem);
-
-    font-weight:800;
-
-    line-height:1.05;
-
-    text-shadow:0 6px 28px rgba(0,0,0,.45);
-
-}
-
-/* ==========================================
-   HERO DATUM
-========================================== */
-
-.hero-date{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin-bottom:38px;
-
-    color:rgba(255,255,255,.92);
-
-    font-size:1.35rem;
-
-    font-weight:600;
-
-}
-
-/* ==========================================
-   HERO INFO
-========================================== */
-
-.hero-info{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
-
-    margin-bottom:42px;
-
-}
-
-.hero-item{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:16px;
-
-    color:#FFFFFF;
-
-    font-size:1.1rem;
-
-    font-weight:500;
-
-}
-
-.hero-icon{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    width:46px;
-
-    height:46px;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.12);
-
-    backdrop-filter:blur(16px);
-
-    box-shadow:0 8px 24px rgba(0,0,0,.25);
-
-    flex-shrink:0;
-
-}
-
-/* ==========================================
-   HERO COUNTDOWN
-========================================== */
-
-.hero-countdown{
-
-    display:inline-flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    min-width:220px;
-
-    min-height:68px;
-
-    width:fit-content;
-
-    margin-top:10px;
-
-    padding:0 28px;
-
-    border:1px solid rgba(255,255,255,.16);
-
-    border-radius:18px;
-
-    background:rgba(255,255,255,.10);
-
-    backdrop-filter:blur(20px);
-
-    box-shadow:0 20px 60px rgba(0,0,0,.35);
-
-    color:#FFFFFF;
-
-    font-size:1.35rem;
-
-    font-weight:700;
-
-    letter-spacing:.02em;
-
-}
-
-/* ==========================================
-   HERO HINWEIS
-========================================== */
-
-.hero-hint{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:10px;
-
-    width:fit-content;
-
-    margin-top:24px;
-
-    color:rgba(255,255,255,.72);
-
-    font-size:.95rem;
-
-    font-weight:600;
-
-    letter-spacing:.04em;
-
-    text-align:center;
-
-    opacity:.85;
-
-    transition:
-        color var(--transition),
-        opacity var(--transition),
-        transform var(--transition);
-
-}
-
-.calendar-hero:hover .hero-hint{
-
-    color:#FFFFFF;
-
-    opacity:1;
-
-    transform:translateY(-2px);
-
-}
-
-/* ==========================================
-   HERO SCROLL
-========================================== */
-
-.hero-scroll{
-
-    position:absolute;
-
-    left:50%;
-
-    bottom:34px;
-
-    z-index:5;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    width:48px;
-
-    height:48px;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.08);
-
-    backdrop-filter:blur(12px);
-
-    box-shadow:0 12px 30px rgba(0,0,0,.30);
-
-    color:#FFFFFF;
-
-    font-size:1.35rem;
-
-    transform:translateX(-50%);
-
-    animation:bounce 2.4s infinite;
-
-    pointer-events:none;
-
-}
-
-/* ==========================================
-   HERO INTERAKTION
-========================================== */
-
-.calendar-hero:active .calendar-hero-background{
-
-    transform:scale(1.14);
-
-    filter:brightness(.72);
-
-}
-
-.calendar-hero:focus-visible{
-
-    outline:3px solid var(--green);
-
-    outline-offset:-8px;
-
-}
-
-.calendar-hero:focus-visible .hero-hint{
-
-    color:#FFFFFF;
+    box-shadow:
+        var(--shadow-lg);
 
 }
 
@@ -514,27 +116,9 @@ html{
    KALENDER
 ========================================== */
 
-#calendarCard{
+#calendar {
 
-    position:relative;
-
-    overflow:hidden;
-
-    padding:32px;
-
-    border:1px solid var(--border);
-
-    border-radius:var(--radius);
-
-    background:var(--card);
-
-    box-shadow:var(--shadow);
-
-}
-
-#calendar{
-
-    min-height:720px;
+    min-height: 720px;
 
 }
 
@@ -542,139 +126,206 @@ html{
    FULLCALENDAR
 ========================================== */
 
-.fc{
+.fc {
 
-    font-family:inherit;
+    font-family:
+        var(--font-family);
 
-    color:var(--text);
+    color:
+        var(--color-text);
 
 }
+
+/* ==========================================
+   KALENDER RAHMEN
+========================================== */
 
 .fc-theme-standard td,
-.fc-theme-standard th{
+.fc-theme-standard th {
 
-    border-color:rgba(255,255,255,.08);
-
-}
-
-.fc-theme-standard .fc-scrollgrid{
-
-    overflow:hidden;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:18px;
-
-    background:transparent;
+    border-color:
+        var(--color-border);
 
 }
 
-.fc .fc-toolbar{
+.fc-theme-standard .fc-scrollgrid {
 
-    display:flex;
+    overflow: hidden;
 
-    align-items:center;
+    border:
+        1px solid
+        var(--color-border);
 
-    justify-content:space-between;
+    border-radius:
+        var(--radius-lg);
 
-    gap:16px;
-
-    margin-bottom:28px;
-
-}
-
-.fc .fc-toolbar-title{
-
-    color:var(--text);
-
-    font-size:2rem;
-
-    font-weight:700;
+    background: transparent;
 
 }
 
-.fc .fc-button{
+/* ==========================================
+   TOOLBAR
+========================================== */
 
-    padding:10px 18px !important;
+.fc .fc-toolbar {
 
-    border:none !important;
+    display: flex;
 
-    border-radius:12px !important;
+    align-items: center;
+    justify-content: space-between;
 
-    background:var(--green) !important;
+    gap:
+        var(--space-md);
 
-    font-weight:600;
+    margin-bottom:
+        var(--space-xl);
+
+}
+
+.fc .fc-toolbar-title {
+
+    color:
+        var(--color-text);
+
+    font-size:
+        var(--font-size-2xl);
+
+    font-weight: 700;
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.fc .fc-button {
+
+    padding:
+        .625rem
+        1.125rem
+        !important;
+
+    border:
+        none
+        !important;
+
+    border-radius:
+        var(--radius-md)
+        !important;
+
+    background:
+        var(--color-ef22-green)
+        !important;
+
+    color:
+        var(--color-surface)
+        !important;
+
+    font-weight: 600;
 
     transition:
-        transform var(--transition),
-        filter var(--transition),
-        box-shadow var(--transition);
+        transform
+        var(--transition-fast),
+        filter
+        var(--transition-fast),
+        box-shadow
+        var(--transition-fast);
 
 }
 
-.fc .fc-button:hover{
+.fc .fc-button:hover {
 
-    transform:translateY(-2px);
+    transform:
+        translateY(-2px);
 
-    filter:brightness(.95);
+    filter:
+        brightness(.95);
 
-    box-shadow:0 10px 24px rgba(0,0,0,.25);
-
-}
-
-.fc .fc-button:disabled{
-
-    opacity:.55;
+    box-shadow:
+        var(--shadow-sm);
 
 }
 
-.fc .fc-col-header-cell{
+.fc .fc-button:disabled {
 
-    background:#1C1C1C;
-
-}
-
-.fc .fc-col-header-cell-cushion{
-
-    display:block;
-
-    padding:14px 0;
-
-    color:var(--text);
-
-    font-weight:700;
-
-    text-decoration:none;
+    opacity: .55;
 
 }
 
-.fc .fc-daygrid-day{
+/* ==========================================
+   WOCHENTAGE
+========================================== */
 
-    transition:background var(--transition);
+.fc .fc-col-header-cell {
 
-}
-
-.fc .fc-daygrid-day:hover{
-
-    background:rgba(255,255,255,.03);
-
-}
-
-.fc .fc-daygrid-day-number{
-
-    padding:10px;
-
-    color:var(--text);
-
-    font-weight:600;
-
-    text-decoration:none;
+    background:
+        var(--color-background);
 
 }
 
-.fc .fc-day-today{
+.fc .fc-col-header-cell-cushion {
 
-    background:rgba(111,191,115,.10) !important;
+    display: block;
+
+    padding:
+        var(--space-md)
+        0;
+
+    color:
+        var(--color-text);
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+}
+
+/* ==========================================
+   TAGE
+========================================== */
+
+.fc .fc-daygrid-day {
+
+    transition:
+        background-color
+        var(--transition-fast);
+
+}
+
+.fc .fc-daygrid-day:hover {
+
+    background:
+        var(--color-background);
+
+}
+
+.fc .fc-daygrid-day-number {
+
+    padding:
+        var(--space-sm);
+
+    color:
+        var(--color-text);
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+}
+
+/* ==========================================
+   HEUTE
+========================================== */
+
+.fc .fc-day-today {
+
+    background:
+        color-mix(
+            in srgb,
+            var(--color-ef22-green) 12%,
+            transparent
+        )
+        !important;
 
 }
 
@@ -683,36 +334,51 @@ html{
 ========================================== */
 
 .fc-event,
-.fc-daygrid-event{
+.fc-daygrid-event {
 
-    border:none !important;
+    border:
+        none
+        !important;
 
-    border-radius:8px !important;
+    border-radius:
+        var(--radius-sm)
+        !important;
 
-    background:var(--green) !important;
+    background:
+        var(--color-ef22-green)
+        !important;
 
-    color:#FFFFFF !important;
+    color:
+        var(--color-surface)
+        !important;
 
-    cursor:pointer;
+    cursor: pointer;
 
     transition:
-        transform var(--transition),
-        filter var(--transition);
+        transform
+        var(--transition-fast),
+        filter
+        var(--transition-fast);
 
 }
 
-.fc-daygrid-event{
+.fc-daygrid-event {
 
-    padding:4px 8px !important;
+    padding:
+        .25rem
+        .5rem
+        !important;
 
 }
 
 .fc-event:hover,
-.fc-daygrid-event:hover{
+.fc-daygrid-event:hover {
 
-    transform:scale(1.03);
+    transform:
+        scale(1.03);
 
-    filter:brightness(.95);
+    filter:
+        brightness(.95);
 
 }
 
@@ -720,1010 +386,105 @@ html{
    LISTENANSICHT
 ========================================== */
 
-.fc-list-event{
+.fc-list-event {
 
-    transition:background var(--transition);
-
-}
-
-.fc-list-event:hover{
-
-    background:rgba(111,191,115,.12) !important;
-
-    cursor:pointer;
-
-}
-
-.fc-list-day-cushion{
-
-    background:#1C1C1C !important;
-
-    color:var(--text);
-
-    font-weight:700;
-
-}
-
-.fc-list-table td{
-
-    border-color:rgba(255,255,255,.08);
-
-}
-
-/* ==========================================
-   HIGHLIGHTS
-========================================== */
-
-.highlight-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-
-    gap:30px;
-
-    align-items:stretch;
-
-}
-
-/* ==========================================
-   HIGHLIGHT CARD
-========================================== */
-
-.highlight-card{
-
-    position:relative;
-
-    display:flex;
-
-    flex-direction:column;
-
-    height:100%;
-
-    overflow:hidden;
-
-    border:1px solid var(--border);
-
-    border-radius:var(--radius);
-
-    background:var(--card);
-
-    box-shadow:var(--shadow);
-
-    cursor:pointer;
+    cursor: pointer;
 
     transition:
-
-        transform var(--transition),
-
-        border-color var(--transition),
-
-        box-shadow var(--transition);
+        background-color
+        var(--transition-fast);
 
 }
 
-.highlight-card:hover{
+.fc-list-event:hover td {
 
-    transform:translateY(-8px);
-
-    border-color:rgba(111,191,115,.30);
-
-    box-shadow:0 30px 70px rgba(0,0,0,.45);
-
-}
-
-/* ==========================================
-   HIGHLIGHT BILD
-========================================== */
-
-.highlight-image{
-
-    width:100%;
-
-    aspect-ratio:16/9;
-
-    background-position:center;
-
-    background-repeat:no-repeat;
-
-    background-size:cover;
-
-    transition:
-
-        transform .6s ease,
-
-        filter .6s ease;
+    background:
+        color-mix(
+            in srgb,
+            var(--color-ef22-green) 12%,
+            transparent
+        )
+        !important;
 
 }
 
-.highlight-card:hover .highlight-image{
+.fc-list-day-cushion {
 
-    transform:scale(1.05);
+    background:
+        var(--color-background)
+        !important;
 
-    filter:brightness(1.05);
+    color:
+        var(--color-text);
+
+    font-weight: 700;
+
+}
+
+.fc-list-table td {
+
+    border-color:
+        var(--color-border);
 
 }
 
 /* ==========================================
-   HIGHLIGHT CONTENT
+   TABLET / MOBILE
 ========================================== */
 
-.highlight-content{
+@media (max-width: 768px) {
 
-    display:flex;
+    .calendar-section {
 
-    flex-direction:column;
-
-    flex:1;
-
-    gap:18px;
-
-    padding:28px;
-
-}
-
-.highlight-badge{
-
-    align-self:flex-start;
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:8px 16px;
-
-    border-radius:999px;
-
-    border:1px solid rgba(111,191,115,.35);
-
-    background:rgba(111,191,115,.15);
-
-    color:var(--green);
-
-    font-size:.8rem;
-
-    font-weight:700;
-
-    letter-spacing:.08em;
-
-    text-transform:uppercase;
-
-    transition:
-
-        background-color .3s ease,
-
-        border-color .3s ease,
-
-        color .3s ease;
-
-}
-
-.highlight-title{
-
-    color:var(--text);
-
-    font-size:1.6rem;
-
-    line-height:1.25;
-
-}
-
-.highlight-date{
-
-    color:var(--light);
-
-    font-weight:600;
-
-}
-
-.highlight-description{
-
-    flex:1;
-
-    color:var(--muted);
-
-    line-height:1.7;
-
-}
-
-/* ==========================================
-   HIGHLIGHT FOOTER
-========================================== */
-
-.highlight-footer{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:18px;
-
-    margin-top:auto;
-
-    padding-top:20px;
-
-    border-top:1px solid rgba(255,255,255,.08);
-
-}
-
-.highlight-countdown{
-
-    color:var(--green);
-
-    font-weight:700;
-
-}
-
-.highlight-arrow{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    width:44px;
-
-    height:44px;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.08);
-
-    transition:
-
-        background var(--transition),
-
-        color var(--transition),
-
-        transform var(--transition);
-
-}
-
-.highlight-card:hover .highlight-arrow{
-
-    background:var(--green);
-
-    color:#FFFFFF;
-
-    transform:translateX(4px);
-
-}
-
-/* ==========================================
-   EVENT MODAL
-========================================== */
-
-/* ==========================================
-   OVERLAY
-========================================== */
-
-.modal-overlay{
-
-    position:fixed;
-
-    inset:0;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    padding:32px;
-
-    background:rgba(0,0,0,.78);
-
-    backdrop-filter:blur(16px);
-
-    opacity:0;
-
-    visibility:hidden;
-
-    transition:
-        opacity .35s ease,
-        visibility .35s ease;
-
-    z-index:9999;
-
-}
-
-.modal-overlay.show{
-
-    opacity:1;
-
-    visibility:visible;
-
-}
-
-/* ==========================================
-   CONTAINER
-========================================== */
-
-.modal{
-
-    position:relative;
-
-    width:min(720px,100%);
-
-    max-height:90vh;
-
-    overflow-y:auto;
-
-    scroll-behavior:smooth;
-
-    scrollbar-width:thin;
-
-    padding:42px;
-
-    border:1px solid var(--border);
-
-    border-radius:28px;
-
-    background:linear-gradient(
-
-        180deg,
-
-        #1A1A1A,
-
-        #141414
-
-    );
-
-    box-shadow:
-
-        0 40px 100px rgba(0,0,0,.45),
-
-        inset 0 1px rgba(255,255,255,.04);
-
-    animation:modalIn .35s ease;
-
-}
-
-/* ==========================================
-   SCHLIESSEN
-========================================== */
-
-.modal-close{
-
-    position:absolute;
-
-    top:22px;
-
-    right:22px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    width:46px;
-
-    height:46px;
-
-    border:none;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.08);
-
-    color:#FFFFFF;
-
-    cursor:pointer;
-
-    transition:
-
-        background var(--transition),
-
-        transform var(--transition);
-
-}
-
-.modal-close:hover{
-
-    background:var(--green);
-
-    transform:rotate(90deg);
-
-}
-
-/* ==========================================
-   BADGE
-========================================== */
-
-.modal-badge{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:8px 18px;
-
-    margin-bottom:18px;
-
-    border-radius:999px;
-
-    border:1px solid rgba(111,191,115,.35);
-
-    background:rgba(111,191,115,.15);
-
-    color:var(--green);
-
-    font-size:.8rem;
-
-    font-weight:700;
-
-    letter-spacing:.08em;
-
-    text-transform:uppercase;
-
-    transition:
-
-        background-color .3s ease,
-
-        border-color .3s ease,
-
-        color .3s ease;
-
-}
-
-/* ==========================================
-   TITEL
-========================================== */
-
-#modalTitle{
-
-    margin:0 0 34px;
-
-    color:var(--text);
-
-    font-size:2.3rem;
-
-    line-height:1.2;
-
-}
-
-/* ==========================================
-   METADATEN
-========================================== */
-
-.modal-meta{
-
-    display:grid;
-
-    gap:22px;
-
-}
-
-.modal-row{
-
-    display:grid;
-
-    grid-template-columns:34px 1fr;
-
-    gap:18px;
-
-    align-items:flex-start;
-
-    padding-bottom:20px;
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-
-}
-
-.modal-row:last-child{
-
-    border-bottom:none;
-
-}
-
-.modal-row i{
-
-    margin-top:3px;
-
-    color:var(--green);
-
-    font-size:1.15rem;
-
-}
-
-.modal-row strong{
-
-    display:block;
-
-    margin-bottom:6px;
-
-    color:#FFFFFF;
-
-    font-size:.95rem;
-
-}
-
-.modal-row div div{
-
-    color:var(--muted);
-
-    line-height:1.7;
-
-}
-
-/* ==========================================
-   BESCHREIBUNG
-========================================== */
-
-.modal-description-section{
-
-    margin-top:36px;
-
-    padding:28px;
-
-    border:1px solid rgba(255,255,255,.06);
-
-    border-radius:20px;
-
-    background:rgba(255,255,255,.03);
-
-}
-
-.modal-description-section h3{
-
-    margin:0 0 18px;
-
-    color:#FFFFFF;
-
-    font-size:1.1rem;
-
-    font-weight:700;
-
-}
-
-.modal-description{
-
-    color:var(--muted);
-
-    line-height:1.9;
-
-    white-space:pre-wrap;
-
-}
-
-/* ==========================================
-   BUTTONS
-========================================== */
-
-.modal-buttons{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:16px;
-
-    margin-top:36px;
-
-}
-
-.modal-buttons .btn,
-
-.modal-buttons .btn-outline{
-
-    flex:1;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:10px;
-
-    min-height:54px;
-
-}
-
-/* ==========================================
-   BADGE FARBEN
-========================================== */
-
-.badge-fest{
-
-    background:rgba(46,204,113,.18);
-
-    border-color:#2ECC71;
-
-    color:#2ECC71;
-
-}
-
-.badge-meeting{
-
-    background:rgba(52,152,219,.18);
-
-    border-color:#3498DB;
-
-    color:#3498DB;
-
-}
-
-.badge-intern{
-
-    background:rgba(243,156,18,.18);
-
-    border-color:#F39C12;
-
-    color:#F39C12;
-
-}
-
-.badge-public{
-
-    background:rgba(155,89,182,.18);
-
-    border-color:#9B59B6;
-
-    color:#9B59B6;
-
-}
-
-.badge-royal{
-
-    background:rgba(231,76,60,.18);
-
-    border-color:#E74C3C;
-
-    color:#E74C3C;
-
-}
-
-.hero-badge,
-.highlight-badge,
-.modal-badge{
-
-    transition:
-
-        background-color .3s ease,
-
-        border-color .3s ease,
-
-        color .3s ease;
-
-}
-
-/* ==========================================
-   ANIMATIONEN
-========================================== */
-
-@keyframes heroFade{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(40px);
+        padding:
+            var(--space-2xl)
+            0;
 
     }
 
-    to{
+    .calendar-section .section-header {
 
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
-
-@keyframes modalIn{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(20px) scale(.96);
+        margin-bottom:
+            var(--space-xl);
 
     }
 
-    to{
+    .calendar-card {
 
-        opacity:1;
-
-        transform:translateY(0) scale(1);
-
-    }
-
-}
-
-@keyframes bounce{
-
-    0%,
-    100%{
-
-        transform:
-            translateX(-50%)
-            translateY(0);
+        padding:
+            var(--space-md);
 
     }
 
-    50%{
+    #calendar {
 
-        transform:
-            translateX(-50%)
-            translateY(10px);
+        min-height: 580px;
 
     }
 
-}
+    .fc .fc-toolbar {
 
-/* ==========================================
-   HILFSKLASSEN
-========================================== */
+        flex-direction: column;
 
-.fade-in{
+        align-items: center;
 
-    animation:heroFade .5s ease;
-
-}
-
-.scale-in{
-
-    animation:modalIn .35s ease;
-
-}
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-@media (max-width:992px){
-
-    .calendar-hero{
-
-        height:90vh;
+        gap:
+            var(--space-md);
 
     }
 
-    .hero-content{
+    .fc-toolbar-chunk {
 
-        max-width:100%;
+        display: flex;
 
-        padding-bottom:90px;
-
-    }
-
-    #heroTitle{
-
-        font-size:clamp(2.8rem,8vw,4.2rem);
+        justify-content: center;
 
     }
 
-    .hero-info{
+    .fc .fc-toolbar-title {
 
-        gap:18px;
-
-    }
-
-    .highlight-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
-@media (max-width:768px){
-
-    .calendar-section,
-    .highlights-section{
-
-        padding:80px 0;
-
-    }
-
-    .section-header{
-
-        margin-bottom:40px;
-
-    }
-
-    .section-header h2{
-
-        font-size:2rem;
-
-    }
-
-    #calendarCard{
-
-        padding:16px;
-
-    }
-
-    #calendar{
-
-        min-height:580px;
-
-    }
-
-    .fc .fc-toolbar{
-
-        display:flex;
-
-        flex-direction:column;
-
-        align-items:center;
-
-        gap:18px;
-
-    }
-
-    .fc-toolbar-chunk{
-
-        display:flex;
-
-        justify-content:center;
-
-    }
-
-    .fc .fc-toolbar-title{
-
-        font-size:1.5rem;
-
-    }
-
-    .modal{
-
-        padding:28px;
-
-    }
-
-    .modal h2{
-
-        font-size:1.7rem;
-
-    }
-
-    .modal-description-section{
-
-        padding:22px;
-
-    }
-
-    .modal-buttons{
-
-        flex-direction:column;
-
-    }
-
-    .modal-buttons .btn,
-    .modal-buttons .btn-outline{
-
-        width:100%;
-
-    }
-
-}
-
-@media (max-width:576px){
-
-    .calendar-hero{
-
-        height:85vh;
-
-    }
-
-    .hero-content{
-
-        padding-bottom:70px;
-
-    }
-
-    .hero-badge{
-
-        font-size:.72rem;
-
-    }
-
-    #heroTitle{
-
-        font-size:2.2rem;
-
-    }
-
-    .hero-date{
-
-        font-size:1.05rem;
-
-    }
-
-    .hero-info{
-
-        gap:16px;
-
-    }
-
-    .hero-item{
-
-        font-size:1rem;
-
-    }
-
-    .hero-countdown{
-
-        width:100%;
-
-        min-width:unset;
-
-        font-size:1.15rem;
-
-    }
-
-    .hero-hint{
-
-        width:100%;
-
-        justify-content:center;
-
-        text-align:center;
-
-        font-size:.9rem;
-
-    }
-
-    .hero-scroll{
-
-        width:42px;
-
-        height:42px;
-
-    }
-
-    .highlight-content{
-
-        padding:22px;
-
-    }
-
-    .highlight-title{
-
-        font-size:1.3rem;
-
-    }
-
-    .highlight-footer{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-        gap:12px;
-
-    }
-
-    .modal{
-
-        padding:22px;
-
-        border-radius:20px;
-
-    }
-
-    .modal-row{
-
-        grid-template-columns:28px 1fr;
-
-        gap:14px;
-
-    }
-
-    .modal h2{
-
-        font-size:1.5rem;
+        font-size:
+            var(--font-size-xl);
 
     }
 
