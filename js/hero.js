@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HERO.JS
- Version 4.0
+ Version 4.1
 =====================================================
 */
 
@@ -20,7 +20,9 @@ EF22.hero = {
 
         data: null,
 
-        action: null
+        action: null,
+
+        customImage: null
 
     },
 
@@ -35,6 +37,16 @@ EF22.hero = {
     ========================================== */
 
     handlers: {},
+
+    /* ==========================================
+       OBSERVER
+    ========================================== */
+
+    observers: {
+
+        media: null
+
+    },
 
     /* ==========================================
        INITIALISIERUNG
@@ -64,6 +76,8 @@ EF22.hero = {
 
         this.registerEvents();
 
+        this.registerMediaObserver();
+
     },
 
     /* ==========================================
@@ -89,6 +103,48 @@ EF22.hero = {
             "click",
 
             this.handlers.click
+
+        );
+
+    },
+
+    /* ==========================================
+       MEDIA OBSERVER
+    ========================================== */
+
+    registerMediaObserver() {
+
+        if (
+
+            !this.elements.media ||
+
+            typeof ResizeObserver === "undefined"
+
+        ) {
+
+            return;
+
+        }
+
+        this.observers.media =
+
+            new ResizeObserver(
+
+                () => {
+
+                    if (!this.state.customImage) {
+
+                        this.setFallbackImage();
+
+                    }
+
+                }
+
+            );
+
+        this.observers.media.observe(
+
+            this.elements.media
 
         );
 
@@ -185,13 +241,83 @@ EF22.hero = {
 
         }
 
-        const fallback =
+        const hasImage =
 
-            EF22.config?.images?.heroFallback;
+            image !== undefined &&
+
+            image !== null &&
+
+            String(image).trim() !== "";
+
+        this.state.customImage =
+
+            hasImage
+
+                ? String(image)
+
+                : null;
+
+        if (this.state.customImage) {
+
+            this.elements.media.style.backgroundImage =
+
+                `url("${this.state.customImage}")`;
+
+            return;
+
+        }
+
+        this.setFallbackImage();
+
+    },
+
+    /* ==========================================
+       FALLBACK BILD
+    ========================================== */
+
+    setFallbackImage() {
+
+        if (!this.elements.media) {
+
+            return;
+
+        }
+
+        const width =
+
+            this.elements.media.clientWidth;
+
+        const height =
+
+            this.elements.media.clientHeight;
+
+        if (
+
+            width <= 0 ||
+
+            height <= 0
+
+        ) {
+
+            return;
+
+        }
+
+        const portraitImage =
+
+            EF22.config?.images?.heroFallbackPortrait;
+
+        const landscapeImage =
+
+            EF22.config?.images?.heroFallbackLandscape;
 
         const source =
 
-            image || fallback;
+            height > width
+
+                ? portraitImage
+
+                : landscapeImage;
 
         this.elements.media.style.backgroundImage =
 
@@ -386,11 +512,17 @@ EF22.hero = {
 
         );
 
+        this.observers.media?.disconnect();
+
         this.state.data = null;
 
         this.state.action = null;
 
+        this.state.customImage = null;
+
         this.handlers = {};
+
+        this.observers.media = null;
 
     }
 

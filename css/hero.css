@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HERO.CSS
- Version 3.3
+ Version 3.4
 =====================================================
 */
 
@@ -30,7 +30,9 @@
 
     box-shadow:
         0 0 24px rgba(111, 191, 115, .08),
-        var(--shadow-md);
+        0 4px 0 rgba(0, 0, 0, .70),
+        0 8px 14px rgba(0, 0, 0, .35),
+        0 18px 32px rgba(0, 0, 0, .22);
 
 }
 
@@ -308,13 +310,13 @@
     gap:
         var(--space-sm);
 
-    min-height: 34px;
+    min-height: 36px;
 
     color:
         var(--color-text-on-dark);
 
     font-size:
-        var(--font-size-sm);
+        var(--font-size-lg);
 
     font-weight: 500;
 
@@ -333,9 +335,9 @@
 
     align-items: center;
 
-    width: 32px;
+    width: 34px;
 
-    height: 32px;
+    height: 34px;
 
     flex-shrink: 0;
 
