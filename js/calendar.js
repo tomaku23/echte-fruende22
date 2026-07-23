@@ -469,83 +469,93 @@ EF22.calendar = {
     },
 
     /* ==========================================
-       FULLCALENDAR OPTIONEN
-    ========================================== */
+   FULLCALENDAR OPTIONEN
+========================================== */
 
-    getCalendarOptions() {
+getCalendarOptions() {
 
-        return {
+    return {
 
-            locale:
-                "de",
+        locale:
+            "de",
 
-            initialView:
-                "dayGridMonth",
+        titleFormat: {
 
-            firstDay:
-                1,
+            month:
+                "long",
 
-            height:
-                "auto",
+            year:
+                "2-digit"
 
-            fixedWeekCount:
-                false,
+        },
 
-            showNonCurrentDates:
-                true,
+        initialView:
+            "dayGridMonth",
 
-            events:
-                this.state.events,
+        firstDay:
+            1,
 
-            /*
-             * Die eigentlichen FullCalendar-
-             * Event-Pills werden nicht angezeigt.
-             * Der komplette Tag wird markiert.
-             */
+        height:
+            "auto",
 
-            eventDisplay:
-                "none",
+        fixedWeekCount:
+            false,
 
-            headerToolbar: {
+        showNonCurrentDates:
+            true,
 
-                left:
-                    "prev",
+        events:
+            this.state.events,
 
-                center:
-                    "title",
+        /*
+         * Die eigentlichen FullCalendar-
+         * Event-Pills werden nicht angezeigt.
+         * Der komplette Tag wird markiert.
+         */
 
-                right:
-                    "next"
+        eventDisplay:
+            "none",
 
-            },
+        headerToolbar: {
 
-            datesSet: () => {
+            left:
+                "prev",
 
-                requestAnimationFrame(
+            center:
+                "title",
 
-                    () => {
+            right:
+                "next"
 
-                        this.updateNavigationLabels();
+        },
 
-                        this.updateDayStates();
+        datesSet: () => {
 
-                    }
+            requestAnimationFrame(
 
-                );
+                () => {
 
-            },
+                    this.updateNavigationLabels();
 
-            dateClick: (info) => {
+                    this.updateDayStates();
 
-                this.onDateClick(
-                    info
-                );
+                }
 
-            }
+            );
 
-        };
+        },
 
-    },
+        dateClick: (info) => {
+
+            this.onDateClick(
+                info
+            );
+
+        }
+
+    };
+
+},
 
     /* ==========================================
        MONATSNAVIGATION
