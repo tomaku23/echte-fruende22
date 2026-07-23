@@ -19,13 +19,17 @@
 
 <section class="component-section hero-section">
 
-    <?php
+    <div class="container">
 
-    $heroVariant = "calendar";
+        <?php
 
-    require_once __DIR__ . "/../components/hero.php";
+        $heroVariant = "calendar";
 
-    ?>
+        require_once __DIR__ . "/../components/hero.php";
+
+        ?>
+
+    </div>
 
 </section>
 

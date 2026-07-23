@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HERO.CSS
- Version 3.1
+ Version 3.2
 =====================================================
 */
 
@@ -14,13 +14,7 @@
 
     position: relative;
 
-    width: calc(
-        100% - (2 * var(--space-lg))
-    );
-
-    margin:
-        var(--space-lg)
-        auto;
+    width: 100%;
 
     overflow: hidden;
 
@@ -32,25 +26,6 @@
 
 }
 
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 480px) {
-
-    .hero {
-
-        width: calc(
-            100% - (2 * var(--space-md))
-        );
-
-        margin:
-            var(--space-md)
-            auto;
-
-    }
-
-}
 
 /* ==========================================
    MEDIA
@@ -70,6 +45,7 @@
 
 }
 
+
 /* ==========================================
    CONTENT AREA
 ========================================== */
@@ -79,6 +55,7 @@
     width: 100%;
 
 }
+
 
 /* ==========================================
    CONTENT
@@ -92,6 +69,7 @@
 
 }
 
+
 /* ==========================================
    VERSTECKTE ELEMENTE
 ========================================== */
@@ -102,7 +80,8 @@
 
 }
 
-/*/* ==========================================
+
+/* ==========================================
    KALENDER
 ========================================== */
 
@@ -112,8 +91,9 @@
         var(--color-background-dark);
 
     cursor: pointer;
-    
+
 }
+
 
 /* ==========================================
    KALENDER MEDIA
@@ -124,6 +104,7 @@
     aspect-ratio: 4 / 3;
 
 }
+
 
 /* ==========================================
    KALENDER CONTENT AREA
@@ -139,19 +120,24 @@
 
 }
 
+
 /* ==========================================
    KALENDER CONTENT
 ========================================== */
 
 .hero--calendar .hero-content {
 
-    gap: var(--space-lg);
+    gap:
+        var(--space-lg);
 
-    padding-top: var(--space-xl);
+    padding-top:
+        var(--space-xl);
 
-    padding-bottom: var(--space-xl);
+    padding-bottom:
+        var(--space-xl);
 
 }
+
 
 /* ==========================================
    KALENDER BADGE
@@ -171,12 +157,12 @@
 
     border:
         2px solid
-        var(--color-ef22-green);
+        var(--color-primary);
 
     border-radius: 999px;
 
     color:
-        var(--color-ef22-green);
+        var(--color-primary);
 
     font-size:
         var(--font-size-xs);
@@ -188,6 +174,7 @@
     text-transform: uppercase;
 
 }
+
 
 /* ==========================================
    KALENDER TITEL
@@ -214,6 +201,23 @@
 
 }
 
+
+/* ==========================================
+   KALENDER INFO
+========================================== */
+
+.hero--calendar .hero-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap:
+        var(--space-md);
+
+}
+
+
 /* ==========================================
    KALENDER INFO ITEM
 ========================================== */
@@ -237,25 +241,6 @@
 
 }
 
-/* ==========================================
-   KALENDER INFO ITEM
-========================================== */
-
-.hero--calendar .hero-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: var(--space-md);
-
-    color: var(--color-text);
-
-    font-size: var(--font-size-md);
-
-    font-weight: 500;
-
-}
 
 /* ==========================================
    KALENDER ICON
@@ -281,9 +266,10 @@
         var(--color-background-dark);
 
     color:
-        var(--color-ef22-green);
+        var(--color-primary);
 
 }
+
 
 /* ==========================================
    KALENDER COUNTDOWN
@@ -325,6 +311,7 @@
 
 }
 
+
 /* ==========================================
    KALENDER HINWEIS
 ========================================== */
@@ -345,6 +332,7 @@
 
 }
 
+
 /* ==========================================
    KALENDER INTERAKTION
 ========================================== */
@@ -353,11 +341,12 @@
 
     outline:
         3px solid
-        var(--color-ef22-green);
+        var(--color-primary);
 
     outline-offset: -3px;
 
 }
+
 
 /* ==========================================
    TABLET
@@ -373,9 +362,11 @@
 
     .hero--calendar .hero-content {
 
-        padding-top: var(--space-2xl);
+        padding-top:
+            var(--space-2xl);
 
-        padding-bottom: var(--space-2xl);
+        padding-bottom:
+            var(--space-2xl);
 
     }
 
@@ -388,6 +379,7 @@
     }
 
 }
+
 
 /* ==========================================
    DESKTOP
@@ -419,7 +411,8 @@
 
     .hero--calendar .hero-item {
 
-        font-size: var(--font-size-lg);
+        font-size:
+            var(--font-size-lg);
 
     }
 

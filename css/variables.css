@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  VARIABLES.CSS
- Version 2.0
+ Version 2.1
 =====================================================
 */
 
@@ -13,66 +13,90 @@
     ========================================== */
 
     --color-black: #0A0A0A;
+
     --color-anthracite: #151515;
+
     --color-white: #FFFFFF;
 
     --color-ef22-green: #6FBF73;
 
 
     /* ==========================================
-   HINTERGRÜNDE
-========================================== */
+       HINTERGRÜNDE
+    ========================================== */
 
---color-background-dark:
-    var(--color-black);
+    --color-background-dark:
+        var(--color-black);
 
---color-background-medium:
-    var(--color-anthracite);
+    --color-background-medium:
+        var(--color-anthracite);
 
---color-background-light:
-    var(--color-white);
-
-
-/* ==========================================
-   TEXT
-========================================== */
-
---color-text-on-dark:
-    var(--color-white);
-
---color-text-muted-on-dark:
-    rgba(255,255,255,.72);
-
---color-text-on-light:
-    #222222;
-
---color-text-muted-on-light:
-    #666666;
+    --color-background-light:
+        var(--color-white);
 
 
-/* ==========================================
-   KOMPATIBILITÄT
-========================================== */
+    /* ==========================================
+       TEXT AUF DUNKLEM HINTERGRUND
+    ========================================== */
 
---color-background:
-    var(--color-background-dark);
+    --color-text-on-dark:
+        var(--color-white);
 
---color-surface:
-    var(--color-background-medium);
+    --color-text-muted-on-dark:
+        rgba(255,255,255,.72);
 
---color-text:
-    var(--color-text-on-dark);
 
---color-text-muted:
-    var(--color-text-muted-on-dark);
+    /* ==========================================
+       TEXT AUF HELLEM HINTERGRUND
+    ========================================== */
+
+    --color-text-on-light:
+        #222222;
+
+    --color-text-muted-on-light:
+        #666666;
+
+
+    /* ==========================================
+       AKZENT
+    ========================================== */
+
+    --color-primary:
+        var(--color-ef22-green);
+
+    --color-primary-dark:
+        #579A5B;
+
+
+    /* ==========================================
+       KOMPATIBILITÄT
+    ========================================== */
+
+    --color-background:
+        var(--color-background-dark);
+
+    --color-surface:
+        var(--color-background-medium);
+
+    --color-text:
+        var(--color-text-on-dark);
+
+    --color-text-light:
+        var(--color-text-muted-on-dark);
+
+    --color-text-muted:
+        var(--color-text-muted-on-dark);
+
 
     /* ==========================================
        RAHMEN
     ========================================== */
 
-    --color-border: rgba(255,255,255,.08);
+    --color-border:
+        rgba(255,255,255,.08);
 
-    --color-border-strong: rgba(255,255,255,.16);
+    --color-border-strong:
+        rgba(255,255,255,.16);
 
 
     /* ==========================================
@@ -168,9 +192,11 @@
 
     --header-height-compact: 60px;
 
-    --header-background: rgba(10,10,10,.92);
+    --header-background:
+        rgba(10,10,10,.92);
 
-    --header-shadow: var(--shadow-sm);
+    --header-shadow:
+        var(--shadow-sm);
 
     --header-blur: 14px;
 

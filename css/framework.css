@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  FRAMEWORK.CSS
- Version 2.0
+ Version 2.1
 =====================================================
 */
 
@@ -40,9 +40,9 @@ body {
 
     flex-direction: column;
 
-    background: var(--color-background);
+    background: var(--color-background-dark);
 
-    color: var(--color-text);
+    color: var(--color-text-on-dark);
 
     font-family: var(--font-family);
 
@@ -111,8 +111,174 @@ main {
 
     flex-direction: column;
 
-    gap: var(--section-spacing);
+}
 
-    padding-block: var(--space-2xl);
+
+/* ==========================================
+   KOMPONENTENBEREICH
+========================================== */
+
+.component-section {
+
+    position: relative;
+
+    width: 100%;
+
+    padding:
+        var(--space-xl)
+        0;
+
+    background:
+        var(--color-background-medium);
+
+    color:
+        var(--color-text-on-dark);
+
+}
+
+
+/* ==========================================
+   HELLER INHALTSBEREICH
+========================================== */
+
+.content-section {
+
+    position: relative;
+
+    width: 100%;
+
+    padding:
+        var(--space-3xl)
+        0;
+
+    background:
+        var(--color-background-light);
+
+    color:
+        var(--color-text-on-light);
+
+}
+
+
+/* ==========================================
+   SECTION HEADER
+========================================== */
+
+.section-header {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-md);
+
+}
+
+.section-header h2 {
+
+    margin: 0;
+
+    color: inherit;
+
+    font-size:
+        var(--font-size-2xl);
+
+    line-height: 1.25;
+
+}
+
+.section-header p {
+
+    max-width: 760px;
+
+    margin: 0;
+
+    color: inherit;
+
+}
+
+
+/* ==========================================
+   SECTION KICKER
+========================================== */
+
+.section-kicker {
+
+    color:
+        var(--color-primary);
+
+    font-size:
+        var(--font-size-sm);
+
+    font-weight: 700;
+
+    letter-spacing: .12em;
+
+    text-transform: uppercase;
+
+}
+
+
+/* ==========================================
+   HELLER INHALTSBEREICH
+========================================== */
+
+.content-section .section-header p {
+
+    color:
+        var(--color-text-muted-on-light);
+
+}
+
+
+/* ==========================================
+   DUNKLER KOMPONENTENBEREICH
+========================================== */
+
+.component-section .section-header p {
+
+    color:
+        var(--color-text-muted-on-dark);
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 480px) {
+
+    .container {
+
+        width: min(
+            100% - (2 * var(--space-lg)),
+            var(--container-width)
+        );
+
+    }
+
+    .component-section {
+
+        padding:
+            var(--space-lg)
+            0;
+
+    }
+
+    .content-section {
+
+        padding:
+            var(--space-2xl)
+            0;
+
+    }
+
+    .section-header h2 {
+
+        font-size:
+            var(--font-size-xl);
+
+    }
 
 }
