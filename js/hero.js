@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HERO.JS
- Version 4.1
+ Version 4.2
 =====================================================
 */
 
@@ -257,7 +257,20 @@ EF22.hero = {
 
                 : null;
 
+        console.log(
+            "HERO IMAGE:",
+            {
+                receivedImage: image,
+                customImage: this.state.customImage
+            }
+        );
+
         if (this.state.customImage) {
+
+            console.log(
+                "HERO IMAGE MODE: CUSTOM",
+                this.state.customImage
+            );
 
             this.elements.media.style.backgroundImage =
 
@@ -266,6 +279,10 @@ EF22.hero = {
             return;
 
         }
+
+        console.log(
+            "HERO IMAGE MODE: FALLBACK"
+        );
 
         this.setFallbackImage();
 
@@ -291,6 +308,23 @@ EF22.hero = {
 
             this.elements.media.clientHeight;
 
+        const orientation =
+
+            height > width
+
+                ? "PORTRAIT"
+
+                : "LANDSCAPE";
+
+        console.log(
+            "HERO MEDIA:",
+            {
+                width,
+                height,
+                orientation
+            }
+        );
+
         if (
 
             width <= 0 ||
@@ -298,6 +332,10 @@ EF22.hero = {
             height <= 0
 
         ) {
+
+            console.log(
+                "HERO FALLBACK: Keine gültigen Maße."
+            );
 
             return;
 
@@ -318,6 +356,15 @@ EF22.hero = {
                 ? portraitImage
 
                 : landscapeImage;
+
+        console.log(
+            "HERO FALLBACK:",
+            {
+                portraitImage,
+                landscapeImage,
+                source
+            }
+        );
 
         this.elements.media.style.backgroundImage =
 
