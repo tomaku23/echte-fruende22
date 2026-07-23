@@ -7,7 +7,7 @@ declare(strict_types=1);
  EF22 FRAMEWORK
  COMPONENT
  HERO
- Version 4.1
+ Version 4.2
 =====================================================
 */
 
@@ -105,18 +105,36 @@ $heroClass =
             <div class="hero-content">
 
                 <!-- ==========================================
-                     BADGE
+                     META
                 ========================================== -->
 
-                <span
-                    class="hero-badge"
-                    data-hero="badge">
+                <div class="hero-meta">
 
-                    <?= htmlspecialchars(
-                        $hero["badge"]
-                    ) ?>
+                    <!-- BADGE -->
 
-                </span>
+                    <span
+                        class="hero-badge"
+                        data-hero="badge">
+
+                        <?= htmlspecialchars(
+                            $hero["badge"]
+                        ) ?>
+
+                    </span>
+
+                    <!-- COUNTDOWN -->
+
+                    <div
+                        class="hero-countdown"
+                        data-hero="countdown">
+
+                        <?= htmlspecialchars(
+                            $hero["countdown"]
+                        ) ?>
+
+                    </div>
+
+                </div>
 
                 <!-- ==========================================
                      TITEL
@@ -235,20 +253,6 @@ $heroClass =
                         </span>
 
                     </div>
-
-                </div>
-
-                <!-- ==========================================
-                     COUNTDOWN
-                ========================================== -->
-
-                <div
-                    class="hero-countdown"
-                    data-hero="countdown">
-
-                    <?= htmlspecialchars(
-                        $hero["countdown"]
-                    ) ?>
 
                 </div>
 
