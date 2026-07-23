@@ -1,195 +1,379 @@
 /*
 =====================================================
- ECHTE FRÜNDE '22
+ EF22 FRAMEWORK
  NAVIGATION-INDICATOR.JS
- Version 4.0
+ Version 5.0
+=====================================================
+
+Komponente:
+Navigation Indicator
+
+Verantwortung:
+- Weiteren Seiteninhalt anzeigen
+- Scrollzustand darstellen
+- Am Footer parken
+- Am Seitenende Scroll-to-top anbieten
+
+Zustände:
+- start
+- scroll
+- park
+
 =====================================================
 */
 
-/* ==========================================
-   NAVIGATION INDICATOR
-========================================== */
+"use strict";
 
-const navigationIndicator =
-    document.getElementById(
-        "navigationIndicator"
-    );
+window.EF22 ??= {};
 
-/* ==========================================
-   ELEMENTS
-========================================== */
+EF22.navigationIndicator = {
 
-const footer =
-    document.querySelector(
-        ".footer"
-    );
+    /* ==========================================
+       STATE
+    ========================================== */
 
-/* ==========================================
-   CONFIG
-========================================== */
+    state: {
 
-const CONFIG = {
+        mode: "start"
 
-    defaultBottom: 24,
+    },
 
-    parkBottom: 95
+    /* ==========================================
+       ELEMENTE
+    ========================================== */
 
-};
+    elements: {
 
-/* ==========================================
-   STATE
-========================================== */
+        root: null,
 
-let indicatorState = "start";
+        footer: null
 
-/* ==========================================
-   INITIALIZATION
-========================================== */
+    },
 
-if (!navigationIndicator) {
+    /* ==========================================
+       HANDLER
+    ========================================== */
 
-    console.warn(
-        "Navigation Indicator nicht gefunden."
-    );
+    handlers: {},
 
-}
+    /* ==========================================
+       INITIALISIERUNG
+    ========================================== */
 
-if (!footer) {
+    init() {
 
-    console.warn(
-        "Footer nicht gefunden."
-    );
+        this.cacheDom();
 
-}
+        if (!this.elements.root) {
 
-updateState();
+            return;
 
-/* ==========================================
-   FUNCTIONS
-========================================== */
+        }
 
-function setState(state){
+        this.createHandlers();
 
-    if(!navigationIndicator){
+        this.registerEvents();
 
-        return;
+        this.refresh();
 
-    }
+    },
 
-    indicatorState = state;
+    /* ==========================================
+       DOM
+    ========================================== */
 
-    navigationIndicator.classList.remove(
+    cacheDom() {
 
-        "navigation-indicator--compact",
-        "navigation-indicator--park",
-        "navigation-indicator--up",
-        "navigation-indicator--bounce"
+        this.elements.root =
+            document.getElementById(
+                "navigationIndicator"
+            );
 
-    );
+        this.elements.footer =
+            document.querySelector(
+                ".footer"
+            );
 
-    switch(state){
+    },
 
-        case "start":
+    /* ==========================================
+       HANDLER
+    ========================================== */
 
-            navigationIndicator.classList.add(
+    createHandlers() {
 
-                "navigation-indicator--bounce"
+        this.handlers.scroll = () =>
+
+            this.update();
+
+        this.handlers.click = () =>
+
+            this.onClick();
+
+    },
+
+    /* ==========================================
+       EVENTS
+    ========================================== */
+
+    registerEvents() {
+
+        window.addEventListener(
+
+            "scroll",
+
+            this.handlers.scroll,
+
+            {
+
+                passive: true
+
+            }
+
+        );
+
+        this.elements.root.addEventListener(
+
+            "click",
+
+            this.handlers.click
+
+        );
+
+    },
+
+    unregisterEvents() {
+
+        window.removeEventListener(
+
+            "scroll",
+
+            this.handlers.scroll
+
+        );
+
+        this.elements.root?.removeEventListener(
+
+            "click",
+
+            this.handlers.click
+
+        );
+
+    },
+
+    /* ==========================================
+       ÖFFENTLICHE METHODEN
+    ========================================== */
+
+    refresh() {
+
+        this.update();
+
+    },
+
+    /* ==========================================
+       UPDATE
+    ========================================== */
+
+    update() {
+
+        this.updatePosition();
+
+        if (
+
+            this.state.mode !== "park"
+
+        ) {
+
+            this.updateState();
+
+        }
+
+    },
+
+    /* ==========================================
+       POSITION
+    ========================================== */
+
+    updatePosition() {
+
+        if (
+
+            !this.elements.root ||
+
+            !this.elements.footer
+
+        ) {
+
+            return;
+
+        }
+
+        const config =
+
+            EF22.config.navigationIndicator;
+
+        const footerTop =
+
+            this.elements.footer
+                .getBoundingClientRect()
+                .top;
+
+        const parkLine =
+
+            window.innerHeight -
+
+            config.parkBottom;
+
+        if (
+
+            footerTop <= parkLine
+
+        ) {
+
+            this.elements.root.style.bottom =
+
+                `${config.parkBottom}px`;
+
+            this.setState(
+
+                "park"
 
             );
 
-            navigationIndicator.setAttribute(
+            return;
 
-                "aria-label",
+        }
 
-                "Nach unten scrollen"
+        this.elements.root.style.bottom =
 
-            );
+            `${config.defaultBottom}px`;
 
-            break;
+    },
 
-        case "scroll":
+    /* ==========================================
+       STATE
+    ========================================== */
 
-            navigationIndicator.classList.add(
+    updateState() {
 
-                "navigation-indicator--compact"
+        if (
 
-            );
+            window.scrollY === 0
 
-            navigationIndicator.setAttribute(
+        ) {
 
-                "aria-label",
+            this.setState(
 
-                "Nach unten scrollen"
-
-            );
-
-            break;
-
-        case "park":
-
-            navigationIndicator.classList.add(
-
-                "navigation-indicator--compact",
-
-                "navigation-indicator--park",
-
-                "navigation-indicator--up"
+                "start"
 
             );
 
-            navigationIndicator.setAttribute(
+            return;
 
-                "aria-label",
+        }
 
-                "Nach oben scrollen"
+        this.setState(
 
-            );
+            "scroll"
 
-            break;
+        );
 
-    }
+    },
 
-}
+    setState(mode) {
 
-setState("start");
+        if (!this.elements.root) {
 
-/* ==========================================
-   UPDATE STATE
-========================================== */
+            return;
 
-function updateState(){
+        }
 
-    if(window.scrollY === 0){
+        this.state.mode = mode;
 
-        setState("start");
+        this.elements.root.classList.remove(
 
-        return;
+            "navigation-indicator--compact",
+            "navigation-indicator--park",
+            "navigation-indicator--up",
+            "navigation-indicator--bounce"
 
-    }
+        );
 
-    setState("scroll");
+        switch (mode) {
 
-}
+            case "start":
 
-/* ==========================================
-   EVENTS
-========================================== */
+                this.elements.root.classList.add(
 
-window.addEventListener(
+                    "navigation-indicator--bounce"
 
-    "scroll",
+                );
 
-    updateNavigationIndicator
+                this.elements.root.setAttribute(
 
-);
+                    "aria-label",
 
-navigationIndicator?.addEventListener(
+                    "Nach unten scrollen"
 
-    "click",
+                );
 
-    () => {
+                break;
 
-        if(indicatorState !== "park"){
+            case "scroll":
+
+                this.elements.root.classList.add(
+
+                    "navigation-indicator--compact"
+
+                );
+
+                this.elements.root.setAttribute(
+
+                    "aria-label",
+
+                    "Nach unten scrollen"
+
+                );
+
+                break;
+
+            case "park":
+
+                this.elements.root.classList.add(
+
+                    "navigation-indicator--compact",
+                    "navigation-indicator--park",
+                    "navigation-indicator--up"
+
+                );
+
+                this.elements.root.setAttribute(
+
+                    "aria-label",
+
+                    "Nach oben scrollen"
+
+                );
+
+                break;
+
+        }
+
+    },
+
+    /* ==========================================
+       INTERAKTION
+    ========================================== */
+
+    onClick() {
+
+        if (
+
+            this.state.mode !== "park"
+
+        ) {
 
             return;
 
@@ -197,90 +381,30 @@ navigationIndicator?.addEventListener(
 
         window.scrollTo({
 
-            top:0,
+            top: 0,
 
-            behavior:"smooth"
+            behavior: "smooth"
 
         });
 
-    }
+    },
 
-);
+    /* ==========================================
+       DESTROY
+    ========================================== */
 
-/* ==========================================
-   UPDATE POSITION
-========================================== */
+    destroy() {
 
-function updatePosition(){
+        this.unregisterEvents();
 
-    if(!navigationIndicator || !footer){
+        this.state.mode = "start";
 
-        return;
+        this.elements.root = null;
 
-    }
+        this.elements.footer = null;
 
-    const footerTop =
-
-        footer.getBoundingClientRect().top;
-
-    const parkLine =
-
-        window.innerHeight -
-
-        CONFIG.parkBottom;
-
-    if(footerTop <= parkLine){
-
-        navigationIndicator.style.bottom =
-
-            CONFIG.parkBottom + "px";
-
-        setState("park");
-
-        return;
+        this.handlers = {};
 
     }
 
-    navigationIndicator.style.bottom =
-
-        CONFIG.defaultBottom + "px";
-
-}
-
-/* ==========================================
-   UPDATE
-========================================== */
-
-function updateNavigationIndicator(){
-
-    updatePosition();
-
-    if(indicatorState !== "park"){
-
-        updateState();
-
-    }
-
-}
-
-/* ==========================================
-   INITIALIZATION
-========================================== */
-
-if (!navigationIndicator) {
-
-    console.warn(
-        "Navigation Indicator nicht gefunden."
-    );
-
-}
-
-if (!footer) {
-
-    console.warn(
-        "Footer nicht gefunden."
-    );
-
-}
-
-updateNavigationIndicator();
+};

@@ -61,7 +61,7 @@ $currentPage = basename(
             aria-label="Zur Startseite">
 
             <img
-                src="../images/logo.svg"
+                src="../images/logo.png"
                 alt="Echte Fründe '22">
 
         </a>

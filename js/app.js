@@ -17,32 +17,59 @@ window.EF22 ??= {};
 EF22.app = {
 
     /* ==========================================
-       INITIALISIERUNG
-    ========================================== */
+   INITIALISIERUNG
+========================================== */
 
-    async init() {
+async init() {
 
-        console.group("=== EF22 APP START ===");
+    console.group("=== EF22 APP START ===");
 
-        try {
+    try {
 
-            await this.initComponent("header", false);
-            await this.initComponent("modal", false);
-            await this.initComponent("hero", false);
-            await this.initComponent("highlights", false);
-            await this.initComponent("calendar", true);
+        await this.initComponent(
+            "header",
+            false
+        );
 
-        }
+        await this.initComponent(
+            "navigationIndicator",
+            false
+        );
 
-        catch (error) {
+        await this.initComponent(
+            "modal",
+            false
+        );
 
-            console.error("APP FEHLER:", error);
+        await this.initComponent(
+            "hero",
+            false
+        );
 
-        }
+        await this.initComponent(
+            "highlights",
+            false
+        );
 
-        console.groupEnd();
+        await this.initComponent(
+            "calendar",
+            true
+        );
 
-    },
+    }
+
+    catch (error) {
+
+        console.error(
+            "APP FEHLER:",
+            error
+        );
+
+    }
+
+    console.groupEnd();
+
+},
 
     /* ==========================================
        KOMPONENTEN INITIALISIEREN
@@ -97,32 +124,31 @@ EF22.app = {
     },
 
     /* ==========================================
-       DESTROY
-    ========================================== */
+   DESTROY
+========================================== */
 
-    destroy() {
+destroy() {
 
-        [
+    [
 
-            "calendar",
-            "highlights",
-            "hero",
-            "modal",
-            "header"
+        "calendar",
+        "highlights",
+        "hero",
+        "modal",
+        "navigationIndicator",
+        "header"
 
-        ].forEach(
+    ].forEach(
 
-            (name) => {
+        (name) => {
 
-                EF22[name]?.destroy?.();
+            EF22[name]?.destroy?.();
 
-            }
+        }
 
-        );
+    );
 
-    }
-
-};
+}
 
 /* ==========================================
    GLOBALE FEHLER
