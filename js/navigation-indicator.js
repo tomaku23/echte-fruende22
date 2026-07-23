@@ -208,37 +208,49 @@ EF22.navigationIndicator = {
     },
 
     /* ==========================================
-       PARKPOSITION VERLASSEN PRÜFEN
-    ========================================== */
+   PARKPOSITION VERLASSEN PRÜFEN
+========================================== */
 
-    shouldUnpark() {
+shouldUnpark() {
 
-        if (!this.elements.anchor) {
+    if (!this.elements.anchor) {
 
-            return true;
+        return true;
 
-        }
+    }
 
-        const anchorTop =
+    const anchorTop =
 
-            this.elements.anchor
-                .getBoundingClientRect()
-                .top;
+        this.elements.anchor
+            .getBoundingClientRect()
+            .top;
 
-        const indicatorHeight =
+    const indicatorStyle =
 
+        window.getComputedStyle(
             this.elements.indicator
-                .offsetHeight;
+        );
 
-        const normalIndicatorTop =
+    const indicatorBottom =
 
-            window.innerHeight -
-            24 -
-            indicatorHeight;
+        parseFloat(
+            indicatorStyle.bottom
+        ) || 0;
 
-        return anchorTop > normalIndicatorTop;
+    const indicatorHeight =
 
-    },
+        this.elements.indicator
+            .offsetHeight;
+
+    const normalIndicatorTop =
+
+        window.innerHeight -
+        indicatorBottom -
+        indicatorHeight;
+
+    return anchorTop > normalIndicatorTop;
+
+},
 
     /* ==========================================
        MODUS
