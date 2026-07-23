@@ -7,7 +7,7 @@ declare(strict_types=1);
  EF22 FRAMEWORK
  COMPONENT
  HERO
- Version 4.0
+ Version 4.1
 =====================================================
 */
 
@@ -67,11 +67,21 @@ $heroVariant =
 
     $heroVariant ?? "default";
 
+$heroClass =
+
+    "hero hero--" .
+
+    htmlspecialchars(
+        $heroVariant,
+        ENT_QUOTES,
+        "UTF-8"
+    );
+
 ?>
 
 <section
     id="hero"
-    class="hero hero--<?= htmlspecialchars($heroVariant) ?>"
+    class="<?= $heroClass ?>"
     data-hero="root">
 
     <!-- ==========================================
@@ -94,29 +104,51 @@ $heroVariant =
 
             <div class="hero-content">
 
+                <!-- ==========================================
+                     BADGE
+                ========================================== -->
+
                 <span
                     class="hero-badge"
                     data-hero="badge">
 
-                    <?= htmlspecialchars($hero["badge"]) ?>
+                    <?= htmlspecialchars(
+                        $hero["badge"]
+                    ) ?>
 
                 </span>
+
+                <!-- ==========================================
+                     TITEL
+                ========================================== -->
 
                 <h1
                     class="hero-title"
                     data-hero="title">
 
-                    <?= htmlspecialchars($hero["title"]) ?>
+                    <?= htmlspecialchars(
+                        $hero["title"]
+                    ) ?>
 
                 </h1>
+
+                <!-- ==========================================
+                     SUBTITLE
+                ========================================== -->
 
                 <p
                     class="hero-subtitle"
                     data-hero="subtitle">
 
-                    <?= htmlspecialchars($hero["subtitle"]) ?>
+                    <?= htmlspecialchars(
+                        $hero["subtitle"]
+                    ) ?>
 
                 </p>
+
+                <!-- ==========================================
+                     BESCHREIBUNG
+                ========================================== -->
 
                 <div
                     class="hero-description"
@@ -138,6 +170,8 @@ $heroVariant =
                     class="hero-info"
                     data-hero="info">
 
+                    <!-- DATUM -->
+
                     <div
                         class="hero-item"
                         data-hero="dateItem">
@@ -150,11 +184,15 @@ $heroVariant =
 
                         <span data-hero="date">
 
-                            <?= htmlspecialchars($hero["date"]) ?>
+                            <?= htmlspecialchars(
+                                $hero["date"]
+                            ) ?>
 
                         </span>
 
                     </div>
+
+                    <!-- UHRZEIT -->
 
                     <div
                         class="hero-item"
@@ -168,11 +206,15 @@ $heroVariant =
 
                         <span data-hero="time">
 
-                            <?= htmlspecialchars($hero["time"]) ?>
+                            <?= htmlspecialchars(
+                                $hero["time"]
+                            ) ?>
 
                         </span>
 
                     </div>
+
+                    <!-- ORT -->
 
                     <div
                         class="hero-item"
@@ -186,7 +228,9 @@ $heroVariant =
 
                         <span data-hero="location">
 
-                            <?= htmlspecialchars($hero["location"]) ?>
+                            <?= htmlspecialchars(
+                                $hero["location"]
+                            ) ?>
 
                         </span>
 
@@ -202,7 +246,9 @@ $heroVariant =
                     class="hero-countdown"
                     data-hero="countdown">
 
-                    <?= htmlspecialchars($hero["countdown"]) ?>
+                    <?= htmlspecialchars(
+                        $hero["countdown"]
+                    ) ?>
 
                 </div>
 
@@ -214,7 +260,9 @@ $heroVariant =
                     class="hero-hint"
                     data-hero="hint">
 
-                    <?= htmlspecialchars($hero["hint"]) ?>
+                    <?= htmlspecialchars(
+                        $hero["hint"]
+                    ) ?>
 
                 </div>
 

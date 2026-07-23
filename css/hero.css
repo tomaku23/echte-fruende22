@@ -14,12 +14,41 @@
 
     position: relative;
 
-    width: 100%;
+    width: calc(
+        100% - (2 * var(--space-lg))
+    );
+
+    margin:
+        var(--space-lg)
+        auto;
 
     overflow: hidden;
 
+    border-radius:
+        var(--radius-xl);
+
     background:
         var(--color-background-dark);
+
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 480px) {
+
+    .hero {
+
+        width: calc(
+            100% - (2 * var(--space-md))
+        );
+
+        margin:
+            var(--space-md)
+            auto;
+
+    }
 
 }
 

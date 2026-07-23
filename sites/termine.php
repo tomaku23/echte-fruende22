@@ -14,104 +14,136 @@
     ?>
 
     <!-- ==========================================
-     HERO
+     HERO BEREICH
 ========================================== -->
 
-<?php
+<section class="component-section hero-section">
 
-$heroVariant = "calendar";
+    <?php
 
-require_once __DIR__ . "/../components/hero.php";
+    $heroVariant = "calendar";
 
-?>
+    require_once __DIR__ . "/../components/hero.php";
 
-    <!-- ==========================================
-         KALENDER
-    ========================================== -->
+    ?>
 
-    <section
-        id="calendar-section"
-        class="calendar-section">
+</section>
 
-        <div class="container">
 
-            <div class="section-header">
+<!-- ==========================================
+     KALENDER EINLEITUNG
+========================================== -->
 
-                <span class="section-kicker">
+<section class="content-section">
 
-                    Termine
+    <div class="container">
 
-                </span>
+        <div class="section-header">
 
-                <h2>
+            <span class="section-kicker">
 
-                    Alle Veranstaltungen auf einen Blick
+                Termine
 
-                </h2>
+            </span>
 
-                <p>
+            <h2>
 
-                    Hier findet ihr alle Termine der Echten Fründe '22'.
-                    Ein Klick auf einen Termin öffnet alle Details.
+                Alle Veranstaltungen auf einen Blick
 
-                </p>
+            </h2>
 
-            </div>
+            <p>
 
-            <div
-                id="calendarCard"
-                class="calendar-card">
+                Hier findet ihr alle Termine der Echten Fründe '22'.
+                Ein Klick auf einen Termin öffnet alle Details.
 
-                <div id="calendar"></div>
-
-            </div>
+            </p>
 
         </div>
 
-    </section>
+    </div>
 
-    <!-- ==========================================
-         HIGHLIGHTS
-    ========================================== -->
+</section>
 
-    <section
-        id="highlights-section"
-        class="highlights-section">
 
-        <div class="container">
+<!-- ==========================================
+     KALENDER
+========================================== -->
 
-            <div class="section-header">
+<section
+    id="calendar-section"
+    class="component-section calendar-section">
 
-                <span class="section-kicker">
+    <div class="container">
 
-                    Highlights
+        <div
+            id="calendarCard"
+            class="calendar-card">
 
-                </span>
-
-                <h2>
-
-                    Besondere Veranstaltungen
-
-                </h2>
-
-                <p>
-
-                    Hier findet ihr die wichtigsten Veranstaltungen
-                    der Echten Fründe '22.
-
-                </p>
-
-            </div>
-
-            <div
-                id="highlights"
-                class="highlight-grid">
-
-            </div>
+            <div id="calendar"></div>
 
         </div>
 
-    </section>
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+     HIGHLIGHTS EINLEITUNG
+========================================== -->
+
+<section class="content-section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <span class="section-kicker">
+
+                Highlights
+
+            </span>
+
+            <h2>
+
+                Besondere Veranstaltungen
+
+            </h2>
+
+            <p>
+
+                Hier findet ihr die wichtigsten Veranstaltungen
+                der Echten Fründe '22.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+     HIGHLIGHTS
+========================================== -->
+
+<section
+    id="highlights-section"
+    class="component-section highlights-section">
+
+    <div class="container">
+
+        <div
+            id="highlights"
+            class="highlight-grid">
+
+        </div>
+
+    </div>
+
+</section>
 
     <!-- ==========================================
          EVENT MODAL
