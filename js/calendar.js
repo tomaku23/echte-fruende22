@@ -2,7 +2,7 @@
 =====================================================
  ECHTE FRÜNDE '22
  CALENDAR.JS
- Version 3.1
+ Version 3.2
 =====================================================
 */
 
@@ -82,56 +82,52 @@ EF22.calendar = {
 
     createInterface() {
 
-        const wrapper =
+        const controls =
 
             document.createElement(
                 "div"
             );
 
-        wrapper.className =
+        controls.className =
             "calendar-controls";
 
-        wrapper.innerHTML = `
-
-            <div class="calendar-view-controls">
-
-                <button
-                    type="button"
-                    class="calendar-view-button is-active"
-                    data-calendar-view="month">
-
-                    Monat
-
-                </button>
-
-                <button
-                    type="button"
-                    class="calendar-view-button"
-                    data-calendar-view="list">
-
-                    Liste
-
-                </button>
-
-            </div>
+        controls.innerHTML = `
 
             <button
                 type="button"
-                class="calendar-today-button"
+                class="calendar-control-button is-active"
+                data-calendar-view="month">
+
+                Monat
+
+            </button>
+
+            <button
+                type="button"
+                class="calendar-control-button"
                 data-calendar-today>
 
                 Heute
 
             </button>
 
+            <button
+                type="button"
+                class="calendar-control-button"
+                data-calendar-view="list">
+
+                Übersicht
+
+            </button>
+
         `;
 
         this.elements.calendar.before(
-            wrapper
+            controls
         );
 
         this.elements.controls =
-            wrapper;
+            controls;
 
         const list =
 
@@ -176,9 +172,7 @@ EF22.calendar = {
                         () => {
 
                             this.setView(
-
                                 button.dataset.calendarView
-
                             );
 
                         }
@@ -207,7 +201,9 @@ EF22.calendar = {
 
                     this.state.calendar.today();
 
-                    this.updateNavigationLabels();
+                    this.setView(
+                        "month"
+                    );
 
                 }
 
@@ -239,7 +235,8 @@ EF22.calendar = {
 
             }
 
-            const result = await response.json();
+            const result =
+                await response.json();
 
             if (!result.success) {
 
@@ -472,14 +469,15 @@ EF22.calendar = {
     },
 
     /* ==========================================
-       KALENDER OPTIONEN
+       FULLCALENDAR OPTIONEN
     ========================================== */
 
     getCalendarOptions() {
 
         return {
 
-            locale: "de",
+            locale:
+                "de",
 
             initialView:
                 "dayGridMonth",
@@ -498,6 +496,12 @@ EF22.calendar = {
 
             events:
                 this.state.events,
+
+            /*
+             * Die eigentlichen FullCalendar-
+             * Event-Pills werden nicht angezeigt.
+             * Der komplette Tag wird markiert.
+             */
 
             eventDisplay:
                 "none",
@@ -691,7 +695,13 @@ EF22.calendar = {
 
         const isMonth =
 
-            this.state.view === "month";
+            this.state.view ===
+            "month";
+
+        /*
+         * Wirklicher Ansichtswechsel:
+         * niemals Kalender + Liste gleichzeitig.
+         */
 
         this.elements.calendar.hidden =
             !isMonth;
@@ -719,20 +729,6 @@ EF22.calendar = {
                 }
 
             );
-
-        const todayButton =
-
-            this.elements.controls
-                ?.querySelector(
-                    "[data-calendar-today]"
-                );
-
-        if (todayButton) {
-
-            todayButton.hidden =
-                !isMonth;
-
-        }
 
         if (!isMonth) {
 
@@ -969,23 +965,23 @@ EF22.calendar = {
                         "has-mixed-events"
                     );
 
+                    return;
+
                 }
 
-                else if (hasEF22) {
+                if (hasEF22) {
 
                     cell.classList.add(
                         "has-ef22-event"
                     );
 
-                }
-
-                else {
-
-                    cell.classList.add(
-                        "has-external-event"
-                    );
+                    return;
 
                 }
+
+                cell.classList.add(
+                    "has-external-event"
+                );
 
             }
 
@@ -1011,20 +1007,12 @@ EF22.calendar = {
 
         }
 
-        /*
-         * EF22 steht durch die Sortierung
-         * immer an erster Stelle.
-         *
-         * Sobald das Modal mehrere Events
-         * unterstützt, wird hier das komplette
-         * Array übergeben.
-         */
-
         if (
 
             events.length > 1 &&
 
-            typeof EF22.modal.openEvents === "function"
+            typeof EF22.modal.openEvents ===
+                "function"
 
         ) {
 
@@ -1035,6 +1023,11 @@ EF22.calendar = {
             return;
 
         }
+
+        /*
+         * EF22 steht bei mehreren Terminen
+         * durch die Priorisierung zuerst.
+         */
 
         EF22.modal.open(
             events[0]
@@ -1049,7 +1042,6 @@ EF22.calendar = {
     getFutureEvents() {
 
         const today =
-
             new Date();
 
         today.setHours(
@@ -1087,14 +1079,14 @@ EF22.calendar = {
 
                 (a, b) => {
 
-                    const dateDifference =
+                    const difference =
 
                         new Date(a.start) -
                         new Date(b.start);
 
-                    if (dateDifference !== 0) {
+                    if (difference !== 0) {
 
-                        return dateDifference;
+                        return difference;
 
                     }
 
@@ -1112,7 +1104,7 @@ EF22.calendar = {
     },
 
     /* ==========================================
-       GEFILTERTE LISTE
+       GEFILTERTE EVENTS
     ========================================== */
 
     getFilteredFutureEvents() {
@@ -1161,7 +1153,8 @@ EF22.calendar = {
 
             this.getFilteredFutureEvents();
 
-        this.elements.list.innerHTML = "";
+        this.elements.list.innerHTML =
+            "";
 
         this.elements.list.append(
 
@@ -1202,29 +1195,27 @@ EF22.calendar = {
                 empty
             );
 
-            this.elements.list.append(
-                content
-            );
-
-            return;
-
         }
 
-        events.forEach(
+        else {
 
-            (event) => {
+            events.forEach(
 
-                content.append(
+                (event) => {
 
-                    this.createListEvent(
-                        event
-                    )
+                    content.append(
 
-                );
+                        this.createListEvent(
+                            event
+                        )
 
-            }
+                    );
 
-        );
+                }
+
+            );
+
+        }
 
         this.elements.list.append(
             content
