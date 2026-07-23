@@ -98,7 +98,7 @@
 
     border:
         1px solid
-        var(--color-border);
+        var(--color-ef22-green);
 
     border-radius:
         var(--radius-xl);
@@ -107,9 +107,11 @@
         var(--color-background-medium);
 
     box-shadow:
+        0 0 24px rgba(111, 191, 115, .08),
         var(--shadow-md);
 
 }
+
 
 /* ==========================================
    KALENDER
