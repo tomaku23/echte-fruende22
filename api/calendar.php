@@ -26,7 +26,7 @@ const CALENDAR_URL =
     "https://calendar.google.com/calendar/ical/ef22.kalender%40gmail.com/public/basic.ics";
 
 const DEFAULT_IMAGE =
-    "../images/hero-bg.png";
+    "";
 
 /* ==========================================
    FEHLERBEHANDLUNG
