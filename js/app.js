@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  APP.JS
- Version 3.1
+ Version 3.2
 =====================================================
 */
 
@@ -17,105 +17,55 @@ window.EF22 ??= {};
 EF22.app = {
 
     /* ==========================================
-   INITIALISIERUNG
-========================================== */
-
-async init() {
-
-    console.group("=== EF22 APP START ===");
-
-    try {
-
-        await this.initComponent(
-            "header",
-            false
-        );
-
-        await this.initComponent(
-            "navigationIndicator",
-            false
-        );
-
-        await this.initComponent(
-            "modal",
-            false
-        );
-
-        await this.initComponent(
-            "hero",
-            false
-        );
-
-        await this.initComponent(
-            "highlights",
-            false
-        );
-
-        await this.initComponent(
-            "calendar",
-            true
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "APP FEHLER:",
-            error
-        );
-
-    }
-
-    console.groupEnd();
-
-},
-
-    /* ==========================================
-       KOMPONENTEN INITIALISIEREN
+       INITIALISIERUNG
     ========================================== */
 
-    async initComponent(name, isAsync = false) {
+    async init() {
 
-        const component = EF22[name];
-
-        if (!component) {
-
-            console.warn(`${name}: nicht gefunden`);
-
-            return;
-
-        }
-
-        if (typeof component.init !== "function") {
-
-            console.warn(`${name}: keine init()-Methode`);
-
-            return;
-
-        }
-
-        console.group(`${name}.init()`);
+        console.group(
+            "=== EF22 APP START ==="
+        );
 
         try {
 
-            if (isAsync) {
+            await this.initComponent(
+                "header",
+                false
+            );
 
-                await component.init();
+            await this.initComponent(
+                "navigationIndicator",
+                false
+            );
 
-            } else {
+            await this.initComponent(
+                "modal",
+                false
+            );
 
-                component.init();
+            await this.initComponent(
+                "hero",
+                false
+            );
 
-            }
+            await this.initComponent(
+                "highlights",
+                false
+            );
 
-            console.log("✔ OK");
+            await this.initComponent(
+                "calendar",
+                true
+            );
 
         }
 
         catch (error) {
 
-            console.error(error);
+            console.error(
+                "APP FEHLER:",
+                error
+            );
 
         }
 
@@ -124,31 +74,104 @@ async init() {
     },
 
     /* ==========================================
-   DESTROY
-========================================== */
+       KOMPONENTEN INITIALISIEREN
+    ========================================== */
 
-destroy() {
+    async initComponent(
+        name,
+        isAsync = false
+    ) {
 
-    [
+        const component =
+            EF22[name];
 
-        "calendar",
-        "highlights",
-        "hero",
-        "modal",
-        "navigationIndicator",
-        "header"
+        if (!component) {
 
-    ].forEach(
+            console.warn(
+                `${name}: nicht gefunden`
+            );
 
-        (name) => {
-
-            EF22[name]?.destroy?.();
+            return;
 
         }
 
-    );
+        if (
+            typeof component.init !==
+            "function"
+        ) {
 
-}
+            console.warn(
+                `${name}: keine init()-Methode`
+            );
+
+            return;
+
+        }
+
+        console.group(
+            `${name}.init()`
+        );
+
+        try {
+
+            if (isAsync) {
+
+                await component.init();
+
+            }
+
+            else {
+
+                component.init();
+
+            }
+
+            console.log(
+                "✔ OK"
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+        console.groupEnd();
+
+    },
+
+    /* ==========================================
+       DESTROY
+    ========================================== */
+
+    destroy() {
+
+        [
+
+            "calendar",
+            "highlights",
+            "hero",
+            "modal",
+            "navigationIndicator",
+            "header"
+
+        ].forEach(
+
+            (name) => {
+
+                EF22[name]?.destroy?.();
+
+            }
+
+        );
+
+    }
+
+};
 
 /* ==========================================
    GLOBALE FEHLER
@@ -160,16 +183,35 @@ window.addEventListener(
 
     (event) => {
 
-        console.group("🚨 JAVASCRIPT FEHLER");
+        console.group(
+            "🚨 JAVASCRIPT FEHLER"
+        );
 
-        console.log("Datei :", event.filename);
-        console.log("Zeile :", event.lineno);
-        console.log("Spalte:", event.colno);
-        console.log("Fehler:", event.message);
+        console.log(
+            "Datei :",
+            event.filename
+        );
+
+        console.log(
+            "Zeile :",
+            event.lineno
+        );
+
+        console.log(
+            "Spalte:",
+            event.colno
+        );
+
+        console.log(
+            "Fehler:",
+            event.message
+        );
 
         if (event.error) {
 
-            console.log(event.error);
+            console.log(
+                event.error
+            );
 
         }
 
@@ -185,9 +227,13 @@ window.addEventListener(
 
     (event) => {
 
-        console.group("🚨 PROMISE FEHLER");
+        console.group(
+            "🚨 PROMISE FEHLER"
+        );
 
-        console.log(event.reason);
+        console.log(
+            event.reason
+        );
 
         console.groupEnd();
 
