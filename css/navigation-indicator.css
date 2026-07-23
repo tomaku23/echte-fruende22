@@ -116,17 +116,17 @@
     0%,
     100% {
 
-        translate:
-            0
-            0;
+        transform:
+            translateX(-50%)
+            translateY(0);
 
     }
 
     50% {
 
-        translate:
-            0
-            -8px;
+        transform:
+            translateX(-50%)
+            translateY(-8px);
 
     }
 
