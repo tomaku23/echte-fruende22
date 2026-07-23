@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  NAVIGATION-INDICATOR.JS
- Version 5.0
+ Version 5.1
 =====================================================
 */
 
@@ -30,7 +30,7 @@ EF22.navigationIndicator = {
 
         indicator: null,
 
-        footer: null
+        anchor: null
 
     },
 
@@ -51,9 +51,9 @@ EF22.navigationIndicator = {
                 "navigationIndicator"
             );
 
-        this.elements.footer =
+        this.elements.anchor =
             document.querySelector(
-                ".footer"
+                "[data-navigation-indicator-anchor]"
             );
 
         if (!this.elements.indicator) {
@@ -120,7 +120,7 @@ EF22.navigationIndicator = {
 
     update() {
 
-        if (this.isAtFooter()) {
+        if (this.isAtAnchor()) {
 
             this.setMode("park");
 
@@ -141,26 +141,41 @@ EF22.navigationIndicator = {
     },
 
     /* ==========================================
-       FOOTER
+       PARK ANCHOR
     ========================================== */
 
-    isAtFooter() {
+    isAtAnchor() {
 
-        if (!this.elements.footer) {
+        if (!this.elements.anchor) {
 
             return false;
 
         }
 
-        const footerTop =
+        const anchorTop =
 
-            this.elements.footer
+            this.elements.anchor
                 .getBoundingClientRect()
                 .top;
 
-        return footerTop <=
+        const indicatorHeight =
 
-            window.innerHeight - 95;
+            this.elements.indicator
+                .offsetHeight;
+
+        const parkBottom = 24;
+
+        const indicatorBottom =
+
+            window.innerHeight -
+            parkBottom;
+
+        const indicatorTop =
+
+            indicatorBottom -
+            indicatorHeight;
+
+        return anchorTop <= indicatorTop;
 
     },
 

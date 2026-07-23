@@ -341,3 +341,27 @@ Weiß   → Hauptinformation
 Grau   → Zusatzinformation
 
 Weniger Gestaltung erzeugt mehr Wirkung.
+
+EF22 FRAMEWORK – FARBREGEL
+────────────────────────────────────
+
+EF22-Grün
+→ #6FBF73
+→ var(—color-primary)
+
+Alle Farben
+→ Definition ausschließlich in variables.css
+
+Komponenten
+→ verwenden ausschließlich var(—color-...)
+
+Keine:
+→ eigenen :root-Farbdefinitionen
+→ —green
+→ —primary
+→ hart codierten #HEX-Farben
+→ hart codierten rgb()/rgba()-Farben
+
+Neue Farbe erforderlich?
+→ zuerst variables.css
+→ danach Verwendung in der Komponente

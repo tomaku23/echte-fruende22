@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HEADER.CSS
- Version 4.0
+ Version 4.1
 =====================================================
 */
 
@@ -20,7 +20,7 @@
 
     width: 100%;
 
-    background: #0a0a0a;
+    background: var(--color-black);
 
 }
 
@@ -133,7 +133,7 @@
 
     align-items: center;
 
-    color: #ffffff;
+    color: var(--color-white);
 
     text-decoration: none;
 
@@ -208,7 +208,7 @@
 
     border-radius: 999px;
 
-    background: #ffffff;
+    background: var(--color-white);
 
     transition:
         transform .30s ease,
@@ -228,7 +228,7 @@
 
     z-index: -1;
 
-    background: rgba(0, 0, 0, .45);
+    background: var(--color-black-45);
 
     opacity: 0;
 
@@ -317,7 +317,7 @@
 
     padding: var(--space-xl);
 
-    background: #0a0a0a;
+    background: var(--color-black);
 
     border-radius: var(--radius-lg);
 

@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  NAVIGATION-INDICATOR.CSS
- Version 4.0
+ Version 4.1
 =====================================================
 */
 
@@ -30,9 +30,9 @@
     border: none;
     border-radius: 50%;
 
-    background: rgba(10, 10, 10, .88);
+    background: var(--color-black-88);
 
-    color: #ffffff;
+    color: var(--color-white);
 
     cursor: pointer;
 

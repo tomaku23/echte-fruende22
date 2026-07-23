@@ -9,23 +9,39 @@
 :root {
 
     /* ==========================================
-       FARBEN
-    ========================================== */
+   FARBEN
+========================================== */
 
-    --color-primary: #2f6f3e;
-    --color-primary-dark: #245632;
+/* EF22 */
 
-    --color-background: #f5f7f5;
-    --color-surface: #ffffff;
+--color-primary: #6FBF73;
 
-    --color-text: #222222;
-    --color-text-light: #666666;
+/* GRUNDFARBEN */
 
-    --color-border: #dddddd;
+--color-black: #0A0A0A;
+--color-white: #FFFFFF;
 
-    --color-success: #3ca55c;
-    --color-warning: #f2a900;
-    --color-error: #d64545;
+--color-background: #f5f7f5;
+--color-surface: #ffffff;
+
+--color-text: #222222;
+--color-text-light: #666666;
+--color-text-muted: #9A9A9A;
+
+--color-border: #dddddd;
+
+/* TRANSPARENZEN */
+
+--color-black-45: rgba(10,10,10,.45);
+--color-black-88: rgba(10,10,10,.88);
+
+--color-white-12: rgba(255,255,255,.12);
+
+/* STATUS */
+
+--color-success: #3ca55c;
+--color-warning: #f2a900;
+--color-error: #d64545;
 
     /* ==========================================
        TYPOGRAFIE
