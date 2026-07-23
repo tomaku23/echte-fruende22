@@ -20,26 +20,51 @@
 
 
     /* ==========================================
-       HINTERGRÜNDE
-    ========================================== */
+   HINTERGRÜNDE
+========================================== */
 
-    --color-background: var(--color-black);
+--color-background-dark:
+    var(--color-black);
 
-    --color-surface: var(--color-anthracite);
+--color-background-medium:
+    var(--color-anthracite);
 
-    --color-surface-light: #1C1C1C;
+--color-background-light:
+    var(--color-white);
 
 
-    /* ==========================================
-       TEXT
-    ========================================== */
+/* ==========================================
+   TEXT
+========================================== */
 
-    --color-text: var(--color-white);
+--color-text-on-dark:
+    var(--color-white);
 
-    --color-text-muted: rgba(255,255,255,.72);
+--color-text-muted-on-dark:
+    rgba(255,255,255,.72);
 
-    --color-text-subtle: rgba(255,255,255,.55);
+--color-text-on-light:
+    #222222;
 
+--color-text-muted-on-light:
+    #666666;
+
+
+/* ==========================================
+   KOMPATIBILITÄT
+========================================== */
+
+--color-background:
+    var(--color-background-dark);
+
+--color-surface:
+    var(--color-background-medium);
+
+--color-text:
+    var(--color-text-on-dark);
+
+--color-text-muted:
+    var(--color-text-muted-on-dark);
 
     /* ==========================================
        RAHMEN
@@ -170,12 +195,3 @@
     --z-modal: 1000;
 
 }
-
-/* ==========================================
-   KOMPATIBILITÄT
-========================================== */
-
---color-primary: var(--color-ef22-green);
---color-primary-dark: var(--color-ef22-green);
-
---color-text-light: var(--color-text-muted);
