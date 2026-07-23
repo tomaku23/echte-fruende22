@@ -141,43 +141,31 @@ EF22.navigationIndicator = {
     },
 
     /* ==========================================
-       PARK ANCHOR
-    ========================================== */
+   PARK ANCHOR
+========================================== */
 
-    isAtAnchor() {
+isAtAnchor() {
 
-        if (!this.elements.anchor) {
+    if (!this.elements.anchor) {
 
-            return false;
+        return false;
 
-        }
+    }
 
-        const anchorTop =
+    const anchorTop =
 
-            this.elements.anchor
-                .getBoundingClientRect()
-                .top;
+        this.elements.anchor
+            .getBoundingClientRect()
+            .top;
 
-        const indicatorHeight =
+    const indicatorRect =
 
-            this.elements.indicator
-                .offsetHeight;
+        this.elements.indicator
+            .getBoundingClientRect();
 
-        const parkBottom = 24;
+    return anchorTop <= indicatorRect.top;
 
-        const indicatorBottom =
-
-            window.innerHeight -
-            parkBottom;
-
-        const indicatorTop =
-
-            indicatorBottom -
-            indicatorHeight;
-
-        return anchorTop <= indicatorTop;
-
-    },
+},
 
     /* ==========================================
        MODUS
