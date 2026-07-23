@@ -2,12 +2,24 @@
 =====================================================
  EF22 FRAMEWORK
  FOOTER.CSS
- Version 1.0
+ Version 2.0
 =====================================================
 */
 
 /* ==========================================
-   INDICATOR PARKZONE
+   FOOTER AREA
+========================================== */
+
+.footer-area {
+
+    position: relative;
+
+    width: 100%;
+
+}
+
+/* ==========================================
+   NAVIGATION INDICATOR PARKZONE
 ========================================== */
 
 .navigation-indicator-park-zone {
@@ -17,7 +29,17 @@
     width: 100%;
     height: 120px;
 
-    flex-shrink: 0;
+}
+
+/* ==========================================
+   FOOTER CONTAINER
+========================================== */
+
+.footer-container {
+
+    position: relative;
+
+    width: 100%;
 
 }
 
@@ -26,6 +48,8 @@
 ========================================== */
 
 .footer {
+
+    width: 100%;
 
     padding:
         var(--space-lg)
