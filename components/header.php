@@ -4,7 +4,7 @@
 =====================================================
  EF22 FRAMEWORK
  HEADER.PHP
- Version 2.0
+ Version 2.1
 =====================================================
 */
 
@@ -70,7 +70,7 @@ $currentPage = basename(
             class="header-navigation"
             data-header="navigation"
             aria-label="Hauptnavigation"
-            aria-hidden="true">
+            aria-hidden="false">
 
             <ul>
 

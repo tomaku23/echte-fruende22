@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HEADER.JS
- Version 9.0
+ Version 9.1
 =====================================================
 */
 
@@ -31,7 +31,7 @@ EF22.header = {
     elements: {},
 
     /* ==========================================
-       EVENTS
+       HANDLER
     ========================================== */
 
     handlers: {},
@@ -45,40 +45,18 @@ EF22.header = {
         this.elements = EF22.dom.register(
 
             document.querySelector(
-
                 "[data-header=\"root\"]"
-
             ),
 
             "data-header"
 
         );
 
-        if (
-
-            !this.elements.root
-
-        ) {
+        if (!this.elements.root) {
 
             return;
 
         }
-
-        this.elements.burger?.setAttribute(
-
-            "aria-expanded",
-
-            "false"
-
-        );
-
-        this.elements.navigation?.setAttribute(
-
-            "aria-hidden",
-
-            "true"
-
-        );
 
         this.createHandlers();
 
@@ -125,9 +103,7 @@ EF22.header = {
             this.handlers.scroll,
 
             {
-
                 passive: true
-
             }
 
         );
@@ -158,11 +134,7 @@ EF22.header = {
 
         this.elements.navigation
 
-            ?.querySelectorAll(
-
-                "a"
-
-            )
+            ?.querySelectorAll("a")
 
             .forEach(
 
@@ -186,11 +158,7 @@ EF22.header = {
 
     onScroll() {
 
-        if (
-
-            this.state.isNavigationOpen
-
-        ) {
+        if (this.state.isNavigationOpen) {
 
             return;
 
@@ -202,11 +170,7 @@ EF22.header = {
 
     updateHeader() {
 
-        if (
-
-            window.scrollY < 80
-
-        ) {
+        if (window.scrollY < 80) {
 
             this.expandHeader();
 
@@ -218,48 +182,52 @@ EF22.header = {
 
     },
 
+    /* ==========================================
+       GROSSER HEADER
+    ========================================== */
+
     expandHeader() {
 
         this.closeNavigation();
 
-        if (
-
-            !this.state.isCompact
-
-        ) {
-
-            return;
-
-        }
-
         this.state.isCompact = false;
 
         this.elements.root.classList.remove(
-
             "compact"
+        );
 
+        this.elements.burger?.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        this.elements.navigation?.setAttribute(
+            "aria-hidden",
+            "false"
         );
 
     },
 
+    /* ==========================================
+       KOMPAKTER HEADER
+    ========================================== */
+
     compactHeader() {
-
-        if (
-
-            this.state.isCompact
-
-        ) {
-
-            return;
-
-        }
 
         this.state.isCompact = true;
 
         this.elements.root.classList.add(
-
             "compact"
+        );
 
+        this.elements.burger?.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        this.elements.navigation?.setAttribute(
+            "aria-hidden",
+            "true"
         );
 
     },
@@ -272,6 +240,8 @@ EF22.header = {
 
         if (
 
+            !this.state.isCompact ||
+
             this.state.isNavigationOpen
 
         ) {
@@ -283,36 +253,24 @@ EF22.header = {
         this.state.isNavigationOpen = true;
 
         this.elements.root.classList.add(
-
             "expanded"
-
         );
 
         this.elements.burger?.setAttribute(
-
             "aria-expanded",
-
             "true"
-
         );
 
         this.elements.navigation?.setAttribute(
-
             "aria-hidden",
-
             "false"
-
         );
 
     },
 
     closeNavigation() {
 
-        if (
-
-            !this.state.isNavigationOpen
-
-        ) {
+        if (!this.state.isNavigationOpen) {
 
             return;
 
@@ -321,24 +279,21 @@ EF22.header = {
         this.state.isNavigationOpen = false;
 
         this.elements.root.classList.remove(
-
             "expanded"
-
         );
 
         this.elements.burger?.setAttribute(
-
             "aria-expanded",
-
             "false"
-
         );
 
         this.elements.navigation?.setAttribute(
 
             "aria-hidden",
 
-            "true"
+            this.state.isCompact
+                ? "true"
+                : "false"
 
         );
 
@@ -346,11 +301,7 @@ EF22.header = {
 
     toggleNavigation() {
 
-        if (
-
-            !this.state.isCompact
-
-        ) {
+        if (!this.state.isCompact) {
 
             return;
 
@@ -368,17 +319,9 @@ EF22.header = {
        TASTATUR
     ========================================== */
 
-    onKeyDown(
+    onKeyDown(event) {
 
-        event
-
-    ) {
-
-        if (
-
-            event.key === "Escape"
-
-        ) {
+        if (event.key === "Escape") {
 
             this.closeNavigation();
 
@@ -426,11 +369,7 @@ EF22.header = {
 
         this.elements.navigation
 
-            ?.querySelectorAll(
-
-                "a"
-
-            )
+            ?.querySelectorAll("a")
 
             .forEach(
 
@@ -447,6 +386,8 @@ EF22.header = {
             );
 
         this.closeNavigation();
+
+        this.handlers = {};
 
     }
 

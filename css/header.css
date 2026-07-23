@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HEADER.CSS
- Version 3.1
+ Version 4.0
 =====================================================
 */
 
@@ -20,13 +20,7 @@
 
     width: 100%;
 
-    background: var(--header-background);
-
-    backdrop-filter: blur(var(--header-blur));
-
-    box-shadow: var(--header-shadow);
-
-    border-bottom: 1px solid var(--color-border);
+    background: #0a0a0a;
 
 }
 
@@ -40,20 +34,18 @@
 
     display: flex;
 
+    flex-direction: column;
+
     align-items: center;
 
-    justify-content: space-between;
+    width: 100%;
 
-    max-width: var(--container-width);
-
-    margin: 0 auto;
-
-    padding: 0 var(--space-lg);
-
-    height: var(--header-height);
+    padding:
+        var(--space-md)
+        var(--space-md)
+        var(--space-lg);
 
     transition:
-        height .30s ease,
         padding .30s ease;
 
 }
@@ -74,8 +66,6 @@
 
     text-decoration: none;
 
-    cursor: pointer;
-
 }
 
 .header-logo img {
@@ -87,8 +77,7 @@
     height: 72px;
 
     transition:
-        height .30s ease,
-        transform .30s ease;
+        height .30s ease;
 
 }
 
@@ -98,7 +87,11 @@
 
 .header-navigation {
 
-    margin-left: auto;
+    margin-top: var(--space-md);
+
+    opacity: 1;
+
+    visibility: visible;
 
     transition:
         opacity .25s ease,
@@ -112,7 +105,9 @@
 
     align-items: center;
 
-    gap: var(--space-xl);
+    justify-content: center;
+
+    gap: var(--space-lg);
 
     margin: 0;
 
@@ -138,30 +133,21 @@
 
     align-items: center;
 
-    color: var(--color-text);
+    color: #ffffff;
 
     text-decoration: none;
+
+    font-size: var(--font-size-sm);
 
     font-weight: 600;
 
     white-space: nowrap;
 
-    transition:
-        color .20s ease;
-
 }
 
-.header-navigation a:hover {
-
-    color: var(--color-primary);
-
-}
-
-.header-navigation a.active {
-
-    color: var(--color-text);
-
-}
+/* ==========================================
+   ACTIVE LINK
+========================================== */
 
 .header-navigation a.active::after {
 
@@ -171,7 +157,7 @@
 
     left: 0;
 
-    bottom: -8px;
+    bottom: -7px;
 
     width: 100%;
 
@@ -200,11 +186,9 @@
     gap: 5px;
 
     width: 48px;
-
     height: 48px;
 
-    margin-left: auto;
-
+    margin: 0;
     padding: 0;
 
     border: none;
@@ -220,12 +204,11 @@
     display: block;
 
     width: 24px;
-
     height: 3px;
 
     border-radius: 999px;
 
-    background: var(--color-text);
+    background: #ffffff;
 
     transition:
         transform .30s ease,
@@ -243,7 +226,9 @@
 
     inset: 0;
 
-    background: rgba(0,0,0,.45);
+    z-index: -1;
+
+    background: rgba(0, 0, 0, .45);
 
     opacity: 0;
 
@@ -263,7 +248,13 @@
 
 .header.compact .header-inner {
 
-    height: var(--header-height-compact);
+    flex-direction: row;
+
+    justify-content: space-between;
+
+    padding:
+        var(--space-sm)
+        var(--space-md);
 
 }
 
@@ -274,6 +265,8 @@
 }
 
 .header.compact .header-navigation {
+
+    position: absolute;
 
     opacity: 0;
 
@@ -309,17 +302,22 @@
 
     top: calc(100% + var(--space-sm));
 
-    right: var(--space-lg);
+    right: var(--space-md);
+
+    z-index: 20;
 
     display: block;
 
-    width: 260px;
+    width: min(
+        260px,
+        calc(100vw - (2 * var(--space-md)))
+    );
+
+    margin: 0;
 
     padding: var(--space-xl);
 
-    background: var(--header-background);
-
-    border: 1px solid var(--color-border);
+    background: #0a0a0a;
 
     border-radius: var(--radius-lg);
 
@@ -330,8 +328,6 @@
     visibility: visible;
 
     pointer-events: auto;
-
-    z-index: 20;
 
 }
 
@@ -351,7 +347,8 @@
    BURGER ANIMATION
 ========================================== */
 
-.header.compact.expanded .header-burger span:nth-child(1) {
+.header.compact.expanded
+.header-burger span:nth-child(1) {
 
     transform:
         translateY(8px)
@@ -359,13 +356,15 @@
 
 }
 
-.header.compact.expanded .header-burger span:nth-child(2) {
+.header.compact.expanded
+.header-burger span:nth-child(2) {
 
     opacity: 0;
 
 }
 
-.header.compact.expanded .header-burger span:nth-child(3) {
+.header.compact.expanded
+.header-burger span:nth-child(3) {
 
     transform:
         translateY(-8px)
@@ -374,24 +373,38 @@
 }
 
 /* ==========================================
-   SMALL DISPLAYS
+   TABLET / DESKTOP
 ========================================== */
 
-@media (max-width: 420px) {
+@media (min-width: 769px) {
 
     .header-inner {
 
-        padding-left: var(--space-md);
+        max-width: var(--container-width);
 
-        padding-right: var(--space-md);
+        margin: 0 auto;
+
+        padding-left: var(--space-xl);
+        padding-right: var(--space-xl);
 
     }
 
-    .header.compact.expanded .header-navigation {
+    .header-navigation ul {
 
-        right: var(--space-md);
+        gap: var(--space-xl);
 
-        width: min(260px, calc(100vw - (2 * var(--space-md))));
+    }
+
+    .header-navigation a {
+
+        font-size: var(--font-size-md);
+
+    }
+
+    .header.compact.expanded
+    .header-navigation {
+
+        right: var(--space-xl);
 
     }
 
