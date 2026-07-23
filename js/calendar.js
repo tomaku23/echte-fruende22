@@ -2,7 +2,7 @@
 =====================================================
  ECHTE FRÜNDE '22
  CALENDAR.JS
- Version 3.0
+ Version 3.1
 =====================================================
 */
 
@@ -24,7 +24,17 @@ EF22.calendar = {
 
         events: [],
 
-        calendar: null
+        calendar: null,
+
+        view: "month",
+
+        filters: {
+
+            ef22: true,
+
+            rkn: true
+
+        }
 
     },
 
@@ -34,7 +44,11 @@ EF22.calendar = {
 
     elements: {
 
-        calendar: null
+        calendar: null,
+
+        controls: null,
+
+        list: null
 
     },
 
@@ -56,7 +70,148 @@ EF22.calendar = {
 
         }
 
+        this.createInterface();
+
         await this.loadEvents();
+
+    },
+
+    /* ==========================================
+       INTERFACE
+    ========================================== */
+
+    createInterface() {
+
+        const wrapper =
+
+            document.createElement(
+                "div"
+            );
+
+        wrapper.className =
+            "calendar-controls";
+
+        wrapper.innerHTML = `
+
+            <div class="calendar-view-controls">
+
+                <button
+                    type="button"
+                    class="calendar-view-button is-active"
+                    data-calendar-view="month">
+
+                    Monat
+
+                </button>
+
+                <button
+                    type="button"
+                    class="calendar-view-button"
+                    data-calendar-view="list">
+
+                    Liste
+
+                </button>
+
+            </div>
+
+            <button
+                type="button"
+                class="calendar-today-button"
+                data-calendar-today>
+
+                Heute
+
+            </button>
+
+        `;
+
+        this.elements.calendar.before(
+            wrapper
+        );
+
+        this.elements.controls =
+            wrapper;
+
+        const list =
+
+            document.createElement(
+                "div"
+            );
+
+        list.className =
+            "calendar-list";
+
+        list.hidden = true;
+
+        this.elements.calendar.after(
+            list
+        );
+
+        this.elements.list =
+            list;
+
+        this.registerInterfaceEvents();
+
+    },
+
+    /* ==========================================
+       INTERFACE EVENTS
+    ========================================== */
+
+    registerInterfaceEvents() {
+
+        this.elements.controls
+            ?.querySelectorAll(
+                "[data-calendar-view]"
+            )
+            .forEach(
+
+                (button) => {
+
+                    button.addEventListener(
+
+                        "click",
+
+                        () => {
+
+                            this.setView(
+
+                                button.dataset.calendarView
+
+                            );
+
+                        }
+
+                    );
+
+                }
+
+            );
+
+        this.elements.controls
+            ?.querySelector(
+                "[data-calendar-today]"
+            )
+            ?.addEventListener(
+
+                "click",
+
+                () => {
+
+                    if (!this.state.calendar) {
+
+                        return;
+
+                    }
+
+                    this.state.calendar.today();
+
+                    this.updateNavigationLabels();
+
+                }
+
+            );
 
     },
 
@@ -136,6 +291,10 @@ EF22.calendar = {
 
         this.renderCalendar();
 
+        this.renderList();
+
+        this.updateView();
+
     },
 
     /* ==========================================
@@ -153,9 +312,7 @@ EF22.calendar = {
             );
 
         this.updateHero(
-
             nextEvent
-
         );
 
         EF22.highlights.refresh(
@@ -187,9 +344,7 @@ EF22.calendar = {
         const props =
 
             EF22.utils.getProps(
-
                 event
-
             );
 
         EF22.hero.refresh({
@@ -228,9 +383,7 @@ EF22.calendar = {
             action: () => {
 
                 EF22.modal.open(
-
                     event
-
                 );
 
             }
@@ -251,18 +404,15 @@ EF22.calendar = {
 
         }
 
-        const now = new Date();
+        const now =
+            new Date();
 
-        const eventDate = new Date(
-
-            start
-
-        );
+        const eventDate =
+            new Date(start);
 
         const diff =
 
             eventDate.getTime() -
-
             now.getTime();
 
         if (diff <= 0) {
@@ -274,13 +424,9 @@ EF22.calendar = {
         const days = Math.ceil(
 
             diff /
-
             1000 /
-
             60 /
-
             60 /
-
             24
 
         );
@@ -319,6 +465,10 @@ EF22.calendar = {
 
         this.state.calendar.render();
 
+        this.updateNavigationLabels();
+
+        this.updateDayStates();
+
     },
 
     /* ==========================================
@@ -331,32 +481,60 @@ EF22.calendar = {
 
             locale: "de",
 
-            initialView: "dayGridMonth",
+            initialView:
+                "dayGridMonth",
 
-            firstDay: 1,
+            firstDay:
+                1,
 
-            height: "auto",
+            height:
+                "auto",
 
-            events: this.state.events,
+            fixedWeekCount:
+                false,
+
+            showNonCurrentDates:
+                true,
+
+            events:
+                this.state.events,
+
+            eventDisplay:
+                "none",
 
             headerToolbar: {
 
-                left: "prev,next today",
+                left:
+                    "prev",
 
-                center: "title",
+                center:
+                    "title",
 
-                right: "dayGridMonth,listMonth"
+                right:
+                    "next"
 
             },
 
-            eventClick: (info) => {
+            datesSet: () => {
 
-                info.jsEvent.preventDefault();
+                requestAnimationFrame(
 
-                this.onEventClick(
+                    () => {
 
+                        this.updateNavigationLabels();
+
+                        this.updateDayStates();
+
+                    }
+
+                );
+
+            },
+
+            dateClick: (info) => {
+
+                this.onDateClick(
                     info
-
                 );
 
             }
@@ -366,16 +544,929 @@ EF22.calendar = {
     },
 
     /* ==========================================
-       EVENT CLICK
+       MONATSNAVIGATION
     ========================================== */
 
-    onEventClick(info) {
+    updateNavigationLabels() {
 
-        EF22.modal.open(
+        if (!this.state.calendar) {
 
-            info.event
+            return;
+
+        }
+
+        const current =
+
+            this.state.calendar.getDate();
+
+        const previous =
+
+            new Date(
+
+                current.getFullYear(),
+
+                current.getMonth() - 1,
+
+                1
+
+            );
+
+        const next =
+
+            new Date(
+
+                current.getFullYear(),
+
+                current.getMonth() + 1,
+
+                1
+
+            );
+
+        const formatter =
+
+            new Intl.DateTimeFormat(
+
+                "de-DE",
+
+                {
+
+                    month:
+                        "long"
+
+                }
+
+            );
+
+        const previousLabel =
+
+            formatter.format(
+                previous
+            );
+
+        const nextLabel =
+
+            formatter.format(
+                next
+            );
+
+        const previousButton =
+
+            this.elements.calendar.querySelector(
+
+                ".fc-prev-button"
+
+            );
+
+        const nextButton =
+
+            this.elements.calendar.querySelector(
+
+                ".fc-next-button"
+
+            );
+
+        if (previousButton) {
+
+            previousButton.textContent =
+                previousLabel;
+
+            previousButton.setAttribute(
+
+                "aria-label",
+
+                `Zum ${previousLabel}`
+
+            );
+
+        }
+
+        if (nextButton) {
+
+            nextButton.textContent =
+                nextLabel;
+
+            nextButton.setAttribute(
+
+                "aria-label",
+
+                `Zum ${nextLabel}`
+
+            );
+
+        }
+
+    },
+
+    /* ==========================================
+       ANSICHT WECHSELN
+    ========================================== */
+
+    setView(view) {
+
+        if (
+
+            view !== "month" &&
+
+            view !== "list"
+
+        ) {
+
+            return;
+
+        }
+
+        this.state.view =
+            view;
+
+        this.updateView();
+
+    },
+
+    /* ==========================================
+       ANSICHT AKTUALISIEREN
+    ========================================== */
+
+    updateView() {
+
+        const isMonth =
+
+            this.state.view === "month";
+
+        this.elements.calendar.hidden =
+            !isMonth;
+
+        this.elements.list.hidden =
+            isMonth;
+
+        this.elements.controls
+            ?.querySelectorAll(
+                "[data-calendar-view]"
+            )
+            .forEach(
+
+                (button) => {
+
+                    button.classList.toggle(
+
+                        "is-active",
+
+                        button.dataset.calendarView ===
+                            this.state.view
+
+                    );
+
+                }
+
+            );
+
+        const todayButton =
+
+            this.elements.controls
+                ?.querySelector(
+                    "[data-calendar-today]"
+                );
+
+        if (todayButton) {
+
+            todayButton.hidden =
+                !isMonth;
+
+        }
+
+        if (!isMonth) {
+
+            this.renderList();
+
+        }
+
+    },
+
+    /* ==========================================
+       EVENTS EINES TAGES
+    ========================================== */
+
+    getEventsForDate(date) {
+
+        const key =
+
+            this.getDateKey(
+                date
+            );
+
+        return this.state.events
+
+            .filter(
+
+                (event) => {
+
+                    if (!event.start) {
+
+                        return false;
+
+                    }
+
+                    return (
+
+                        this.getDateKey(
+                            event.start
+                        ) === key
+
+                    );
+
+                }
+
+            )
+
+            .sort(
+
+                (a, b) =>
+
+                    this.getCalendarPriority(a) -
+                    this.getCalendarPriority(b)
+
+            );
+
+    },
+
+    /* ==========================================
+       DATUM KEY
+    ========================================== */
+
+    getDateKey(value) {
+
+        const date =
+
+            value instanceof Date
+
+                ? value
+
+                : new Date(value);
+
+        const year =
+            date.getFullYear();
+
+        const month =
+
+            String(
+                date.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            );
+
+        const day =
+
+            String(
+                date.getDate()
+            ).padStart(
+                2,
+                "0"
+            );
+
+        return `${year}-${month}-${day}`;
+
+    },
+
+    /* ==========================================
+       KALENDER QUELLE
+    ========================================== */
+
+    getCalendarSource(event) {
+
+        const props =
+
+            EF22.utils.getProps(
+                event
+            );
+
+        const source =
+
+            String(
+
+                props.calendar ??
+                props.source ??
+                "ef22"
+
+            ).toLowerCase();
+
+        return source === "rkn"
+
+            ? "rkn"
+
+            : "ef22";
+
+    },
+
+    /* ==========================================
+       PRIORITÄT
+    ========================================== */
+
+    getCalendarPriority(event) {
+
+        return (
+
+            this.getCalendarSource(event) ===
+            "ef22"
+
+                ? 0
+
+                : 1
 
         );
+
+    },
+
+    /* ==========================================
+       TAGESSTATUS
+    ========================================== */
+
+    updateDayStates() {
+
+        if (!this.elements.calendar) {
+
+            return;
+
+        }
+
+        const cells =
+
+            this.elements.calendar.querySelectorAll(
+
+                ".fc-daygrid-day[data-date]"
+
+            );
+
+        cells.forEach(
+
+            (cell) => {
+
+                cell.classList.remove(
+
+                    "has-event",
+
+                    "has-ef22-event",
+
+                    "has-external-event",
+
+                    "has-mixed-events"
+
+                );
+
+                const date =
+
+                    cell.getAttribute(
+                        "data-date"
+                    );
+
+                const events =
+
+                    this.getEventsForDate(
+                        date
+                    );
+
+                if (!events.length) {
+
+                    return;
+
+                }
+
+                const hasEF22 =
+
+                    events.some(
+
+                        (event) =>
+
+                            this.getCalendarSource(event) ===
+                            "ef22"
+
+                    );
+
+                const hasRKN =
+
+                    events.some(
+
+                        (event) =>
+
+                            this.getCalendarSource(event) ===
+                            "rkn"
+
+                    );
+
+                cell.classList.add(
+                    "has-event"
+                );
+
+                if (
+
+                    hasEF22 &&
+
+                    hasRKN
+
+                ) {
+
+                    cell.classList.add(
+                        "has-mixed-events"
+                    );
+
+                }
+
+                else if (hasEF22) {
+
+                    cell.classList.add(
+                        "has-ef22-event"
+                    );
+
+                }
+
+                else {
+
+                    cell.classList.add(
+                        "has-external-event"
+                    );
+
+                }
+
+            }
+
+        );
+
+    },
+
+    /* ==========================================
+       TAG ANGEKLICKT
+    ========================================== */
+
+    onDateClick(info) {
+
+        const events =
+
+            this.getEventsForDate(
+                info.date
+            );
+
+        if (!events.length) {
+
+            return;
+
+        }
+
+        /*
+         * EF22 steht durch die Sortierung
+         * immer an erster Stelle.
+         *
+         * Sobald das Modal mehrere Events
+         * unterstützt, wird hier das komplette
+         * Array übergeben.
+         */
+
+        if (
+
+            events.length > 1 &&
+
+            typeof EF22.modal.openEvents === "function"
+
+        ) {
+
+            EF22.modal.openEvents(
+                events
+            );
+
+            return;
+
+        }
+
+        EF22.modal.open(
+            events[0]
+        );
+
+    },
+
+    /* ==========================================
+       ZUKÜNFTIGE EVENTS
+    ========================================== */
+
+    getFutureEvents() {
+
+        const today =
+
+            new Date();
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+        return this.state.events
+
+            .filter(
+
+                (event) => {
+
+                    if (!event.start) {
+
+                        return false;
+
+                    }
+
+                    const start =
+
+                        new Date(
+                            event.start
+                        );
+
+                    return start >= today;
+
+                }
+
+            )
+
+            .sort(
+
+                (a, b) => {
+
+                    const dateDifference =
+
+                        new Date(a.start) -
+                        new Date(b.start);
+
+                    if (dateDifference !== 0) {
+
+                        return dateDifference;
+
+                    }
+
+                    return (
+
+                        this.getCalendarPriority(a) -
+                        this.getCalendarPriority(b)
+
+                    );
+
+                }
+
+            );
+
+    },
+
+    /* ==========================================
+       GEFILTERTE LISTE
+    ========================================== */
+
+    getFilteredFutureEvents() {
+
+        return this.getFutureEvents()
+
+            .filter(
+
+                (event) => {
+
+                    const source =
+
+                        this.getCalendarSource(
+                            event
+                        );
+
+                    return (
+
+                        source === "ef22"
+
+                            ? this.state.filters.ef22
+
+                            : this.state.filters.rkn
+
+                    );
+
+                }
+
+            );
+
+    },
+
+    /* ==========================================
+       LISTE RENDERN
+    ========================================== */
+
+    renderList() {
+
+        if (!this.elements.list) {
+
+            return;
+
+        }
+
+        const events =
+
+            this.getFilteredFutureEvents();
+
+        this.elements.list.innerHTML = "";
+
+        this.elements.list.append(
+
+            this.createListFilters()
+
+        );
+
+        const content =
+
+            document.createElement(
+                "div"
+            );
+
+        content.className =
+            "calendar-list-content";
+
+        if (!events.length) {
+
+            const empty =
+
+                document.createElement(
+                    "p"
+                );
+
+            empty.className =
+                "calendar-list-empty";
+
+            empty.textContent =
+
+                this.state.filters.ef22 ||
+                this.state.filters.rkn
+
+                    ? "Keine kommenden Termine vorhanden."
+
+                    : "Keine Kalender ausgewählt.";
+
+            content.append(
+                empty
+            );
+
+            this.elements.list.append(
+                content
+            );
+
+            return;
+
+        }
+
+        events.forEach(
+
+            (event) => {
+
+                content.append(
+
+                    this.createListEvent(
+                        event
+                    )
+
+                );
+
+            }
+
+        );
+
+        this.elements.list.append(
+            content
+        );
+
+    },
+
+    /* ==========================================
+       LISTEN FILTER
+    ========================================== */
+
+    createListFilters() {
+
+        const filters =
+
+            document.createElement(
+                "div"
+            );
+
+        filters.className =
+            "calendar-list-filters";
+
+        filters.innerHTML = `
+
+            <label class="calendar-filter">
+
+                <input
+                    type="checkbox"
+                    data-calendar-filter="ef22"
+                    ${this.state.filters.ef22 ? "checked" : ""}
+                >
+
+                <span>
+                    Echte Freunde '22
+                </span>
+
+            </label>
+
+            <label class="calendar-filter">
+
+                <input
+                    type="checkbox"
+                    data-calendar-filter="rkn"
+                    ${this.state.filters.rkn ? "checked" : ""}
+                >
+
+                <span>
+                    Rhein-Kreis Neuss
+                </span>
+
+            </label>
+
+        `;
+
+        filters
+            .querySelectorAll(
+                "[data-calendar-filter]"
+            )
+            .forEach(
+
+                (checkbox) => {
+
+                    checkbox.addEventListener(
+
+                        "change",
+
+                        () => {
+
+                            const filter =
+
+                                checkbox.dataset.calendarFilter;
+
+                            this.state.filters[filter] =
+                                checkbox.checked;
+
+                            this.renderList();
+
+                        }
+
+                    );
+
+                }
+
+            );
+
+        return filters;
+
+    },
+
+    /* ==========================================
+       LISTEN EVENT
+    ========================================== */
+
+    createListEvent(event) {
+
+        const props =
+
+            EF22.utils.getProps(
+                event
+            );
+
+        const source =
+
+            this.getCalendarSource(
+                event
+            );
+
+        const item =
+
+            document.createElement(
+                "button"
+            );
+
+        item.type =
+            "button";
+
+        item.className =
+
+            `calendar-list-event calendar-list-event--${source}`;
+
+        const date =
+
+            new Intl.DateTimeFormat(
+
+                "de-DE",
+
+                {
+
+                    weekday:
+                        "long",
+
+                    day:
+                        "2-digit",
+
+                    month:
+                        "long",
+
+                    year:
+                        "numeric"
+
+                }
+
+            ).format(
+
+                new Date(
+                    event.start
+                )
+
+            );
+
+        const sourceLabel =
+
+            source === "ef22"
+
+                ? "Echte Freunde '22"
+
+                : "Rhein-Kreis Neuss";
+
+        const time =
+
+            EF22.utils.formatTimeRange(
+
+                event.start,
+
+                event.end
+
+            );
+
+        item.innerHTML = `
+
+            <span class="calendar-list-event-date">
+                ${this.escapeHTML(date)}
+            </span>
+
+            <span class="calendar-list-event-source">
+                ${this.escapeHTML(sourceLabel)}
+            </span>
+
+            <strong class="calendar-list-event-title">
+                ${this.escapeHTML(event.title || "")}
+            </strong>
+
+            ${
+                time
+
+                    ? `
+                        <span class="calendar-list-event-time">
+                            ${this.escapeHTML(time)}
+                        </span>
+                    `
+
+                    : ""
+            }
+
+            ${
+                props.location
+
+                    ? `
+                        <span class="calendar-list-event-location">
+                            ${this.escapeHTML(props.location)}
+                        </span>
+                    `
+
+                    : ""
+            }
+
+        `;
+
+        item.addEventListener(
+
+            "click",
+
+            () => {
+
+                EF22.modal.open(
+                    event
+                );
+
+            }
+
+        );
+
+        return item;
+
+    },
+
+    /* ==========================================
+       HTML ESCAPEN
+    ========================================== */
+
+    escapeHTML(value) {
+
+        const element =
+
+            document.createElement(
+                "div"
+            );
+
+        element.textContent =
+            String(value ?? "");
+
+        return element.innerHTML;
 
     },
 
@@ -393,7 +1484,22 @@ EF22.calendar = {
 
         }
 
+        this.elements.controls?.remove();
+
+        this.elements.list?.remove();
+
         this.state.events = [];
+
+        this.state.view =
+            "month";
+
+        this.state.filters = {
+
+            ef22: true,
+
+            rkn: true
+
+        };
 
     }
 

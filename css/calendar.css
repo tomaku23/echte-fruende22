@@ -1,156 +1,121 @@
-/*
-=====================================================
- EF22 FRAMEWORK
- CALENDAR.CSS
- Version 5.0
-=====================================================
-*/
-
 /* ==========================================
-   KALENDER SECTION
+   EF22 ANSICHT STEUERUNG
 ========================================== */
 
-.calendar-section {
+.calendar-controls {
 
-    position: relative;
+    display: flex;
 
-    padding:
-        var(--space-3xl)
-        0;
+    justify-content: space-between;
 
-}
+    align-items: center;
 
-/* ==========================================
-   SECTION HEADER
-========================================== */
-
-.calendar-section .section-header {
-
-    margin-bottom:
-        var(--space-2xl);
-
-    text-align: center;
-
-}
-
-.calendar-section .section-kicker {
-
-    display: inline-block;
-
-    margin-bottom:
+    gap:
         var(--space-md);
 
-    color:
-        var(--color-ef22-green);
-
-    font-weight: 700;
-
-    letter-spacing: .14em;
-
-    text-transform: uppercase;
-
-}
-
-.calendar-section .section-header h2 {
-
-    margin:
-        0
-        0
+    margin-top:
         var(--space-md);
 
-    color:
-        var(--color-text);
-
-    font-size:
-        clamp(
-            2rem,
-            4vw,
-            3rem
-        );
-
 }
 
-.calendar-section .section-header p {
-
-    max-width: 760px;
-
-    margin: 0 auto;
-
-    color:
-        var(--color-text-light);
-
-    line-height:
-        var(--line-height);
-
-}
 
 /* ==========================================
-   KALENDER CARD
+   ANSICHT BUTTONS
 ========================================== */
 
-.calendar-card {
+.calendar-view-controls {
 
-    position: relative;
+    display: flex;
 
-    overflow: hidden;
+    align-items: center;
+
+    gap:
+        var(--space-xs);
+
+}
+
+
+/* ==========================================
+   ANSICHT BUTTON
+========================================== */
+
+.calendar-view-button,
+.calendar-today-button {
+
+    min-height: 36px;
 
     padding:
-        var(--space-xl);
+        0
+        var(--space-md);
 
     border:
         1px solid
-        var(--color-border);
+        var(--color-border-strong);
 
     border-radius:
-        var(--radius-xl);
+        var(--radius-md);
 
     background:
-        var(--color-surface);
-
-    box-shadow:
-        var(--shadow-lg);
-
-}
-
-/* ==========================================
-   KALENDER
-========================================== */
-
-#calendar {
-
-    min-height: 720px;
-
-}
-
-/* ==========================================
-   FULLCALENDAR
-========================================== */
-
-.fc {
-
-    font-family:
-        var(--font-family);
+        var(--color-background-dark);
 
     color:
-        var(--color-text);
+        var(--color-text-on-dark);
+
+    font-size:
+        var(--font-size-sm);
+
+    font-weight: 600;
 
 }
+
 
 /* ==========================================
-   KALENDER RAHMEN
+   AKTIVE ANSICHT
 ========================================== */
 
-.fc-theme-standard td,
-.fc-theme-standard th {
+.calendar-view-button.is-active {
 
     border-color:
-        var(--color-border);
+        var(--color-ef22-green);
+
+    background:
+        var(--color-ef22-green);
+
+    color:
+        var(--color-background-dark);
 
 }
 
-.fc-theme-standard .fc-scrollgrid {
 
-    overflow: hidden;
+/* ==========================================
+   LISTENANSICHT
+========================================== */
+
+.calendar-list {
+
+    width: 100%;
+
+}
+
+
+/* ==========================================
+   LISTEN FILTER
+========================================== */
+
+.calendar-list-filters {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap:
+        var(--space-sm);
+
+    margin-bottom:
+        var(--space-lg);
+
+    padding:
+        var(--space-md);
 
     border:
         1px solid
@@ -159,333 +124,250 @@
     border-radius:
         var(--radius-lg);
 
-    background: transparent;
+    background:
+        var(--color-background-dark);
 
 }
 
+
 /* ==========================================
-   TOOLBAR
+   FILTER
 ========================================== */
 
-.fc .fc-toolbar {
+.calendar-filter {
 
     display: flex;
 
     align-items: center;
-    justify-content: space-between;
 
     gap:
-        var(--space-md);
-
-    margin-bottom:
-        var(--space-xl);
-
-}
-
-.fc .fc-toolbar-title {
-
-    color:
-        var(--color-text);
-
-    font-size:
-        var(--font-size-2xl);
-
-    font-weight: 700;
-
-}
-
-/* ==========================================
-   BUTTONS
-========================================== */
-
-.fc .fc-button {
-
-    padding:
-        .625rem
-        1.125rem
-        !important;
-
-    border:
-        none
-        !important;
-
-    border-radius:
-        var(--radius-md)
-        !important;
-
-    background:
-        var(--color-ef22-green)
-        !important;
-
-    color:
-        var(--color-surface)
-        !important;
-
-    font-weight: 600;
-
-    transition:
-        transform
-        var(--transition-fast),
-        filter
-        var(--transition-fast),
-        box-shadow
-        var(--transition-fast);
-
-}
-
-.fc .fc-button:hover {
-
-    transform:
-        translateY(-2px);
-
-    filter:
-        brightness(.95);
-
-    box-shadow:
-        var(--shadow-sm);
-
-}
-
-.fc .fc-button:disabled {
-
-    opacity: .55;
-
-}
-
-/* ==========================================
-   WOCHENTAGE
-========================================== */
-
-.fc .fc-col-header-cell {
-
-    background:
-        var(--color-background);
-
-}
-
-.fc .fc-col-header-cell-cushion {
-
-    display: block;
-
-    padding:
-        var(--space-md)
-        0;
-
-    color:
-        var(--color-text);
-
-    font-weight: 700;
-
-    text-decoration: none;
-
-}
-
-/* ==========================================
-   TAGE
-========================================== */
-
-.fc .fc-daygrid-day {
-
-    transition:
-        background-color
-        var(--transition-fast);
-
-}
-
-.fc .fc-daygrid-day:hover {
-
-    background:
-        var(--color-background);
-
-}
-
-.fc .fc-daygrid-day-number {
-
-    padding:
         var(--space-sm);
 
+    min-height: 36px;
+
     color:
-        var(--color-text);
+        var(--color-text-on-dark);
+
+    font-size:
+        var(--font-size-sm);
 
     font-weight: 600;
 
-    text-decoration: none;
-
-}
-
-/* ==========================================
-   HEUTE
-========================================== */
-
-.fc .fc-day-today {
-
-    background:
-        color-mix(
-            in srgb,
-            var(--color-ef22-green) 12%,
-            transparent
-        )
-        !important;
-
-}
-
-/* ==========================================
-   EVENTS
-========================================== */
-
-.fc-event,
-.fc-daygrid-event {
-
-    border:
-        none
-        !important;
-
-    border-radius:
-        var(--radius-sm)
-        !important;
-
-    background:
-        var(--color-ef22-green)
-        !important;
-
-    color:
-        var(--color-surface)
-        !important;
-
     cursor: pointer;
 
-    transition:
-        transform
-        var(--transition-fast),
-        filter
-        var(--transition-fast);
+}
+
+
+/* ==========================================
+   CHECKBOX
+========================================== */
+
+.calendar-filter input {
+
+    width: 20px;
+
+    height: 20px;
+
+    margin: 0;
+
+    flex-shrink: 0;
+
+    accent-color:
+        var(--color-ef22-green);
 
 }
 
-.fc-daygrid-event {
+
+/* ==========================================
+   LISTEN CONTENT
+========================================== */
+
+.calendar-list-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap:
+        var(--space-sm);
+
+}
+
+
+/* ==========================================
+   LISTEN EVENT
+========================================== */
+
+.calendar-list-event {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    width: 100%;
+
+    gap:
+        var(--space-xs);
 
     padding:
-        .25rem
-        .5rem
-        !important;
+        var(--space-md);
 
-}
+    border:
+        1px solid
+        var(--color-border);
 
-.fc-event:hover,
-.fc-daygrid-event:hover {
-
-    transform:
-        scale(1.03);
-
-    filter:
-        brightness(.95);
-
-}
-
-/* ==========================================
-   LISTENANSICHT
-========================================== */
-
-.fc-list-event {
-
-    cursor: pointer;
-
-    transition:
-        background-color
-        var(--transition-fast);
-
-}
-
-.fc-list-event:hover td {
+    border-radius:
+        var(--radius-lg);
 
     background:
-        color-mix(
-            in srgb,
-            var(--color-ef22-green) 12%,
-            transparent
-        )
-        !important;
-
-}
-
-.fc-list-day-cushion {
-
-    background:
-        var(--color-background)
-        !important;
+        var(--color-background-dark);
 
     color:
-        var(--color-text);
+        var(--color-text-on-dark);
+
+    font-family:
+        inherit;
+
+    text-align: left;
+
+}
+
+
+/* ==========================================
+   EF22 EVENT
+========================================== */
+
+.calendar-list-event--ef22 {
+
+    border-left:
+        4px solid
+        var(--color-ef22-green);
+
+}
+
+
+/* ==========================================
+   RKN EVENT
+========================================== */
+
+.calendar-list-event--rkn {
+
+    border-left:
+        4px solid
+        var(--color-warning);
+
+}
+
+
+/* ==========================================
+   EVENT DATUM
+========================================== */
+
+.calendar-list-event-date {
+
+    color:
+        var(--color-text-muted-on-dark);
+
+    font-size:
+        var(--font-size-xs);
+
+    font-weight: 600;
+
+}
+
+
+/* ==========================================
+   EVENT QUELLE
+========================================== */
+
+.calendar-list-event-source {
+
+    margin-top:
+        var(--space-xs);
+
+    color:
+        var(--color-ef22-green);
+
+    font-size:
+        var(--font-size-xs);
 
     font-weight: 700;
 
+    letter-spacing:
+        .06em;
+
+    text-transform:
+        uppercase;
+
 }
 
-.fc-list-table td {
-
-    border-color:
-        var(--color-border);
-
-}
 
 /* ==========================================
-   TABLET / MOBILE
+   RKN QUELLE
 ========================================== */
 
-@media (max-width: 768px) {
+.calendar-list-event--rkn
+.calendar-list-event-source {
 
-    .calendar-section {
+    color:
+        var(--color-warning);
 
-        padding:
-            var(--space-2xl)
-            0;
+}
 
-    }
 
-    .calendar-section .section-header {
+/* ==========================================
+   EVENT TITEL
+========================================== */
 
-        margin-bottom:
-            var(--space-xl);
+.calendar-list-event-title {
 
-    }
+    color:
+        var(--color-text-on-dark);
 
-    .calendar-card {
+    font-size:
+        var(--font-size-md);
 
-        padding:
-            var(--space-md);
+    line-height:
+        1.3;
 
-    }
+}
 
-    #calendar {
 
-        min-height: 580px;
+/* ==========================================
+   EVENT ZEIT / ORT
+========================================== */
 
-    }
+.calendar-list-event-time,
+.calendar-list-event-location {
 
-    .fc .fc-toolbar {
+    color:
+        var(--color-text-muted-on-dark);
 
-        flex-direction: column;
+    font-size:
+        var(--font-size-sm);
 
-        align-items: center;
+}
 
-        gap:
-            var(--space-md);
 
-    }
+/* ==========================================
+   LEERE LISTE
+========================================== */
 
-    .fc-toolbar-chunk {
+.calendar-list-empty {
 
-        display: flex;
+    margin: 0;
 
-        justify-content: center;
+    padding:
+        var(--space-xl)
+        var(--space-md);
 
-    }
+    color:
+        var(--color-text-muted-on-dark);
 
-    .fc .fc-toolbar-title {
-
-        font-size:
-            var(--font-size-xl);
-
-    }
+    text-align: center;
 
 }
