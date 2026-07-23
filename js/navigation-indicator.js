@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  NAVIGATION-INDICATOR.JS
- Version 6.0
+ Version 6.1
 =====================================================
 */
 
@@ -137,7 +137,29 @@ EF22.navigationIndicator = {
 
     update() {
 
-        if (this.isAtAnchor()) {
+        if (this.state.mode === "park") {
+
+            if (this.shouldUnpark()) {
+
+                this.unpark();
+
+                if (window.scrollY === 0) {
+
+                    this.setMode("start");
+
+                    return;
+
+                }
+
+                this.setMode("scroll");
+
+            }
+
+            return;
+
+        }
+
+        if (this.shouldPark()) {
 
             this.setMode("park");
 
@@ -158,10 +180,10 @@ EF22.navigationIndicator = {
     },
 
     /* ==========================================
-       PARK ANCHOR
+       PARKEN PRÜFEN
     ========================================== */
 
-    isAtAnchor() {
+    shouldPark() {
 
         if (!this.elements.anchor) {
 
@@ -170,15 +192,51 @@ EF22.navigationIndicator = {
         }
 
         const anchorTop =
+
             this.elements.anchor
                 .getBoundingClientRect()
                 .top;
 
-        const indicatorRect =
-            this.elements.indicator
-                .getBoundingClientRect();
+        const indicatorTop =
 
-        return anchorTop <= indicatorRect.top;
+            this.elements.indicator
+                .getBoundingClientRect()
+                .top;
+
+        return anchorTop <= indicatorTop;
+
+    },
+
+    /* ==========================================
+       PARKPOSITION VERLASSEN PRÜFEN
+    ========================================== */
+
+    shouldUnpark() {
+
+        if (!this.elements.anchor) {
+
+            return true;
+
+        }
+
+        const anchorTop =
+
+            this.elements.anchor
+                .getBoundingClientRect()
+                .top;
+
+        const indicatorHeight =
+
+            this.elements.indicator
+                .offsetHeight;
+
+        const normalIndicatorTop =
+
+            window.innerHeight -
+            24 -
+            indicatorHeight;
+
+        return anchorTop > normalIndicatorTop;
 
     },
 
@@ -203,18 +261,6 @@ EF22.navigationIndicator = {
         ) {
 
             this.park();
-
-        }
-
-        if (
-
-            mode !== "park" &&
-
-            this.state.mode === "park"
-
-        ) {
-
-            this.unpark();
 
         }
 
