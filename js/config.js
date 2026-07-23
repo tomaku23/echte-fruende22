@@ -64,7 +64,7 @@ EF22.config = {
         "../assets/images/hero-bg.png",
 
     heroFallbackLandscape:
-        "../assets/images/hero-bgq.png"
+        "../images/hero-bgq.png"
 
 },
 
