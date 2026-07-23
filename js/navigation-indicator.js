@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  NAVIGATION-INDICATOR.JS
- Version 5.0
+ Version 5.1
 =====================================================
 
 Komponente:
@@ -178,76 +178,76 @@ EF22.navigationIndicator = {
 
     update() {
 
-        this.updatePosition();
-
         if (
 
-            this.state.mode !== "park"
+            this.isFooterReached()
 
         ) {
 
-            this.updateState();
+            this.park();
+
+            return;
 
         }
+
+        this.resetPosition();
+
+        this.updateState();
 
     },
 
     /* ==========================================
-       POSITION
+       FOOTER
     ========================================== */
 
-    updatePosition() {
+    isFooterReached() {
 
         if (
-
-            !this.elements.root ||
 
             !this.elements.footer
 
         ) {
 
-            return;
+            return false;
 
         }
 
         const config =
-
             EF22.config.navigationIndicator;
 
         const footerTop =
-
             this.elements.footer
                 .getBoundingClientRect()
                 .top;
 
         const parkLine =
-
             window.innerHeight -
-
             config.parkBottom;
 
-        if (
+        return footerTop <= parkLine;
 
-            footerTop <= parkLine
+    },
 
-        ) {
+    park() {
 
-            this.elements.root.style.bottom =
-
-                `${config.parkBottom}px`;
-
-            this.setState(
-
-                "park"
-
-            );
-
-            return;
-
-        }
+        const config =
+            EF22.config.navigationIndicator;
 
         this.elements.root.style.bottom =
+            `${config.parkBottom}px`;
 
+        this.setState(
+            "park"
+        );
+
+    },
+
+    resetPosition() {
+
+        const config =
+            EF22.config.navigationIndicator;
+
+        this.elements.root.style.bottom =
             `${config.defaultBottom}px`;
 
     },
@@ -265,9 +265,7 @@ EF22.navigationIndicator = {
         ) {
 
             this.setState(
-
                 "start"
-
             );
 
             return;
@@ -275,9 +273,7 @@ EF22.navigationIndicator = {
         }
 
         this.setState(
-
             "scroll"
-
         );
 
     },
@@ -306,17 +302,12 @@ EF22.navigationIndicator = {
             case "start":
 
                 this.elements.root.classList.add(
-
                     "navigation-indicator--bounce"
-
                 );
 
                 this.elements.root.setAttribute(
-
                     "aria-label",
-
                     "Nach unten scrollen"
-
                 );
 
                 break;
@@ -324,17 +315,12 @@ EF22.navigationIndicator = {
             case "scroll":
 
                 this.elements.root.classList.add(
-
                     "navigation-indicator--compact"
-
                 );
 
                 this.elements.root.setAttribute(
-
                     "aria-label",
-
                     "Nach unten scrollen"
-
                 );
 
                 break;
@@ -350,11 +336,8 @@ EF22.navigationIndicator = {
                 );
 
                 this.elements.root.setAttribute(
-
                     "aria-label",
-
                     "Nach oben scrollen"
-
                 );
 
                 break;
@@ -379,13 +362,64 @@ EF22.navigationIndicator = {
 
         }
 
-        window.scrollTo({
+        this.scrollToTop();
 
-            top: 0,
+    },
 
-            behavior: "smooth"
+    /* ==========================================
+       SCROLL TO TOP
+    ========================================== */
 
-        });
+    scrollToTop() {
+
+        const start =
+            window.scrollY;
+
+        const duration =
+            900;
+
+        const startTime =
+            performance.now();
+
+        const animate = (currentTime) => {
+
+            const elapsed =
+                currentTime - startTime;
+
+            const progress =
+                Math.min(
+                    elapsed / duration,
+                    1
+                );
+
+            const easing =
+                1 - Math.pow(
+                    1 - progress,
+                    3
+                );
+
+            window.scrollTo(
+                0,
+                start * (1 - easing)
+            );
+
+            if (
+
+                progress < 1
+
+            ) {
+
+                requestAnimationFrame(
+                    animate
+                );
+
+            }
+
+        };
+
+        requestAnimationFrame(
+            animate
+        );
 
     },
 
