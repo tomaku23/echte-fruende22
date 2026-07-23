@@ -60,9 +60,13 @@ EF22.config = {
 
     images: {
 
-        heroFallback: "../images/hero-bg.png"
+    heroFallbackPortrait:
+        "../assets/images/hero-bg.png",
 
-    },
+    heroFallbackLandscape:
+        "../assets/images/hero-bgq.png"
+
+}
 
     /* ==========================================
        NAVIGATION INDICATOR
