@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 /*
 =====================================================
-EF22 FRAMEWORK
-COMPONENT
-HERO
-Version 3.0
+ EF22 FRAMEWORK
+ COMPONENT
+ HERO
+ Version 4.0
 =====================================================
 */
 
+/* ==========================================
+   DEFAULTS
+========================================== */
+
 $defaults = [
 
-    "background" => "",
+    "image" => "",
 
     "badge" => "",
 
@@ -43,6 +47,10 @@ $defaults = [
 
 ];
 
+/* ==========================================
+   DATEN
+========================================== */
+
 $hero = array_replace_recursive(
 
     $defaults,
@@ -51,19 +59,36 @@ $hero = array_replace_recursive(
 
 );
 
+/* ==========================================
+   VARIANTE
+========================================== */
+
+$heroVariant =
+
+    $heroVariant ?? "default";
+
 ?>
 
 <section
     id="hero"
-    class="hero">
+    class="hero hero--<?= htmlspecialchars($heroVariant) ?>"
+    data-hero="root">
+
+    <!-- ==========================================
+         MEDIA
+    ========================================== -->
 
     <div
-        class="hero-background"
-        data-hero="background">
+        class="hero-media"
+        data-hero="media">
 
     </div>
 
-    <div class="hero-overlay">
+    <!-- ==========================================
+         CONTENT
+    ========================================== -->
+
+    <div class="hero-content-area">
 
         <div class="container">
 
@@ -97,24 +122,33 @@ $hero = array_replace_recursive(
                     class="hero-description"
                     data-hero="description">
 
-                    <?= nl2br(htmlspecialchars($hero["description"])) ?>
+                    <?= nl2br(
+                        htmlspecialchars(
+                            $hero["description"]
+                        )
+                    ) ?>
 
                 </div>
+
+                <!-- ==========================================
+                     INFO
+                ========================================== -->
 
                 <div
                     class="hero-info"
                     data-hero="info">
 
-                    <div class="hero-item">
+                    <div
+                        class="hero-item"
+                        data-hero="dateItem">
 
                         <span class="hero-icon">
 
-                            📅
+                            <i class="fa-solid fa-calendar-days"></i>
 
                         </span>
 
-                        <span
-                            data-hero="date">
+                        <span data-hero="date">
 
                             <?= htmlspecialchars($hero["date"]) ?>
 
@@ -122,16 +156,17 @@ $hero = array_replace_recursive(
 
                     </div>
 
-                    <div class="hero-item">
+                    <div
+                        class="hero-item"
+                        data-hero="timeItem">
 
                         <span class="hero-icon">
 
-                            🕒
+                            <i class="fa-solid fa-clock"></i>
 
                         </span>
 
-                        <span
-                            data-hero="time">
+                        <span data-hero="time">
 
                             <?= htmlspecialchars($hero["time"]) ?>
 
@@ -139,16 +174,17 @@ $hero = array_replace_recursive(
 
                     </div>
 
-                    <div class="hero-item">
+                    <div
+                        class="hero-item"
+                        data-hero="locationItem">
 
                         <span class="hero-icon">
 
-                            📍
+                            <i class="fa-solid fa-location-dot"></i>
 
                         </span>
 
-                        <span
-                            data-hero="location">
+                        <span data-hero="location">
 
                             <?= htmlspecialchars($hero["location"]) ?>
 
@@ -158,6 +194,10 @@ $hero = array_replace_recursive(
 
                 </div>
 
+                <!-- ==========================================
+                     COUNTDOWN
+                ========================================== -->
+
                 <div
                     class="hero-countdown"
                     data-hero="countdown">
@@ -165,6 +205,10 @@ $hero = array_replace_recursive(
                     <?= htmlspecialchars($hero["countdown"]) ?>
 
                 </div>
+
+                <!-- ==========================================
+                     HINWEIS
+                ========================================== -->
 
                 <div
                     class="hero-hint"
@@ -174,12 +218,20 @@ $hero = array_replace_recursive(
 
                 </div>
 
+                <!-- ==========================================
+                     BUTTON
+                ========================================== -->
+
                 <a
                     class="button hero-button"
                     data-hero="button"
-                    href="<?= htmlspecialchars($hero["button"]["link"]) ?>">
+                    href="<?= htmlspecialchars(
+                        $hero["button"]["link"]
+                    ) ?>">
 
-                    <?= htmlspecialchars($hero["button"]["text"]) ?>
+                    <?= htmlspecialchars(
+                        $hero["button"]["text"]
+                    ) ?>
 
                 </a>
 

@@ -2,7 +2,7 @@
 =====================================================
  ECHTE FRÜNDE '22
  CALENDAR.JS
- Version 2.0
+ Version 3.0
 =====================================================
 */
 
@@ -39,278 +39,361 @@ EF22.calendar = {
     },
 
     /* ==========================================
-   INITIALISIERUNG
-========================================== */
+       INITIALISIERUNG
+    ========================================== */
 
-async init() {
+    async init() {
 
-    console.log(
+        this.elements.calendar =
 
-        "1. calendar.init()"
-
-    );
-
-    this.elements.calendar =
-
-        document.getElementById(
-
-            "calendar"
-
-        );
-
-    console.log(
-
-        "2. calendar Element:",
-
-        this.elements.calendar
-
-    );
-
-    if (
-
-        !this.elements.calendar
-
-    ) {
-
-        console.log(
-
-            "3. Kein Calendar-Element gefunden."
-
-        );
-
-        return;
-
-    }
-
-    console.log(
-
-        "4. loadEvents()"
-
-    );
-
-    await this.loadEvents();
-
-    console.log(
-
-        "5. init beendet"
-
-    );
-
-},
-    
-        /* ==========================================
-   ÖFFENTLICHE METHODEN
-========================================== */
-
-async loadEvents() {
-
-    try {
-
-        const response = await fetch(
-
-            EF22.config.api.calendar
-
-        );
-
-        console.log(
-
-            "API Response:",
-
-            response
-
-        );
-
-        if (!response.ok) {
-
-            throw new Error(
-
-                `HTTP ${response.status}`
-
+            document.getElementById(
+                "calendar"
             );
+
+        if (!this.elements.calendar) {
+
+            return;
 
         }
 
-        const result = await response.json();
+        await this.loadEvents();
 
-        console.log(
+    },
 
-            "API JSON:",
+    /* ==========================================
+       EVENTS LADEN
+    ========================================== */
 
-            result
+    async loadEvents() {
 
-        );
+        try {
 
-        if (!result.success) {
+            const response = await fetch(
 
-            throw new Error(
-
-                "API meldet einen Fehler."
+                EF22.config.api.calendar
 
             );
+
+            if (!response.ok) {
+
+                throw new Error(
+
+                    `HTTP ${response.status}`
+
+                );
+
+            }
+
+            const result = await response.json();
+
+            if (!result.success) {
+
+                throw new Error(
+
+                    "API meldet einen Fehler."
+
+                );
+
+            }
+
+            this.state.events =
+
+                EF22.utils.filterCalendar(
+
+                    result.events
+
+                );
+
+            this.refresh();
 
         }
 
-        this.state.events =
+        catch (error) {
 
-            EF22.utils.filterCalendar(
+            console.error(
 
-                result.events
+                "Kalender konnte nicht geladen werden.",
+
+                error
 
             );
 
-        this.refresh();
+            this.state.events = [];
 
-    }
+            this.refresh();
 
-    catch (error) {
+        }
 
-        console.error(
+    },
 
-            "Kalender konnte nicht geladen werden."
+    /* ==========================================
+       REFRESH
+    ========================================== */
+
+    refresh() {
+
+        this.updateComponents();
+
+        this.renderCalendar();
+
+    },
+
+    /* ==========================================
+       KOMPONENTEN
+    ========================================== */
+
+    updateComponents() {
+
+        const nextEvent =
+
+            EF22.utils.getNextEvent(
+
+                this.state.events
+
+            );
+
+        this.updateHero(
+
+            nextEvent
 
         );
 
-        console.error(
+        EF22.highlights.refresh(
 
-            "Message:",
+            EF22.utils.filterHighlights(
 
-            error.message
+                this.state.events
 
-        );
-
-        console.error(
-
-            "Stack:",
-
-            error.stack
+            )
 
         );
 
-        console.error(
+    },
 
-            error
+    /* ==========================================
+       HERO
+    ========================================== */
+
+    updateHero(event) {
+
+        if (!event) {
+
+            EF22.hero.clear();
+
+            return;
+
+        }
+
+        const props =
+
+            EF22.utils.getProps(
+
+                event
+
+            );
+
+        EF22.hero.refresh({
+
+            image:
+                props.image,
+
+            badge:
+                props.category,
+
+            title:
+                event.title,
+
+            date:
+                EF22.utils.formatDate(
+                    event.start
+                ),
+
+            time:
+                EF22.utils.formatTimeRange(
+                    event.start,
+                    event.end
+                ),
+
+            location:
+                props.location,
+
+            countdown:
+                this.getCountdown(
+                    event.start
+                ),
+
+            hint:
+                "Für Details tippen",
+
+            action: () => {
+
+                EF22.modal.open(
+
+                    event
+
+                );
+
+            }
+
+        });
+
+    },
+
+    /* ==========================================
+       COUNTDOWN
+    ========================================== */
+
+    getCountdown(start) {
+
+        if (!start) {
+
+            return "";
+
+        }
+
+        const now = new Date();
+
+        const eventDate = new Date(
+
+            start
 
         );
+
+        const diff =
+
+            eventDate.getTime() -
+
+            now.getTime();
+
+        if (diff <= 0) {
+
+            return "";
+
+        }
+
+        const days = Math.ceil(
+
+            diff /
+
+            1000 /
+
+            60 /
+
+            60 /
+
+            24
+
+        );
+
+        return `Noch ${days} Tag${days !== 1 ? "e" : ""}`;
+
+    },
+
+    /* ==========================================
+       KALENDER RENDERN
+    ========================================== */
+
+    renderCalendar() {
+
+        if (!this.elements.calendar) {
+
+            return;
+
+        }
+
+        if (this.state.calendar) {
+
+            this.state.calendar.destroy();
+
+        }
+
+        this.state.calendar =
+
+            new FullCalendar.Calendar(
+
+                this.elements.calendar,
+
+                this.getCalendarOptions()
+
+            );
+
+        this.state.calendar.render();
+
+    },
+
+    /* ==========================================
+       KALENDER OPTIONEN
+    ========================================== */
+
+    getCalendarOptions() {
+
+        return {
+
+            locale: "de",
+
+            initialView: "dayGridMonth",
+
+            firstDay: 1,
+
+            height: "auto",
+
+            events: this.state.events,
+
+            headerToolbar: {
+
+                left: "prev,next today",
+
+                center: "title",
+
+                right: "dayGridMonth,listMonth"
+
+            },
+
+            eventClick: (info) => {
+
+                info.jsEvent.preventDefault();
+
+                this.onEventClick(
+
+                    info
+
+                );
+
+            }
+
+        };
+
+    },
+
+    /* ==========================================
+       EVENT CLICK
+    ========================================== */
+
+    onEventClick(info) {
+
+        EF22.modal.open(
+
+            info.event
+
+        );
+
+    },
+
+    /* ==========================================
+       DESTROY
+    ========================================== */
+
+    destroy() {
+
+        if (this.state.calendar) {
+
+            this.state.calendar.destroy();
+
+            this.state.calendar = null;
+
+        }
 
         this.state.events = [];
-
-        this.refresh();
-
-    }
-
-},
-
-refresh() {
-
-    this.updateComponents();
-
-    this.renderCalendar();
-
-},
-
-        /* ==========================================
-   PRIVATE METHODEN
-========================================== */
-
-renderCalendar() {
-
-    if (!this.elements.calendar) {
-
-        return;
-
-    }
-
-    if (this.state.calendar) {
-
-        this.state.calendar.destroy();
-
-    }
-
-    this.state.calendar = new FullCalendar.Calendar(
-
-        this.elements.calendar,
-
-        this.getCalendarOptions()
-
-    );
-
-    this.state.calendar.render();
-
-},
-
-updateComponents() {
-
-    const nextEvent = EF22.utils.getNextEvent(
-
-        this.state.events
-
-    );
-
-    EF22.hero.refresh(
-
-        nextEvent
-
-    );
-
-    EF22.highlights.refresh(
-
-        EF22.utils.filterHighlights(
-
-            this.state.events
-
-        )
-
-    );
-
-},
-
-getCalendarOptions() {
-
-    return {
-
-        locale: "de",
-
-        initialView: "dayGridMonth",
-
-        firstDay: 1,
-
-        height: "auto",
-
-        events: this.state.events,
-
-        headerToolbar: {
-
-            left: "prev,next today",
-
-            center: "title",
-
-            right: "dayGridMonth,listMonth"
-
-        },
-
-        eventClick: (info) => {
-
-            info.jsEvent.preventDefault();
-
-            this.onEventClick(
-
-                info
-
-            );
-
-        }
-
-    };
-
-},
-
-onEventClick(info) {
-
-    EF22.modal.open(
-
-        info.event
-
-    );
 
     }
 
