@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  NAVIGATION-INDICATOR.CSS
- Version 4.1
+ Version 5.0
 =====================================================
 */
 
@@ -44,7 +44,6 @@
 
     transition:
         scale .35s ease,
-        bottom .35s ease,
         opacity .35s ease,
         transform .35s ease;
 
@@ -97,7 +96,10 @@
 
 .navigation-indicator--park {
 
-    bottom: 36px;
+    position: absolute;
+
+    top: 24px;
+    bottom: auto;
 
 }
 

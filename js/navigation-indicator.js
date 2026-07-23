@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  NAVIGATION-INDICATOR.JS
- Version 5.1
+ Version 6.0
 =====================================================
 */
 
@@ -18,7 +18,11 @@ EF22.navigationIndicator = {
 
     state: {
 
-        mode: "start"
+        mode: "start",
+
+        originalParent: null,
+
+        originalNextSibling: null
 
     },
 
@@ -30,7 +34,9 @@ EF22.navigationIndicator = {
 
         indicator: null,
 
-        anchor: null
+        anchor: null,
+
+        footerArea: null
 
     },
 
@@ -56,11 +62,22 @@ EF22.navigationIndicator = {
                 "[data-navigation-indicator-anchor]"
             );
 
+        this.elements.footerArea =
+            document.querySelector(
+                ".footer-area"
+            );
+
         if (!this.elements.indicator) {
 
             return;
 
         }
+
+        this.state.originalParent =
+            this.elements.indicator.parentNode;
+
+        this.state.originalNextSibling =
+            this.elements.indicator.nextSibling;
 
         this.createHandlers();
 
@@ -141,31 +158,29 @@ EF22.navigationIndicator = {
     },
 
     /* ==========================================
-   PARK ANCHOR
-========================================== */
+       PARK ANCHOR
+    ========================================== */
 
-isAtAnchor() {
+    isAtAnchor() {
 
-    if (!this.elements.anchor) {
+        if (!this.elements.anchor) {
 
-        return false;
+            return false;
 
-    }
+        }
 
-    const anchorTop =
+        const anchorTop =
+            this.elements.anchor
+                .getBoundingClientRect()
+                .top;
 
-        this.elements.anchor
-            .getBoundingClientRect()
-            .top;
+        const indicatorRect =
+            this.elements.indicator
+                .getBoundingClientRect();
 
-    const indicatorRect =
+        return anchorTop <= indicatorRect.top;
 
-        this.elements.indicator
-            .getBoundingClientRect();
-
-    return anchorTop <= indicatorRect.top;
-
-},
+    },
 
     /* ==========================================
        MODUS
@@ -176,6 +191,30 @@ isAtAnchor() {
         if (!this.elements.indicator) {
 
             return;
+
+        }
+
+        if (
+
+            mode === "park" &&
+
+            this.state.mode !== "park"
+
+        ) {
+
+            this.park();
+
+        }
+
+        if (
+
+            mode !== "park" &&
+
+            this.state.mode === "park"
+
+        ) {
+
+            this.unpark();
 
         }
 
@@ -253,16 +292,73 @@ isAtAnchor() {
     },
 
     /* ==========================================
+       PARKEN
+    ========================================== */
+
+    park() {
+
+        if (!this.elements.footerArea) {
+
+            return;
+
+        }
+
+        this.elements.footerArea.appendChild(
+
+            this.elements.indicator
+
+        );
+
+    },
+
+    /* ==========================================
+       PARKPOSITION VERLASSEN
+    ========================================== */
+
+    unpark() {
+
+        if (!this.state.originalParent) {
+
+            return;
+
+        }
+
+        if (
+
+            this.state.originalNextSibling &&
+
+            this.state.originalNextSibling.parentNode ===
+                this.state.originalParent
+
+        ) {
+
+            this.state.originalParent.insertBefore(
+
+                this.elements.indicator,
+
+                this.state.originalNextSibling
+
+            );
+
+            return;
+
+        }
+
+        this.state.originalParent.appendChild(
+
+            this.elements.indicator
+
+        );
+
+    },
+
+    /* ==========================================
        INTERAKTION
     ========================================== */
 
     onClick() {
 
-        if (
-
-            this.state.mode !== "park"
-
-        ) {
+        if (this.state.mode !== "park") {
 
             return;
 
@@ -299,6 +395,12 @@ isAtAnchor() {
             this.handlers.click
 
         );
+
+        if (this.state.mode === "park") {
+
+            this.unpark();
+
+        }
 
         this.handlers = {};
 
