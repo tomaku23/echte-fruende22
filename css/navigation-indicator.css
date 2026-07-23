@@ -1,8 +1,8 @@
 /*
 =====================================================
- ECHTE FRÜNDE '22
+ EF22 FRAMEWORK
  NAVIGATION-INDICATOR.CSS
- Version 3.0
+ Version 4.0
 =====================================================
 */
 
@@ -10,48 +10,42 @@
    NAVIGATION INDICATOR
 ========================================== */
 
-.navigation-indicator{
+.navigation-indicator {
 
-    position:fixed;
+    position: fixed;
 
-    left:50%;
+    left: 50%;
+    bottom: 24px;
 
-    bottom:24px;
+    width: 48px;
+    height: 48px;
 
-    transform:translateX(-50%);
+    display: flex;
 
-    scale:1;
+    justify-content: center;
+    align-items: center;
 
-    width:56px;
+    padding: 0;
 
-    height:56px;
+    border: none;
+    border-radius: 50%;
 
-    display:flex;
+    background: rgba(10, 10, 10, .88);
 
-    justify-content:center;
+    color: #ffffff;
 
-    align-items:center;
+    cursor: pointer;
 
-    border:none;
+    z-index: 950;
 
-    border-radius:50%;
+    transform: translateX(-50%);
 
-    background:rgba(10,10,10,.88);
-
-    color:var(--white);
-
-    cursor:pointer;
-
-    z-index:950;
+    scale: 1;
 
     transition:
-
         scale .35s ease,
-
         bottom .35s ease,
-
         opacity .35s ease,
-
         transform .35s ease;
 
 }
@@ -60,112 +54,115 @@
    ICON
 ========================================== */
 
-.navigation-indicator i{
+.navigation-indicator i {
 
-    font-size:1.15rem;
+    font-size: 1rem;
 
-    line-height:1;
+    line-height: 1;
 
-    pointer-events:none;
+    pointer-events: none;
 
     transition:
-
         transform .35s ease;
 
 }
 
 /* ==========================================
-   STATES
+   START
 ========================================== */
 
-.navigation-indicator--compact{
-
-    scale:.82;
-
-}
-
-.navigation-indicator--park{
-
-    bottom:95px;
-
-}
-
-.navigation-indicator--up i{
-
-    transform:rotate(180deg);
-
-}
-
-.navigation-indicator--bounce{
+.navigation-indicator--bounce {
 
     animation:
-
         navigationIndicatorFloat
-
         1.5s
-
         ease-in-out
-
         infinite;
 
 }
 
 /* ==========================================
-   ANIMATIONS
+   SCROLL
 ========================================== */
 
-@keyframes navigationIndicatorFloat{
+.navigation-indicator--compact {
+
+    scale: .82;
+
+}
+
+/* ==========================================
+   PARK
+========================================== */
+
+.navigation-indicator--park {
+
+    bottom: 95px;
+
+}
+
+.navigation-indicator--up i {
+
+    transform: rotate(180deg);
+
+}
+
+/* ==========================================
+   ANIMATION
+========================================== */
+
+@keyframes navigationIndicatorFloat {
 
     0%,
-    100%{
+    100% {
 
         transform:
             translateX(-50%)
-            translateY(0)
-            scale(1);
+            translateY(0);
 
     }
 
-    50%{
+    50% {
 
         transform:
             translateX(-50%)
-            translateY(-8px)
-            scale(1);
+            translateY(-8px);
 
     }
 
 }
 
 /* ==========================================
-   RESPONSIVE
+   TABLET
 ========================================== */
 
-@media (max-width:768px){
+@media (min-width: 481px) {
 
-    .navigation-indicator{
+    .navigation-indicator {
 
-        width:52px;
-
-        height:52px;
+        width: 52px;
+        height: 52px;
 
     }
 
 }
 
-@media (max-width:480px){
+/* ==========================================
+   DESKTOP
+========================================== */
 
-    .navigation-indicator{
+@media (min-width: 769px) {
 
-        width:48px;
+    .navigation-indicator {
 
-        height:48px;
+        width: 56px;
+        height: 56px;
 
     }
 
-    .navigation-indicator i{
+    .navigation-indicator i {
 
-        font-size:1rem;
+        font-size: 1.15rem;
 
     }
 
