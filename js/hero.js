@@ -409,96 +409,115 @@ EF22.hero = {
     },
 
     /* ==========================================
-       INFO
-    ========================================== */
+   INFO
+========================================== */
 
-    updateInfo() {
+updateInfo() {
 
-        const items = [
+    const items = [
 
-            {
+        {
 
-                item:
-                    this.elements.dateItem,
+            item:
+                this.elements.dateItem,
 
-                value:
-                    this.elements.date
+            value:
+                this.elements.date,
 
-            },
+            alwaysVisible:
+                false
 
-            {
+        },
 
-                item:
-                    this.elements.timeItem,
+        {
 
-                value:
-                    this.elements.time
+            item:
+                this.elements.timeItem,
 
-            },
+            value:
+                this.elements.time,
 
-            {
+            alwaysVisible:
+                false
 
-                item:
-                    this.elements.locationItem,
+        },
 
-                value:
-                    this.elements.location
+        {
 
-            },
+            item:
+                this.elements.locationItem,
 
-            {
+            value:
+                this.elements.location,
 
-                item:
-                    this.elements.meetingItem,
+            alwaysVisible:
+                false
 
-                value:
-                    this.elements.meeting
+        },
 
-            }
+        {
 
-        ];
+            item:
+                this.elements.meetingItem,
 
-        items.forEach(
+            value:
+                this.elements.meeting,
 
-            ({ item, value }) => {
-
-                if (!item) {
-
-                    return;
-
-                }
-
-                item.hidden =
-
-                    !value ||
-
-                    value.hidden;
-
-            }
-
-        );
-
-        const hasInfo =
-
-            items.some(
-
-                ({ item }) =>
-
-                    item &&
-
-                    !item.hidden
-
-            );
-
-        if (this.elements.info) {
-
-            this.elements.info.hidden =
-
-                !hasInfo;
+            alwaysVisible:
+                true
 
         }
 
-    },
+    ];
+
+    items.forEach(
+
+        ({
+            item,
+            value,
+            alwaysVisible
+        }) => {
+
+            if (!item) {
+
+                return;
+
+            }
+
+            item.hidden =
+
+                alwaysVisible
+
+                    ? false
+
+                    : !value ||
+                      value.hidden;
+
+        }
+
+    );
+
+    const hasInfo =
+
+        items.some(
+
+            ({ item }) =>
+
+                item &&
+
+                !item.hidden
+
+        );
+
+    if (this.elements.info) {
+
+        this.elements.info.hidden =
+
+            !hasInfo;
+
+    }
+
+},
 
     /* ==========================================
        BUTTON
