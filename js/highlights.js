@@ -491,31 +491,25 @@ if (image) {
 
         () => {
 
-            const ratio =
+            const imageRatio =
 
                 imageProbe.naturalWidth /
                 imageProbe.naturalHeight;
 
-            const targetRatio =
+            const cardRatio =
 
                 16 / 9;
 
-            const tolerance =
+            const isWideImage =
 
-                0.01;
-
-            const isSixteenNine =
-
-                Math.abs(
-                    ratio -
-                    targetRatio
-                ) <= tolerance;
+                imageRatio >
+                cardRatio;
 
             media.classList.toggle(
 
-                "is-16-9",
+                "is-wide-image",
 
-                isSixteenNine
+                isWideImage
 
             );
 
