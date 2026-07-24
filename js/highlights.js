@@ -26,7 +26,11 @@ EF22.highlights = {
 
         activeIndex: 0,
 
-        scrollFrame: null
+        physicalIndex: 0,
+
+        isJumping: false,
+
+        scrollTimer: null
 
     },
 
@@ -124,27 +128,29 @@ EF22.highlights = {
 
         this.handlers.scroll = () => {
 
-            if (this.state.scrollFrame) {
+            if (this.state.isJumping) {
 
-                cancelAnimationFrame(
-                    this.state.scrollFrame
-                );
+                return;
 
             }
 
-            this.state.scrollFrame =
+            window.clearTimeout(
+                this.state.scrollTimer
+            );
 
-                requestAnimationFrame(
+            this.updateActiveFromScroll();
+
+            this.state.scrollTimer =
+
+                window.setTimeout(
 
                     () => {
 
-                        this.updateActiveFromScroll();
+                        this.onScrollEnd();
 
-                        this.updateCardDepth();
+                    },
 
-                        this.state.scrollFrame = null;
-
-                    }
+                    100
 
                 );
 
@@ -152,7 +158,24 @@ EF22.highlights = {
 
         this.handlers.resize = () => {
 
-            this.updateCardDepth();
+            if (!this.state.events.length) {
+
+                return;
+
+            }
+
+            requestAnimationFrame(
+
+                () => {
+
+                    this.centerPhysicalCard(
+                        this.state.physicalIndex,
+                        false
+                    );
+
+                }
+
+            );
 
         };
 
@@ -180,11 +203,7 @@ EF22.highlights = {
 
             "resize",
 
-            this.handlers.resize,
-
-            {
-                passive: true
-            }
+            this.handlers.resize
 
         );
 
@@ -212,6 +231,16 @@ EF22.highlights = {
 
         this.state.activeIndex = 0;
 
+        this.state.physicalIndex =
+
+            this.state.events.length > 1
+
+                ? 1
+
+                : 0;
+
+        this.state.isJumping = false;
+
         this.render();
 
     },
@@ -230,16 +259,28 @@ EF22.highlights = {
 
         this.updateActiveState();
 
+        if (!this.state.events.length) {
+
+            return;
+
+        }
+
         requestAnimationFrame(
 
             () => {
 
-                this.scrollTo(
-                    0,
-                    false
-                );
+                requestAnimationFrame(
 
-                this.updateCardDepth();
+                    () => {
+
+                        this.centerPhysicalCard(
+                            this.state.physicalIndex,
+                            false
+                        );
+
+                    }
+
+                );
 
             }
 
@@ -261,7 +302,50 @@ EF22.highlights = {
 
         this.elements.track.innerHTML = "";
 
-        this.state.events.forEach(
+        const events =
+
+            this.state.events;
+
+        if (!events.length) {
+
+            return;
+
+        }
+
+        /*
+         * Bei mehreren Highlights:
+         *
+         * KLON LETZTE
+         * EVENT 1
+         * EVENT 2
+         * EVENT 3
+         * KLON ERSTE
+         *
+         * Dadurch kann an beiden Enden
+         * unsichtbar gesprungen werden.
+         */
+
+        if (events.length > 1) {
+
+            this.elements.track.append(
+
+                this.createCard(
+
+                    events[
+                        events.length - 1
+                    ],
+
+                    events.length - 1,
+
+                    true
+
+                )
+
+            );
+
+        }
+
+        events.forEach(
 
             (event, index) => {
 
@@ -269,7 +353,8 @@ EF22.highlights = {
 
                     this.createCard(
                         event,
-                        index
+                        index,
+                        false
                     )
 
                 );
@@ -278,13 +363,35 @@ EF22.highlights = {
 
         );
 
+        if (events.length > 1) {
+
+            this.elements.track.append(
+
+                this.createCard(
+
+                    events[0],
+
+                    0,
+
+                    true
+
+                )
+
+            );
+
+        }
+
     },
 
     /* ==========================================
        KARTE ERSTELLEN
     ========================================== */
 
-    createCard(event, index) {
+    createCard(
+        event,
+        realIndex,
+        clone = false
+    ) {
 
         const props =
 
@@ -305,7 +412,15 @@ EF22.highlights = {
             "highlight-card";
 
         card.dataset.highlightIndex =
-            String(index);
+            String(realIndex);
+
+        card.dataset.highlightClone =
+
+            clone
+
+                ? "true"
+
+                : "false";
 
         card.setAttribute(
 
@@ -314,6 +429,17 @@ EF22.highlights = {
             `Details zu ${event.title ?? "Highlight"}`
 
         );
+
+        if (clone) {
+
+            card.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+            card.tabIndex = -1;
+
+        }
 
         /* ======================================
            MEDIA
@@ -332,16 +458,11 @@ EF22.highlights = {
 
             props.image &&
 
-            String(
-                props.image
-            ).trim() !== ""
+            String(props.image).trim() !== ""
 
-                ? String(
-                    props.image
-                )
+                ? String(props.image)
 
-                : EF22.config
-                    ?.images
+                : EF22.config?.images
                     ?.heroFallbackLandscape;
 
         if (image) {
@@ -366,20 +487,31 @@ EF22.highlights = {
             "highlight-card-content";
 
         /* ======================================
-           TITEL
+           TYPE
         ====================================== */
 
-        const title =
+        const type =
 
             document.createElement(
                 "div"
             );
 
-        title.className =
+        type.className =
             "highlight-card-title";
 
-        title.textContent =
-            event.title ?? "";
+        type.textContent =
+
+            props.type ??
+
+            props.category ??
+
+            "";
+
+        if (!type.textContent.trim()) {
+
+            type.hidden = true;
+
+        }
 
         /* ======================================
            DATUM
@@ -402,8 +534,7 @@ EF22.highlights = {
 
         content.append(
 
-            title,
-
+            type,
             date
 
         );
@@ -411,7 +542,6 @@ EF22.highlights = {
         card.append(
 
             media,
-
             content
 
         );
@@ -426,30 +556,11 @@ EF22.highlights = {
 
             () => {
 
-                /*
-                 * Nicht aktive Karte:
-                 * zuerst in den Vordergrund holen.
-                 */
-
-                if (
-
-                    index !==
-                    this.state.activeIndex
-
-                ) {
-
-                    this.scrollTo(
-                        index
-                    );
+                if (clone) {
 
                     return;
 
                 }
-
-                /*
-                 * Aktive Karte:
-                 * Modal öffnen.
-                 */
 
                 EF22.modal.open(
                     event
@@ -488,8 +599,7 @@ EF22.highlights = {
                 EF22.config.locale,
 
                 {
-                    month:
-                        "long"
+                    month: "long"
                 }
 
             ).format(
@@ -500,11 +610,343 @@ EF22.highlights = {
 
             String(
                 date.getFullYear()
-            ).slice(
-                -2
-            );
+            ).slice(-2);
 
         return `${month} ${year}`;
+
+    },
+
+    /* ==========================================
+       PHYSISCHE KARTEN
+    ========================================== */
+
+    getCards() {
+
+        if (!this.elements.track) {
+
+            return [];
+
+        }
+
+        return Array.from(
+
+            this.elements.track.querySelectorAll(
+                ".highlight-card"
+            )
+
+        );
+
+    },
+
+    /* ==========================================
+       KARTE ZENTRIEREN
+    ========================================== */
+
+    centerPhysicalCard(
+        physicalIndex,
+        smooth = true
+    ) {
+
+        if (!this.elements.viewport) {
+
+            return;
+
+        }
+
+        const cards =
+            this.getCards();
+
+        const card =
+
+            cards[
+                physicalIndex
+            ];
+
+        if (!card) {
+
+            return;
+
+        }
+
+        const target =
+
+            card.offsetLeft -
+
+            (
+                (
+                    this.elements.viewport.clientWidth -
+                    card.offsetWidth
+                ) /
+                2
+            );
+
+        this.elements.viewport.scrollTo({
+
+            left:
+                target,
+
+            behavior:
+
+                smooth
+
+                    ? "smooth"
+
+                    : "auto"
+
+        });
+
+    },
+
+    /* ==========================================
+       AKTIVE KARTE AUS SCROLL
+    ========================================== */
+
+    updateActiveFromScroll() {
+
+        if (
+
+            !this.elements.viewport ||
+
+            this.state.isJumping
+
+        ) {
+
+            return;
+
+        }
+
+        const cards =
+            this.getCards();
+
+        if (!cards.length) {
+
+            return;
+
+        }
+
+        const viewportCenter =
+
+            this.elements.viewport.scrollLeft +
+
+            (
+                this.elements.viewport.clientWidth /
+                2
+            );
+
+        let closestPhysicalIndex = 0;
+
+        let closestDistance =
+            Infinity;
+
+        cards.forEach(
+
+            (card, index) => {
+
+                const cardCenter =
+
+                    card.offsetLeft +
+
+                    (
+                        card.offsetWidth /
+                        2
+                    );
+
+                const distance =
+
+                    Math.abs(
+
+                        viewportCenter -
+                        cardCenter
+
+                    );
+
+                if (
+
+                    distance <
+                    closestDistance
+
+                ) {
+
+                    closestDistance =
+                        distance;
+
+                    closestPhysicalIndex =
+                        index;
+
+                }
+
+            }
+
+        );
+
+        this.state.physicalIndex =
+            closestPhysicalIndex;
+
+        const card =
+
+            cards[
+                closestPhysicalIndex
+            ];
+
+        if (!card) {
+
+            return;
+
+        }
+
+        const realIndex =
+
+            Number(
+                card.dataset.highlightIndex
+            );
+
+        if (
+
+            Number.isInteger(
+                realIndex
+            )
+
+        ) {
+
+            this.state.activeIndex =
+                realIndex;
+
+        }
+
+        this.updateActiveState();
+
+    },
+
+    /* ==========================================
+       SCROLL ENDE
+    ========================================== */
+
+    onScrollEnd() {
+
+        if (
+
+            this.state.isJumping ||
+
+            this.state.events.length <= 1
+
+        ) {
+
+            return;
+
+        }
+
+        const cards =
+            this.getCards();
+
+        if (!cards.length) {
+
+            return;
+
+        }
+
+        const lastPhysicalIndex =
+
+            cards.length - 1;
+
+        /*
+         * Linker Klon:
+         * letzte Karte -> echte letzte Karte
+         */
+
+        if (
+
+            this.state.physicalIndex ===
+            0
+
+        ) {
+
+            this.jumpToPhysicalCard(
+
+                this.state.events.length
+
+            );
+
+            return;
+
+        }
+
+        /*
+         * Rechter Klon:
+         * erste Karte -> echte erste Karte
+         */
+
+        if (
+
+            this.state.physicalIndex ===
+            lastPhysicalIndex
+
+        ) {
+
+            this.jumpToPhysicalCard(
+                1
+            );
+
+            return;
+
+        }
+
+        /*
+         * Normale Karte noch einmal
+         * exakt zentrieren.
+         */
+
+        this.centerPhysicalCard(
+
+            this.state.physicalIndex,
+
+            true
+
+        );
+
+    },
+
+    /* ==========================================
+       UNSICHTBARER LOOP SPRUNG
+    ========================================== */
+
+    jumpToPhysicalCard(
+        physicalIndex
+    ) {
+
+        this.state.isJumping =
+            true;
+
+        this.state.physicalIndex =
+            physicalIndex;
+
+        requestAnimationFrame(
+
+            () => {
+
+                this.centerPhysicalCard(
+
+                    physicalIndex,
+
+                    false
+
+                );
+
+                requestAnimationFrame(
+
+                    () => {
+
+                        this.state.isJumping =
+                            false;
+
+                        this.updateActiveFromScroll();
+
+                    }
+
+                );
+
+            }
+
+        );
 
     },
 
@@ -520,7 +962,8 @@ EF22.highlights = {
 
         }
 
-        this.elements.indicators.innerHTML = "";
+        this.elements.indicators.innerHTML =
+            "";
 
         if (
 
@@ -609,287 +1052,30 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       AKTIVE KARTE AUS SCROLL
-    ========================================== */
-
-    updateActiveFromScroll() {
-
-        if (
-
-            !this.elements.viewport ||
-
-            !this.elements.track
-
-        ) {
-
-            return;
-
-        }
-
-        const cards =
-
-            Array.from(
-
-                this.elements.track.querySelectorAll(
-                    ".highlight-card"
-                )
-
-            );
-
-        if (!cards.length) {
-
-            return;
-
-        }
-
-        const viewportRect =
-
-            this.elements.viewport
-                .getBoundingClientRect();
-
-        const viewportCenter =
-
-            viewportRect.left +
-
-            (
-                viewportRect.width /
-                2
-            );
-
-        let closestIndex =
-            0;
-
-        let closestDistance =
-            Infinity;
-
-        cards.forEach(
-
-            (card, index) => {
-
-                const rect =
-
-                    card.getBoundingClientRect();
-
-                const cardCenter =
-
-                    rect.left +
-
-                    (
-                        rect.width /
-                        2
-                    );
-
-                const distance =
-
-                    Math.abs(
-
-                        viewportCenter -
-                        cardCenter
-
-                    );
-
-                if (
-
-                    distance <
-                    closestDistance
-
-                ) {
-
-                    closestDistance =
-                        distance;
-
-                    closestIndex =
-                        index;
-
-                }
-
-            }
-
-        );
-
-        if (
-
-            closestIndex ===
-            this.state.activeIndex
-
-        ) {
-
-            return;
-
-        }
-
-        this.state.activeIndex =
-            closestIndex;
-
-        this.updateActiveState();
-
-    },
-
-    /* ==========================================
-       TIEFENWIRKUNG
-
-       Die Karte, die der Mitte am nächsten ist,
-       liegt über ihren Nachbarn.
-
-       Die Bewegung bleibt vollständig an das
-       native Scrollen gekoppelt.
-    ========================================== */
-
-    updateCardDepth() {
-
-        if (
-
-            !this.elements.viewport ||
-
-            !this.elements.track
-
-        ) {
-
-            return;
-
-        }
-
-        const cards =
-
-            Array.from(
-
-                this.elements.track.querySelectorAll(
-                    ".highlight-card"
-                )
-
-            );
-
-        if (!cards.length) {
-
-            return;
-
-        }
-
-        const viewportRect =
-
-            this.elements.viewport
-                .getBoundingClientRect();
-
-        const viewportCenter =
-
-            viewportRect.left +
-
-            (
-                viewportRect.width /
-                2
-            );
-
-        cards.forEach(
-
-            (card) => {
-
-                const rect =
-
-                    card.getBoundingClientRect();
-
-                const cardCenter =
-
-                    rect.left +
-
-                    (
-                        rect.width /
-                        2
-                    );
-
-                const distance =
-
-                    Math.abs(
-
-                        viewportCenter -
-                        cardCenter
-
-                    );
-
-                const normalizedDistance =
-
-                    Math.min(
-
-                        distance /
-                        Math.max(
-                            rect.width,
-                            1
-                        ),
-
-                        1
-
-                    );
-
-                /*
-                 * Karte nahe der Mitte:
-                 * hoher z-index.
-                 */
-
-                const depth =
-
-                    Math.round(
-
-                        (
-                            1 -
-                            normalizedDistance
-                        ) *
-                        100
-
-                    );
-
-                card.style.zIndex =
-
-                    String(
-                        100 + depth
-                    );
-
-            }
-
-        );
-
-    },
-
-    /* ==========================================
        AKTIVEN STATUS AKTUALISIEREN
     ========================================== */
 
     updateActiveState() {
 
-        this.elements.track
-            ?.querySelectorAll(
-                ".highlight-card"
-            )
-            .forEach(
+        const cards =
+            this.getCards();
 
-                (card, index) => {
+        cards.forEach(
 
-                    const active =
+            (card, physicalIndex) => {
 
-                        index ===
-                        this.state.activeIndex;
+                card.classList.toggle(
 
-                    card.classList.toggle(
+                    "is-active",
 
-                        "is-active",
+                    physicalIndex ===
+                        this.state.physicalIndex
 
-                        active
+                );
 
-                    );
+            }
 
-                    card.setAttribute(
-
-                        "aria-current",
-
-                        active
-
-                            ? "true"
-
-                            : "false"
-
-                    );
-
-                }
-
-            );
+        );
 
         this.elements.indicators
             ?.querySelectorAll(
@@ -931,19 +1117,17 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       ZU KARTE SCROLLEN
+       ZU ECHTER KARTE SCROLLEN
     ========================================== */
 
-    scrollTo(
-        index,
-        smooth = true
-    ) {
+    scrollTo(index) {
 
         if (
 
-            !this.elements.viewport ||
+            index < 0 ||
 
-            !this.elements.track
+            index >=
+                this.state.events.length
 
         ) {
 
@@ -951,50 +1135,34 @@ EF22.highlights = {
 
         }
 
-        const card =
+        /*
+         * Wegen des linken Klons liegt
+         * echtes Event 0 auf Position 1.
+         */
 
-            this.elements.track.querySelector(
+        const physicalIndex =
 
-                `[data-highlight-index="${index}"]`
+            this.state.events.length > 1
 
-            );
+                ? index + 1
 
-        if (!card) {
+                : index;
 
-            return;
+        this.state.activeIndex =
+            index;
 
-        }
+        this.state.physicalIndex =
+            physicalIndex;
 
-        const viewportWidth =
+        this.updateActiveState();
 
-            this.elements.viewport.clientWidth;
+        this.centerPhysicalCard(
 
-        const target =
+            physicalIndex,
 
-            card.offsetLeft -
+            true
 
-            (
-                (
-                    viewportWidth -
-                    card.offsetWidth
-                ) /
-                2
-            );
-
-        this.elements.viewport.scrollTo({
-
-            left:
-                target,
-
-            behavior:
-
-                smooth
-
-                    ? "smooth"
-
-                    : "auto"
-
-        });
+        );
 
     },
 
@@ -1003,6 +1171,10 @@ EF22.highlights = {
     ========================================== */
 
     destroy() {
+
+        window.clearTimeout(
+            this.state.scrollTimer
+        );
 
         this.elements.viewport
             ?.removeEventListener(
@@ -1021,14 +1193,6 @@ EF22.highlights = {
 
         );
 
-        if (this.state.scrollFrame) {
-
-            cancelAnimationFrame(
-                this.state.scrollFrame
-            );
-
-        }
-
         if (this.elements.track) {
 
             this.elements.track.innerHTML =
@@ -1043,13 +1207,19 @@ EF22.highlights = {
 
         }
 
-        this.state.events = [];
+        this.state = {
 
-        this.state.activeIndex =
-            0;
+            events: [],
 
-        this.state.scrollFrame =
-            null;
+            activeIndex: 0,
+
+            physicalIndex: 0,
+
+            isJumping: false,
+
+            scrollTimer: null
+
+        };
 
         this.elements = {
 

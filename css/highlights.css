@@ -91,26 +91,22 @@
 
     position: relative;
 
+    z-index: 1;
+
     width:
-        78%;
+        85%;
 
     min-width:
-        78%;
-
-    flex:
-        0
-        0
-        78%;
+        85%;
 
     padding: 0;
 
     overflow: hidden;
 
+    flex-shrink: 0;
+
     scroll-snap-align:
         center;
-
-    scroll-snap-stop:
-        always;
 
     border:
         1px solid
@@ -146,23 +142,16 @@
     -webkit-appearance:
         none;
 
-    /*
-     * Keine künstliche Verkleinerung.
-     * CUPRA erzeugt die Tiefenwirkung
-     * hauptsächlich durch Überdeckung.
-     */
-
     transform:
-        none;
+        scale(.92);
 
     opacity:
-        1;
+        .78;
 
     transition:
-        border-color
-        var(--transition-normal),
-        box-shadow
-        var(--transition-normal);
+        transform var(--transition-normal),
+        opacity var(--transition-normal),
+        border-color var(--transition-normal);
 
 }
 
@@ -192,14 +181,17 @@
 
 .highlight-card.is-active {
 
-    border-color:
-        rgba(111, 191, 115, .60);
+    z-index:
+        10;
 
-    box-shadow:
-        0 0 28px rgba(111, 191, 115, .12),
-        0 4px 0 rgba(0, 0, 0, .70),
-        0 10px 18px rgba(0, 0, 0, .40),
-        0 20px 36px rgba(0, 0, 0, .26);
+    opacity:
+        1;
+
+    transform:
+        scale(1);
+
+    border-color:
+        rgba(111, 191, 115, .55);
 
 }
 
@@ -222,7 +214,7 @@
         no-repeat;
 
     background-size:
-        cover;
+        contain;
 
     background-color:
         var(--color-background-dark);
