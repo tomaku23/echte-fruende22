@@ -133,21 +133,11 @@
      HIGHLIGHTS
 ========================================== -->
 
-<section
-    id="highlights-section"
-    class="component-section highlights-section">
+<?php
 
-    <div class="container">
+require_once __DIR__ . "/../components/highlights.php";
 
-        <div
-            id="highlights"
-            class="highlight-grid">
-
-        </div>
-
-    </div>
-
-</section>
+?>
 
     <!-- ==========================================
          EVENT MODAL
