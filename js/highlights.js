@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HIGHLIGHTS.JS
- Version 1.2
+ Version 2.0
 =====================================================
 */
 
@@ -26,11 +26,17 @@ EF22.highlights = {
 
         activeIndex: 0,
 
-        physicalIndex: 0,
+        dragging: false,
 
-        isJumping: false,
+        animating: false,
 
-        scrollTimer: null
+        startX: 0,
+
+        currentX: 0,
+
+        deltaX: 0,
+
+        pointerId: null
 
     },
 
@@ -58,7 +64,13 @@ EF22.highlights = {
 
     handlers: {
 
-        scroll: null,
+        pointerDown: null,
+
+        pointerMove: null,
+
+        pointerUp: null,
+
+        pointerCancel: null,
 
         resize: null
 
@@ -126,58 +138,51 @@ EF22.highlights = {
 
     createHandlers() {
 
-        this.handlers.scroll = () => {
+        this.handlers.pointerDown =
 
-            if (this.state.isJumping) {
+            (event) => {
 
-                return;
-
-            }
-
-            window.clearTimeout(
-                this.state.scrollTimer
-            );
-
-            this.updateActiveFromScroll();
-
-            this.state.scrollTimer =
-
-                window.setTimeout(
-
-                    () => {
-
-                        this.onScrollEnd();
-
-                    },
-
-                    100
-
+                this.onPointerDown(
+                    event
                 );
 
-        };
+            };
 
-        this.handlers.resize = () => {
+        this.handlers.pointerMove =
 
-            if (!this.state.events.length) {
+            (event) => {
 
-                return;
+                this.onPointerMove(
+                    event
+                );
 
-            }
+            };
 
-            requestAnimationFrame(
+        this.handlers.pointerUp =
 
-                () => {
+            (event) => {
 
-                    this.centerPhysicalCard(
-                        this.state.physicalIndex,
-                        false
-                    );
+                this.onPointerUp(
+                    event
+                );
 
-                }
+            };
 
-            );
+        this.handlers.pointerCancel =
 
-        };
+            () => {
+
+                this.cancelDrag();
+
+            };
+
+        this.handlers.resize =
+
+            () => {
+
+                this.renderCards();
+
+            };
 
     },
 
@@ -189,13 +194,37 @@ EF22.highlights = {
 
         this.elements.viewport.addEventListener(
 
-            "scroll",
+            "pointerdown",
 
-            this.handlers.scroll,
+            this.handlers.pointerDown
+
+        );
+
+        window.addEventListener(
+
+            "pointermove",
+
+            this.handlers.pointerMove,
 
             {
-                passive: true
+                passive: false
             }
+
+        );
+
+        window.addEventListener(
+
+            "pointerup",
+
+            this.handlers.pointerUp
+
+        );
+
+        window.addEventListener(
+
+            "pointercancel",
+
+            this.handlers.pointerCancel
 
         );
 
@@ -231,15 +260,7 @@ EF22.highlights = {
 
         this.state.activeIndex = 0;
 
-        this.state.physicalIndex =
-
-            this.state.events.length > 1
-
-                ? 1
-
-                : 0;
-
-        this.state.isJumping = false;
+        this.resetInteraction();
 
         this.render();
 
@@ -257,34 +278,7 @@ EF22.highlights = {
 
         this.updateVisibility();
 
-        this.updateActiveState();
-
-        if (!this.state.events.length) {
-
-            return;
-
-        }
-
-        requestAnimationFrame(
-
-            () => {
-
-                requestAnimationFrame(
-
-                    () => {
-
-                        this.centerPhysicalCard(
-                            this.state.physicalIndex,
-                            false
-                        );
-
-                    }
-
-                );
-
-            }
-
-        );
+        this.updateIndicators();
 
     },
 
@@ -300,86 +294,192 @@ EF22.highlights = {
 
         }
 
-        this.elements.track.innerHTML = "";
+        this.elements.track.innerHTML =
+            "";
 
-        const events =
+        const count =
 
-            this.state.events;
+            this.state.events.length;
 
-        if (!events.length) {
+        if (!count) {
 
             return;
 
         }
 
-        /*
-         * Bei mehreren Highlights:
-         *
-         * KLON LETZTE
-         * EVENT 1
-         * EVENT 2
-         * EVENT 3
-         * KLON ERSTE
-         *
-         * Dadurch kann an beiden Enden
-         * unsichtbar gesprungen werden.
-         */
+        /* ======================================
+           EIN HIGHLIGHT
+        ====================================== */
 
-        if (events.length > 1) {
+        if (count === 1) {
 
             this.elements.track.append(
 
                 this.createCard(
 
-                    events[
-                        events.length - 1
-                    ],
+                    this.state.events[0],
 
-                    events.length - 1,
+                    0,
 
-                    true
+                    "active"
 
                 )
 
             );
 
+            return;
+
         }
 
-        events.forEach(
+        /* ======================================
+           ZWEI HIGHLIGHTS
+        ====================================== */
 
-            (event, index) => {
+        if (count === 2) {
+
+            const activeIndex =
+
+                this.state.activeIndex;
+
+            const otherIndex =
+
+                activeIndex === 0
+
+                    ? 1
+
+                    : 0;
+
+            /*
+             * Beim ersten Highlight liegt
+             * das zweite rechts.
+             *
+             * Beim zweiten Highlight liegt
+             * das erste links.
+             */
+
+            if (activeIndex === 0) {
 
                 this.elements.track.append(
 
                     this.createCard(
-                        event,
-                        index,
-                        false
+
+                        this.state.events[
+                            activeIndex
+                        ],
+
+                        activeIndex,
+
+                        "active"
+
+                    ),
+
+                    this.createCard(
+
+                        this.state.events[
+                            otherIndex
+                        ],
+
+                        otherIndex,
+
+                        "next"
+
                     )
 
                 );
 
             }
 
-        );
+            else {
 
-        if (events.length > 1) {
+                this.elements.track.append(
 
-            this.elements.track.append(
+                    this.createCard(
 
-                this.createCard(
+                        this.state.events[
+                            otherIndex
+                        ],
 
-                    events[0],
+                        otherIndex,
 
-                    0,
+                        "previous"
 
-                    true
+                    ),
 
-                )
+                    this.createCard(
 
-            );
+                        this.state.events[
+                            activeIndex
+                        ],
+
+                        activeIndex,
+
+                        "active"
+
+                    )
+
+                );
+
+            }
+
+            return;
 
         }
+
+        /* ======================================
+           DREI ODER MEHR HIGHLIGHTS
+
+           Es existieren immer nur:
+
+           PREVIOUS | ACTIVE | NEXT
+        ====================================== */
+
+        const previousIndex =
+
+            this.getPreviousIndex();
+
+        const nextIndex =
+
+            this.getNextIndex();
+
+        this.elements.track.append(
+
+            this.createCard(
+
+                this.state.events[
+                    previousIndex
+                ],
+
+                previousIndex,
+
+                "previous"
+
+            ),
+
+            this.createCard(
+
+                this.state.events[
+                    this.state.activeIndex
+                ],
+
+                this.state.activeIndex,
+
+                "active"
+
+            ),
+
+            this.createCard(
+
+                this.state.events[
+                    nextIndex
+                ],
+
+                nextIndex,
+
+                "next"
+
+            )
+
+        );
 
     },
 
@@ -389,8 +489,8 @@ EF22.highlights = {
 
     createCard(
         event,
-        realIndex,
-        clone = false
+        index,
+        position
     ) {
 
         const props =
@@ -409,18 +509,14 @@ EF22.highlights = {
             "button";
 
         card.className =
-            "highlight-card";
+
+            `highlight-card highlight-card--${position}`;
 
         card.dataset.highlightIndex =
-            String(realIndex);
+            String(index);
 
-        card.dataset.highlightClone =
-
-            clone
-
-                ? "true"
-
-                : "false";
+        card.dataset.highlightPosition =
+            position;
 
         card.setAttribute(
 
@@ -430,14 +526,15 @@ EF22.highlights = {
 
         );
 
-        if (clone) {
+        if (position === "active") {
 
             card.setAttribute(
-                "aria-hidden",
-                "true"
-            );
 
-            card.tabIndex = -1;
+                "aria-current",
+
+                "true"
+
+            );
 
         }
 
@@ -458,11 +555,16 @@ EF22.highlights = {
 
             props.image &&
 
-            String(props.image).trim() !== ""
+            String(
+                props.image
+            ).trim() !== ""
 
-                ? String(props.image)
+                ? String(
+                    props.image
+                )
 
-                : EF22.config?.images
+                : EF22.config
+                    ?.images
                     ?.heroFallbackLandscape;
 
         if (image) {
@@ -509,7 +611,8 @@ EF22.highlights = {
 
         if (!type.textContent.trim()) {
 
-            type.hidden = true;
+            type.hidden =
+                true;
 
         }
 
@@ -535,6 +638,7 @@ EF22.highlights = {
         content.append(
 
             type,
+
             date
 
         );
@@ -542,25 +646,65 @@ EF22.highlights = {
         card.append(
 
             media,
+
             content
 
         );
 
         /* ======================================
-           INTERAKTION
+           CLICK
         ====================================== */
 
         card.addEventListener(
 
             "click",
 
-            () => {
+            (clickEvent) => {
 
-                if (clone) {
+                /*
+                 * Ein Swipe darf anschließend
+                 * kein Modal öffnen.
+                 */
+
+                if (
+
+                    Math.abs(
+                        this.state.deltaX
+                    ) > 8
+
+                ) {
+
+                    clickEvent.preventDefault();
 
                     return;
 
                 }
+
+                /*
+                 * Seitliche Karte:
+                 * erst aktivieren.
+                 */
+
+                if (position === "previous") {
+
+                    this.goPrevious();
+
+                    return;
+
+                }
+
+                if (position === "next") {
+
+                    this.goNext();
+
+                    return;
+
+                }
+
+                /*
+                 * Aktive Karte:
+                 * Modal öffnen.
+                 */
 
                 EF22.modal.open(
                     event
@@ -599,7 +743,8 @@ EF22.highlights = {
                 EF22.config.locale,
 
                 {
-                    month: "long"
+                    month:
+                        "long"
                 }
 
             ).format(
@@ -617,215 +762,127 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       PHYSISCHE KARTEN
+       VORHERIGER INDEX
     ========================================== */
 
-    getCards() {
+    getPreviousIndex() {
 
-        if (!this.elements.track) {
+        const count =
 
-            return [];
+            this.state.events.length;
+
+        if (!count) {
+
+            return 0;
 
         }
 
-        return Array.from(
+        return (
 
-            this.elements.track.querySelectorAll(
-                ".highlight-card"
-            )
+            this.state.activeIndex -
+            1 +
+            count
 
-        );
+        ) % count;
 
     },
 
     /* ==========================================
-       KARTE ZENTRIEREN
+       NÄCHSTER INDEX
     ========================================== */
 
-    centerPhysicalCard(
-        physicalIndex,
-        smooth = true
-    ) {
+    getNextIndex() {
 
-        if (!this.elements.viewport) {
+        const count =
 
-            return;
+            this.state.events.length;
 
-        }
+        if (!count) {
 
-        const cards =
-            this.getCards();
-
-        const card =
-
-            cards[
-                physicalIndex
-            ];
-
-        if (!card) {
-
-            return;
+            return 0;
 
         }
 
-        const target =
+        return (
 
-            card.offsetLeft -
+            this.state.activeIndex +
+            1
 
-            (
-                (
-                    this.elements.viewport.clientWidth -
-                    card.offsetWidth
-                ) /
-                2
-            );
-
-        this.elements.viewport.scrollTo({
-
-            left:
-                target,
-
-            behavior:
-
-                smooth
-
-                    ? "smooth"
-
-                    : "auto"
-
-        });
+        ) % count;
 
     },
 
     /* ==========================================
-       AKTIVE KARTE AUS SCROLL
+       DARF ZURÜCK
     ========================================== */
 
-    updateActiveFromScroll() {
+    canGoPrevious() {
 
-        if (
+        const count =
 
-            !this.elements.viewport ||
+            this.state.events.length;
 
-            this.state.isJumping
+        if (count <= 1) {
 
-        ) {
-
-            return;
+            return false;
 
         }
 
-        const cards =
-            this.getCards();
+        if (count === 2) {
 
-        if (!cards.length) {
+            return (
 
-            return;
+                this.state.activeIndex ===
+                1
 
-        }
-
-        const viewportCenter =
-
-            this.elements.viewport.scrollLeft +
-
-            (
-                this.elements.viewport.clientWidth /
-                2
             );
 
-        let closestPhysicalIndex = 0;
-
-        let closestDistance =
-            Infinity;
-
-        cards.forEach(
-
-            (card, index) => {
-
-                const cardCenter =
-
-                    card.offsetLeft +
-
-                    (
-                        card.offsetWidth /
-                        2
-                    );
-
-                const distance =
-
-                    Math.abs(
-
-                        viewportCenter -
-                        cardCenter
-
-                    );
-
-                if (
-
-                    distance <
-                    closestDistance
-
-                ) {
-
-                    closestDistance =
-                        distance;
-
-                    closestPhysicalIndex =
-                        index;
-
-                }
-
-            }
-
-        );
-
-        this.state.physicalIndex =
-            closestPhysicalIndex;
-
-        const card =
-
-            cards[
-                closestPhysicalIndex
-            ];
-
-        if (!card) {
-
-            return;
-
         }
 
-        const realIndex =
-
-            Number(
-                card.dataset.highlightIndex
-            );
-
-        if (
-
-            Number.isInteger(
-                realIndex
-            )
-
-        ) {
-
-            this.state.activeIndex =
-                realIndex;
-
-        }
-
-        this.updateActiveState();
+        return true;
 
     },
 
     /* ==========================================
-       SCROLL ENDE
+       DARF VOR
     ========================================== */
 
-    onScrollEnd() {
+    canGoNext() {
+
+        const count =
+
+            this.state.events.length;
+
+        if (count <= 1) {
+
+            return false;
+
+        }
+
+        if (count === 2) {
+
+            return (
+
+                this.state.activeIndex ===
+                0
+
+            );
+
+        }
+
+        return true;
+
+    },
+
+    /* ==========================================
+       POINTER DOWN
+    ========================================== */
+
+    onPointerDown(event) {
 
         if (
 
-            this.state.isJumping ||
+            this.state.animating ||
 
             this.state.events.length <= 1
 
@@ -835,123 +892,471 @@ EF22.highlights = {
 
         }
 
-        const cards =
-            this.getCards();
-
-        if (!cards.length) {
-
-            return;
-
-        }
-
-        const lastPhysicalIndex =
-
-            cards.length - 1;
-
         /*
-         * Linker Klon:
-         * letzte Karte -> echte letzte Karte
+         * Nur primäre Maus-/Touch-Interaktion.
          */
 
         if (
 
-            this.state.physicalIndex ===
-            0
+            event.pointerType === "mouse" &&
+
+            event.button !== 0
 
         ) {
-
-            this.jumpToPhysicalCard(
-
-                this.state.events.length
-
-            );
 
             return;
 
         }
 
+        this.state.dragging =
+            true;
+
+        this.state.pointerId =
+            event.pointerId;
+
+        this.state.startX =
+            event.clientX;
+
+        this.state.currentX =
+            event.clientX;
+
+        this.state.deltaX =
+            0;
+
+        this.elements.viewport.classList.add(
+            "is-dragging"
+        );
+
+        try {
+
+            this.elements.viewport
+                .setPointerCapture(
+                    event.pointerId
+                );
+
+        }
+
+        catch (_) {
+
+            /*
+             * Nicht jeder Browser benötigt
+             * Pointer Capture.
+             */
+
+        }
+
+    },
+
+    /* ==========================================
+       POINTER MOVE
+    ========================================== */
+
+    onPointerMove(event) {
+
+        if (
+
+            !this.state.dragging ||
+
+            event.pointerId !==
+                this.state.pointerId
+
+        ) {
+
+            return;
+
+        }
+
+        this.state.currentX =
+            event.clientX;
+
+        let delta =
+
+            this.state.currentX -
+            this.state.startX;
+
         /*
-         * Rechter Klon:
-         * erste Karte -> echte erste Karte
+         * Bei zwei Karten gibt es echte Enden.
+         * Dort erzeugen wir nur einen kleinen
+         * Widerstand statt eines weiteren Slides.
          */
 
         if (
 
-            this.state.physicalIndex ===
-            lastPhysicalIndex
+            delta > 0 &&
+
+            !this.canGoPrevious()
 
         ) {
 
-            this.jumpToPhysicalCard(
-                1
+            delta *=
+                .18;
+
+        }
+
+        if (
+
+            delta < 0 &&
+
+            !this.canGoNext()
+
+        ) {
+
+            delta *=
+                .18;
+
+        }
+
+        this.state.deltaX =
+            delta;
+
+        this.applyDragTransform(
+            delta
+        );
+
+        if (
+
+            Math.abs(delta) > 4
+
+        ) {
+
+            event.preventDefault();
+
+        }
+
+    },
+
+    /* ==========================================
+       POINTER UP
+    ========================================== */
+
+    onPointerUp(event) {
+
+        if (
+
+            !this.state.dragging ||
+
+            event.pointerId !==
+                this.state.pointerId
+
+        ) {
+
+            return;
+
+        }
+
+        const delta =
+
+            this.state.deltaX;
+
+        const threshold =
+
+            Math.max(
+
+                50,
+
+                this.elements.viewport.clientWidth *
+                    .14
+
             );
+
+        this.state.dragging =
+            false;
+
+        this.elements.viewport.classList.remove(
+            "is-dragging"
+        );
+
+        /*
+         * Nach links gewischt:
+         * nächstes Highlight.
+         */
+
+        if (
+
+            delta <= -threshold &&
+
+            this.canGoNext()
+
+        ) {
+
+            this.animateToNext();
 
             return;
 
         }
 
         /*
-         * Normale Karte noch einmal
-         * exakt zentrieren.
+         * Nach rechts gewischt:
+         * vorheriges Highlight.
          */
 
-        this.centerPhysicalCard(
+        if (
 
-            this.state.physicalIndex,
+            delta >= threshold &&
 
-            true
+            this.canGoPrevious()
+
+        ) {
+
+            this.animateToPrevious();
+
+            return;
+
+        }
+
+        /*
+         * Schwelle nicht erreicht:
+         * zurück zur Mitte.
+         */
+
+        this.animateBack();
+
+    },
+
+    /* ==========================================
+       DRAG TRANSFORM
+    ========================================== */
+
+    applyDragTransform(delta) {
+
+        if (!this.elements.track) {
+
+            return;
+
+        }
+
+        this.elements.track.style.setProperty(
+
+            "--highlight-drag-x",
+
+            `${delta}px`
 
         );
 
     },
 
     /* ==========================================
-       UNSICHTBARER LOOP SPRUNG
+       ZURÜCK AN MITTE
     ========================================== */
 
-    jumpToPhysicalCard(
-        physicalIndex
-    ) {
+    animateBack() {
 
-        this.state.isJumping =
+        if (!this.elements.track) {
+
+            return;
+
+        }
+
+        this.state.animating =
             true;
 
-        this.state.physicalIndex =
-            physicalIndex;
+        this.elements.track.classList.add(
+            "is-animating"
+        );
 
-        requestAnimationFrame(
+        this.applyDragTransform(
+            0
+        );
+
+        window.setTimeout(
 
             () => {
 
-                this.centerPhysicalCard(
-
-                    physicalIndex,
-
-                    false
-
+                this.elements.track.classList.remove(
+                    "is-animating"
                 );
 
-                requestAnimationFrame(
+                this.state.animating =
+                    false;
 
-                    () => {
+                this.resetDragValues();
 
-                        this.state.isJumping =
-                            false;
+            },
 
-                        this.updateActiveFromScroll();
-
-                    }
-
-                );
-
-            }
+            280
 
         );
 
     },
 
     /* ==========================================
-       INDIKATOREN RENDERN
+       NÄCHSTES HIGHLIGHT ANIMIEREN
+    ========================================== */
+
+    animateToNext() {
+
+        if (!this.elements.track) {
+
+            return;
+
+        }
+
+        this.state.animating =
+            true;
+
+        this.elements.track.classList.add(
+            "is-animating"
+        );
+
+        const distance =
+
+            this.elements.viewport.clientWidth *
+            .72;
+
+        this.applyDragTransform(
+            -distance
+        );
+
+        window.setTimeout(
+
+            () => {
+
+                this.state.activeIndex =
+
+                    this.getNextIndex();
+
+                this.finishTransition();
+
+            },
+
+            280
+
+        );
+
+    },
+
+    /* ==========================================
+       VORHERIGES HIGHLIGHT ANIMIEREN
+    ========================================== */
+
+    animateToPrevious() {
+
+        if (!this.elements.track) {
+
+            return;
+
+        }
+
+        this.state.animating =
+            true;
+
+        this.elements.track.classList.add(
+            "is-animating"
+        );
+
+        const distance =
+
+            this.elements.viewport.clientWidth *
+            .72;
+
+        this.applyDragTransform(
+            distance
+        );
+
+        window.setTimeout(
+
+            () => {
+
+                this.state.activeIndex =
+
+                    this.getPreviousIndex();
+
+                this.finishTransition();
+
+            },
+
+            280
+
+        );
+
+    },
+
+    /* ==========================================
+       TRANSITION ABSCHLIESSEN
+    ========================================== */
+
+    finishTransition() {
+
+        /*
+         * Erst Transition abschalten.
+         * Dann neue Rollen rendern.
+         *
+         * Dadurch erscheint die weggegangene
+         * Karte bei 3+ auf der anderen Seite,
+         * ohne selbst zurückzuanimieren.
+         */
+
+        this.elements.track.classList.remove(
+            "is-animating"
+        );
+
+        this.applyDragTransform(
+            0
+        );
+
+        this.renderCards();
+
+        this.updateIndicators();
+
+        this.state.animating =
+            false;
+
+        this.resetDragValues();
+
+    },
+
+    /* ==========================================
+       DIREKT NÄCHSTES
+    ========================================== */
+
+    goNext() {
+
+        if (
+
+            this.state.animating ||
+
+            !this.canGoNext()
+
+        ) {
+
+            return;
+
+        }
+
+        this.state.deltaX =
+            0;
+
+        this.animateToNext();
+
+    },
+
+    /* ==========================================
+       DIREKT VORHERIGES
+    ========================================== */
+
+    goPrevious() {
+
+        if (
+
+            this.state.animating ||
+
+            !this.canGoPrevious()
+
+        ) {
+
+            return;
+
+        }
+
+        this.state.deltaX =
+            0;
+
+        this.animateToPrevious();
+
+    },
+
+    /* ==========================================
+       INDIKATOREN
     ========================================== */
 
     renderIndicators() {
@@ -1014,7 +1419,7 @@ EF22.highlights = {
 
                     () => {
 
-                        this.scrollTo(
+                        this.goTo(
                             index
                         );
 
@@ -1033,49 +1438,10 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       SICHTBARKEIT
+       INDIKATOREN AKTUALISIEREN
     ========================================== */
 
-    updateVisibility() {
-
-        const hasHighlights =
-
-            this.state.events.length > 0;
-
-        if (this.elements.section) {
-
-            this.elements.section.hidden =
-                !hasHighlights;
-
-        }
-
-    },
-
-    /* ==========================================
-       AKTIVEN STATUS AKTUALISIEREN
-    ========================================== */
-
-    updateActiveState() {
-
-        const cards =
-            this.getCards();
-
-        cards.forEach(
-
-            (card, physicalIndex) => {
-
-                card.classList.toggle(
-
-                    "is-active",
-
-                    physicalIndex ===
-                        this.state.physicalIndex
-
-                );
-
-            }
-
-        );
+    updateIndicators() {
 
         this.elements.indicators
             ?.querySelectorAll(
@@ -1117,17 +1483,22 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       ZU ECHTER KARTE SCROLLEN
+       ZU INDEX
     ========================================== */
 
-    scrollTo(index) {
+    goTo(index) {
 
         if (
+
+            this.state.animating ||
 
             index < 0 ||
 
             index >=
-                this.state.events.length
+                this.state.events.length ||
+
+            index ===
+                this.state.activeIndex
 
         ) {
 
@@ -1135,34 +1506,179 @@ EF22.highlights = {
 
         }
 
+        const count =
+
+            this.state.events.length;
+
         /*
-         * Wegen des linken Klons liegt
-         * echtes Event 0 auf Position 1.
+         * Bei zwei Karten ist die Richtung
+         * eindeutig.
          */
 
-        const physicalIndex =
+        if (count === 2) {
 
-            this.state.events.length > 1
+            if (
 
-                ? index + 1
+                index >
+                this.state.activeIndex
 
-                : index;
+            ) {
 
-        this.state.activeIndex =
-            index;
+                this.goNext();
 
-        this.state.physicalIndex =
-            physicalIndex;
+            }
 
-        this.updateActiveState();
+            else {
 
-        this.centerPhysicalCard(
+                this.goPrevious();
 
-            physicalIndex,
+            }
 
-            true
+            return;
+
+        }
+
+        /*
+         * Bei einem Ring wählen wir den
+         * kürzeren Weg.
+         */
+
+        const forward =
+
+            (
+                index -
+                this.state.activeIndex +
+                count
+            ) % count;
+
+        const backward =
+
+            (
+                this.state.activeIndex -
+                index +
+                count
+            ) % count;
+
+        if (forward <= backward) {
+
+            this.goNext();
+
+        }
+
+        else {
+
+            this.goPrevious();
+
+        }
+
+    },
+
+    /* ==========================================
+       SICHTBARKEIT
+    ========================================== */
+
+    updateVisibility() {
+
+        const hasHighlights =
+
+            this.state.events.length > 0;
+
+        if (this.elements.section) {
+
+            this.elements.section.hidden =
+                !hasHighlights;
+
+        }
+
+    },
+
+    /* ==========================================
+       DRAG ABBRECHEN
+    ========================================== */
+
+    cancelDrag() {
+
+        if (!this.state.dragging) {
+
+            return;
+
+        }
+
+        this.state.dragging =
+            false;
+
+        this.elements.viewport?.classList.remove(
+            "is-dragging"
+        );
+
+        this.animateBack();
+
+    },
+
+    /* ==========================================
+       DRAG WERTE RESET
+    ========================================== */
+
+    resetDragValues() {
+
+        this.state.startX =
+            0;
+
+        this.state.currentX =
+            0;
+
+        /*
+         * Leicht verzögert, damit der Click,
+         * der unmittelbar nach pointerup
+         * entstehen kann, einen Swipe noch
+         * erkennen kann.
+         */
+
+        window.setTimeout(
+
+            () => {
+
+                if (!this.state.dragging) {
+
+                    this.state.deltaX =
+                        0;
+
+                }
+
+            },
+
+            50
 
         );
+
+        this.state.pointerId =
+            null;
+
+    },
+
+    /* ==========================================
+       INTERAKTION RESET
+    ========================================== */
+
+    resetInteraction() {
+
+        this.state.dragging =
+            false;
+
+        this.state.animating =
+            false;
+
+        this.state.startX =
+            0;
+
+        this.state.currentX =
+            0;
+
+        this.state.deltaX =
+            0;
+
+        this.state.pointerId =
+            null;
 
     },
 
@@ -1172,18 +1688,38 @@ EF22.highlights = {
 
     destroy() {
 
-        window.clearTimeout(
-            this.state.scrollTimer
-        );
-
         this.elements.viewport
             ?.removeEventListener(
 
-                "scroll",
+                "pointerdown",
 
-                this.handlers.scroll
+                this.handlers.pointerDown
 
             );
+
+        window.removeEventListener(
+
+            "pointermove",
+
+            this.handlers.pointerMove
+
+        );
+
+        window.removeEventListener(
+
+            "pointerup",
+
+            this.handlers.pointerUp
+
+        );
+
+        window.removeEventListener(
+
+            "pointercancel",
+
+            this.handlers.pointerCancel
+
+        );
 
         window.removeEventListener(
 
@@ -1207,41 +1743,12 @@ EF22.highlights = {
 
         }
 
-        this.state = {
+        this.state.events = [];
 
-            events: [],
+        this.state.activeIndex =
+            0;
 
-            activeIndex: 0,
-
-            physicalIndex: 0,
-
-            isJumping: false,
-
-            scrollTimer: null
-
-        };
-
-        this.elements = {
-
-            section: null,
-
-            root: null,
-
-            viewport: null,
-
-            track: null,
-
-            indicators: null
-
-        };
-
-        this.handlers = {
-
-            scroll: null,
-
-            resize: null
-
-        };
+        this.resetInteraction();
 
     }
 

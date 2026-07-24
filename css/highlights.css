@@ -26,35 +26,30 @@
 
 .highlights-viewport {
 
+    position: relative;
+
     width: 100%;
 
-    overflow-x: auto;
-
-    overflow-y: hidden;
-
-    scroll-snap-type:
-        x mandatory;
-
-    scroll-behavior:
-        smooth;
-
-    scrollbar-width:
-        none;
-
-    -webkit-overflow-scrolling:
-        touch;
-
-    overscroll-behavior-x:
-        contain;
+    overflow: hidden;
 
     touch-action:
-        pan-x;
+        pan-y;
+
+    user-select:
+        none;
+
+    -webkit-user-select:
+        none;
+
+    cursor:
+        grab;
 
 }
 
-.highlights-viewport::-webkit-scrollbar {
+.highlights-viewport.is-dragging {
 
-    display: none;
+    cursor:
+        grabbing;
 
 }
 
@@ -65,23 +60,33 @@
 
 .highlights-track {
 
-    display: flex;
+    position: relative;
 
-    align-items: stretch;
+    width: 100%;
 
-    /*
-     * Die seitlichen Abstände sorgen dafür,
-     * dass erste und letzte Karte ebenfalls
-     * exakt zentriert werden können.
-     */
+    min-height:
+        1px;
 
     padding:
         var(--space-md)
-        11%
+        0
         var(--space-xl);
+
+    transform:
+        translateX(
+            var(--highlight-drag-x, 0px)
+        );
 
 }
 
+.highlights-track.is-animating {
+
+    transition:
+        transform
+        280ms
+        ease;
+
+}
 
 /* ==========================================
    KARTE
@@ -89,24 +94,22 @@
 
 .highlight-card {
 
-    position: relative;
+    position: absolute;
+
+    top:
+        var(--space-md);
+
+    left:
+        50%;
 
     z-index: 1;
 
     width:
         85%;
 
-    min-width:
-        85%;
-
     padding: 0;
 
     overflow: hidden;
-
-    flex-shrink: 0;
-
-    scroll-snap-align:
-        center;
 
     border:
         1px solid
@@ -134,7 +137,7 @@
         left;
 
     cursor:
-        pointer;
+        inherit;
 
     appearance:
         none;
@@ -142,56 +145,67 @@
     -webkit-appearance:
         none;
 
-    transform:
-        scale(.92);
-
     opacity:
         .78;
 
+    transform:
+        translateX(-50%)
+        scale(.92);
+
+    transform-origin:
+        center center;
+
     transition:
-        transform var(--transition-normal),
-        opacity var(--transition-normal),
-        border-color var(--transition-normal);
+        transform
+        var(--transition-normal),
+        opacity
+        var(--transition-normal),
+        border-color
+        var(--transition-normal);
 
 }
 
 
 /* ==========================================
-   ÜBERLAPPUNG
-
-   Die folgende Karte läuft unter die
-   vorherige Karte.
-
-   Dadurch bleiben die Nachbarn sichtbar,
-   liegen aber optisch hinter der Karte,
-   die sich in der Mitte befindet.
+   KARTENPOSITIONEN
 ========================================== */
 
-.highlight-card + .highlight-card {
+.highlight-card--previous {
 
-    margin-left:
-        -18%;
+    z-index: 2;
+
+    transform:
+        translateX(-104%)
+        scale(.92);
 
 }
 
+.highlight-card--active {
 
-/* ==========================================
-   AKTIVE KARTE
-========================================== */
+    position: relative;
 
-.highlight-card.is-active {
+    top: auto;
 
-    z-index:
-        10;
+    left: 50%;
+
+    z-index: 10;
 
     opacity:
         1;
 
     transform:
+        translateX(-50%)
         scale(1);
 
-    border-color:
-        rgba(111, 191, 115, .55);
+}
+
+.highlight-card--next {
+
+    z-index: 2;
+
+    transform:
+        translateX(4%)
+        scale(.92);
 
 }
 
@@ -433,34 +447,27 @@
    EINZELNES HIGHLIGHT
 ========================================== */
 
-.highlights-track:has(
-    .highlight-card:only-child
-) {
-
-    justify-content:
-        center;
-
-    padding-left:
-        var(--space-md);
-
-    padding-right:
-        var(--space-md);
-
-}
-
 .highlight-card:only-child {
 
+    position: relative;
+
+    top: auto;
+
+    left:
+        50%;
+
     width:
-        100%;
-
-    min-width:
-        100%;
-
-    flex-basis:
-        100%;
+        85%;
 
     max-width:
         680px;
+
+    opacity:
+        1;
+
+    transform:
+        translateX(-50%)
+        scale(1);
 
 }
 
