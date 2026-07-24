@@ -270,13 +270,21 @@ EF22.highlights = {
 
         const image =
 
-            props.image &&
+    props.image &&
 
-            String(props.image).trim() !== ""
+    String(props.image).trim() !== ""
 
-                ? String(props.image)
+        ? String(props.image)
 
-                : "../images/hero-bgq.png";
+        : EF22.config?.images?.heroFallbackLandscape;
+
+if (image) {
+
+    media.style.backgroundImage =
+
+        `url("${image}")`;
+
+}
 
         media.style.backgroundImage =
 
