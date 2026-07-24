@@ -258,58 +258,52 @@ createHandlers() {
 
 registerEvents() {
 
-    /* ==========================================
-       EVENTS
-    ========================================== */
+    this.elements.viewport.addEventListener(
 
-    registerEvents() {
+        "pointerdown",
 
-        this.elements.viewport.addEventListener(
+        this.handlers.pointerDown
 
-            "pointerdown",
+    );
 
-            this.handlers.pointerDown
+    window.addEventListener(
 
-        );
+        "pointermove",
 
-        window.addEventListener(
+        this.handlers.pointerMove,
 
-            "pointermove",
+        {
+            passive:
+                false
+        }
 
-            this.handlers.pointerMove,
+    );
 
-            {
-                passive:
-                    false
-            }
+    window.addEventListener(
 
-        );
+        "pointerup",
 
-        window.addEventListener(
+        this.handlers.pointerUp
 
-            "pointerup",
+    );
 
-            this.handlers.pointerUp
+    window.addEventListener(
 
-        );
+        "pointercancel",
 
-        window.addEventListener(
+        this.handlers.pointerCancel
 
-            "pointercancel",
+    );
 
-            this.handlers.pointerCancel
+    window.addEventListener(
 
-        );
+        "resize",
 
-        window.addEventListener(
+        this.handlers.resize
 
-            "resize",
+    );
 
-            this.handlers.resize
-
-        );
-
-    },
+},
 
     /* ==========================================
        REFRESH
