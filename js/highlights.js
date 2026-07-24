@@ -449,41 +449,82 @@ render() {
         );
 
         /* ======================================
-           MEDIA
-        ====================================== */
+   MEDIA
+====================================== */
 
-        const media =
+const media =
 
-            document.createElement(
-                "div"
+    document.createElement(
+        "div"
+    );
+
+media.className =
+    "highlight-card-media";
+
+const image =
+
+    props.image &&
+
+    String(
+        props.image
+    ).trim() !== ""
+
+        ? String(
+            props.image
+        )
+
+        : EF22.config
+            ?.images
+            ?.heroFallbackLandscape;
+
+if (image) {
+
+    media.style.backgroundImage =
+
+        `url("${image}")`;
+
+    const imageProbe =
+
+        new Image();
+
+    imageProbe.onload =
+
+        () => {
+
+            const ratio =
+
+                imageProbe.naturalWidth /
+                imageProbe.naturalHeight;
+
+            const targetRatio =
+
+                16 / 9;
+
+            const tolerance =
+
+                0.01;
+
+            const isSixteenNine =
+
+                Math.abs(
+                    ratio -
+                    targetRatio
+                ) <= tolerance;
+
+            media.classList.toggle(
+
+                "is-16-9",
+
+                isSixteenNine
+
             );
 
-        media.className =
-            "highlight-card-media";
+        };
 
-        const image =
+    imageProbe.src =
+        image;
 
-            props.image &&
-
-            String(
-                props.image
-            ).trim() !== ""
-
-                ? String(
-                    props.image
-                )
-
-                : EF22.config
-                    ?.images
-                    ?.heroFallbackLandscape;
-
-        if (image) {
-
-            media.style.backgroundImage =
-
-                `url("${image}")`;
-
-        }
+}
 
         /* ======================================
            CONTENT
