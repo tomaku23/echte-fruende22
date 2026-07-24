@@ -78,46 +78,46 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       STATE
-    ========================================== */
+   STATE
+========================================== */
 
-    state: {
+state: {
 
-        events: [],
+    events: [],
 
-        activeIndex:
-            0,
+    activeIndex:
+        0,
 
-        dragging:
-            false,
+    dragging:
+        false,
 
-        animating:
-            false,
+    animating:
+        false,
 
-        pointerId:
-            null,
+    pointerId:
+        null,
 
-        startX:
-            0,
+    startX:
+        0,
 
-        currentX:
-            0,
+    currentX:
+        0,
 
-        dragOffset:
-            0,
+    dragOffset:
+        0,
 
-        moved:
-            false,
+    moved:
+        false,
 
-        suppressClick:
-            false,
+    suppressClick:
+        false,
 
-        animationFrame:
-            null
+    animationFrame:
+        null
 
-    },
+},
 
-    /* ==========================================
+/* ==========================================
    ELEMENTE
 ========================================== */
 
@@ -141,7 +141,7 @@ elements: {
 },
 
 /* ==========================================
-   HANDLER REFERENZEN
+   HANDLER
 ========================================== */
 
 handlers: {
@@ -216,6 +216,62 @@ init() {
     this.createHandlers();
 
     this.registerEvents();
+
+},
+
+/* ==========================================
+   HANDLER ERSTELLEN
+========================================== */
+
+createHandlers() {
+
+    this.handlers.pointerDown =
+
+        (event) => {
+
+            this.onPointerDown(
+                event
+            );
+
+        };
+
+    this.handlers.pointerMove =
+
+        (event) => {
+
+            this.onPointerMove(
+                event
+            );
+
+        };
+
+    this.handlers.pointerUp =
+
+        (event) => {
+
+            this.onPointerUp(
+                event
+            );
+
+        };
+
+    this.handlers.pointerCancel =
+
+        () => {
+
+            this.cancelDrag();
+
+        };
+
+    this.handlers.resize =
+
+        () => {
+
+            this.updateCards();
+
+            this.updateTrackHeight();
+
+        };
 
 },
 
