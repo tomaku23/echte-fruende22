@@ -118,160 +118,145 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       ELEMENTE
-    ========================================== */
+   ELEMENTE
+========================================== */
 
-    elements: {
+elements: {
 
-        section:
-            null,
+    section:
+        null,
 
-        root:
-            null,
+    root:
+        null,
 
-        viewport:
-            null,
+    viewport:
+        null,
 
-        track:
-            null,
+    track:
+        null,
 
-        indicators:
-            null
+    indicators:
+        null
 
-    },
+},
 
-    /* ==========================================
-       HANDLER
-    ========================================== */
+/* ==========================================
+   INITIALISIERUNG
+========================================== */
 
-    handlers: {
+init() {
 
-        pointerDown:
-            null,
+    this.elements.section =
 
-        pointerMove:
-            null,
+        document.querySelector(
+            "[data-highlights-section]"
+        );
 
-        pointerUp:
-            null,
+    this.elements.root =
 
-        pointerCancel:
-            null,
+        document.querySelector(
+            "[data-highlights]"
+        );
 
-        resize:
-            null
+    this.elements.viewport =
 
-    },
+        document.querySelector(
+            "[data-highlights-viewport]"
+        );
 
-    /* ==========================================
-       INITIALISIERUNG
-    ========================================== */
+    this.elements.track =
 
-    init() {
+        document.querySelector(
+            "[data-highlights-track]"
+        );
 
-        this.elements.section =
+    this.elements.indicators =
 
-            document.querySelector(
-                "[data-highlights-section]"
+        document.querySelector(
+            "[data-highlights-indicators]"
+        );
+
+    if (
+
+        !this.elements.root ||
+
+        !this.elements.viewport ||
+
+        !this.elements.track
+
+    ) {
+
+        return;
+
+    }
+
+    this.createHandlers();
+
+    this.registerEvents();
+
+},
+
+/* ==========================================
+   HANDLER
+========================================== */
+
+createHandlers() {
+
+    this.handlers.pointerDown =
+
+        (event) => {
+
+            this.onPointerDown(
+                event
             );
 
-        this.elements.root =
+        };
 
-            document.querySelector(
-                "[data-highlights]"
+    this.handlers.pointerMove =
+
+        (event) => {
+
+            this.onPointerMove(
+                event
             );
 
-        this.elements.viewport =
+        };
 
-            document.querySelector(
-                "[data-highlights-viewport]"
+    this.handlers.pointerUp =
+
+        (event) => {
+
+            this.onPointerUp(
+                event
             );
 
-        this.elements.track =
+        };
 
-            document.querySelector(
-                "[data-highlights-track]"
-            );
+    this.handlers.pointerCancel =
 
-        this.elements.indicators =
+        () => {
 
-            document.querySelector(
-                "[data-highlights-indicators]"
-            );
+            this.cancelDrag();
 
-        if (
+        };
 
-            !this.elements.root ||
+    this.handlers.resize =
 
-            !this.elements.viewport ||
+        () => {
 
-            !this.elements.track
+            this.updateCards();
 
-        ) {
+            this.updateTrackHeight();
 
-            return;
+        };
 
-        }
+},
 
-        this.createHandlers();
+/* ==========================================
+   EVENTS
+========================================== */
 
-        this.registerEvents();
-
-    },
-
-    /* ==========================================
-       HANDLER
-    ========================================== */
-
-    createHandlers() {
-
-        this.handlers.pointerDown =
-
-            (event) => {
-
-                this.onPointerDown(
-                    event
-                );
-
-            };
-
-        this.handlers.pointerMove =
-
-            (event) => {
-
-                this.onPointerMove(
-                    event
-                );
-
-            };
-
-        this.handlers.pointerUp =
-
-            (event) => {
-
-                this.onPointerUp(
-                    event
-                );
-
-            };
-
-        this.handlers.pointerCancel =
-
-            () => {
-
-                this.cancelDrag();
-
-            };
-
-        this.handlers.resize =
-
-            () => {
-
-                this.updateCards();
-
-            };
-
-    },
+registerEvents() {
 
     /* ==========================================
        EVENTS
@@ -358,22 +343,24 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       RENDERN
-    ========================================== */
+   RENDERN
+========================================== */
 
-    render() {
+render() {
 
-        this.renderCards();
+    this.renderCards();
 
-        this.renderIndicators();
+    this.renderIndicators();
 
-        this.updateIndicators();
+    this.updateIndicators();
 
-        this.updateVisibility();
+    this.updateVisibility();
 
-        this.updateCards();
+    this.updateCards();
 
-    },
+    this.updateTrackHeight();
+
+},
 
     /* ==========================================
        KARTEN RENDERN
@@ -961,6 +948,82 @@ EF22.highlights = {
         );
 
     },
+
+/* ==========================================
+   TRACK HÖHE
+========================================== */
+
+updateTrackHeight() {
+
+    if (!this.elements.track) {
+
+        return;
+
+    }
+
+    const cards =
+
+        Array.from(
+
+            this.elements.track.querySelectorAll(
+                ".highlight-card"
+            )
+
+        );
+
+    if (!cards.length) {
+
+        this.elements.track.style.height =
+            "";
+
+        return;
+
+    }
+
+    let maxHeight =
+        0;
+
+    cards.forEach(
+
+        (card) => {
+
+            maxHeight =
+
+                Math.max(
+
+                    maxHeight,
+
+                    card.offsetHeight
+
+                );
+
+        }
+
+    );
+
+    const styles =
+
+        getComputedStyle(
+            this.elements.track
+        );
+
+    const paddingTop =
+
+        parseFloat(
+            styles.paddingTop
+        ) || 0;
+
+    const paddingBottom =
+
+        parseFloat(
+            styles.paddingBottom
+        ) || 0;
+
+    this.elements.track.style.height =
+
+        `${maxHeight + paddingTop + paddingBottom}px`;
+
+},
 
     /* ==========================================
        EINZELNE KARTE POSITIONIEREN

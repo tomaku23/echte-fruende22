@@ -154,38 +154,6 @@
 
 
 /* ==========================================
-   HÖHENREFERENZ
-
-   Eine Karte bleibt zusätzlich im normalen
-   Dokumentfluss, damit der Track die Höhe
-   des Carousels kennt.
-
-   JS setzt alle Karten absolut.
-   Deshalb reservieren wir die Höhe über
-   ein unsichtbares Pseudo-Element.
-========================================== */
-
-.highlights-track::before {
-
-    content:
-        "";
-
-    display:
-        block;
-
-    width:
-        85%;
-
-    margin:
-        0 auto;
-
-    aspect-ratio:
-        16 / 9;
-
-}
-
-
-/* ==========================================
    MEDIA
 ========================================== */
 
