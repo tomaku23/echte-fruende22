@@ -141,6 +141,29 @@ elements: {
 },
 
 /* ==========================================
+   HANDLER REFERENZEN
+========================================== */
+
+handlers: {
+
+    pointerDown:
+        null,
+
+    pointerMove:
+        null,
+
+    pointerUp:
+        null,
+
+    pointerCancel:
+        null,
+
+    resize:
+        null
+
+},
+
+/* ==========================================
    INITIALISIERUNG
 ========================================== */
 
@@ -193,62 +216,6 @@ init() {
     this.createHandlers();
 
     this.registerEvents();
-
-},
-
-/* ==========================================
-   HANDLER
-========================================== */
-
-createHandlers() {
-
-    this.handlers.pointerDown =
-
-        (event) => {
-
-            this.onPointerDown(
-                event
-            );
-
-        };
-
-    this.handlers.pointerMove =
-
-        (event) => {
-
-            this.onPointerMove(
-                event
-            );
-
-        };
-
-    this.handlers.pointerUp =
-
-        (event) => {
-
-            this.onPointerUp(
-                event
-            );
-
-        };
-
-    this.handlers.pointerCancel =
-
-        () => {
-
-            this.cancelDrag();
-
-        };
-
-    this.handlers.resize =
-
-        () => {
-
-            this.updateCards();
-
-            this.updateTrackHeight();
-
-        };
 
 },
 
