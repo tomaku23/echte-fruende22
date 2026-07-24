@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HIGHLIGHTS.JS
- Version 3.0
+ Version 4.0
 =====================================================
 */
 
@@ -17,6 +17,67 @@ window.EF22 ??= {};
 EF22.highlights = {
 
     /* ==========================================
+       KONFIGURATION
+    ========================================== */
+
+    config: {
+
+        /*
+         * Abstand zwischen den Mittelpunkten
+         * zweier Karten relativ zur
+         * Viewport-Breite.
+         */
+
+        spacing:
+            0.58,
+
+        /*
+         * Größe der direkten Nachbarkarten.
+         */
+
+        sideScale:
+            0.90,
+
+        /*
+         * Minimale Größe weiter entfernter
+         * Karten.
+         */
+
+        farScale:
+            0.82,
+
+        /*
+         * Sichtbarkeit der Nachbarkarten.
+         */
+
+        sideOpacity:
+            0.78,
+
+        /*
+         * Ab dieser Entfernung von der Mitte
+         * werden Karten vollständig unsichtbar.
+         */
+
+        visibilityRange:
+            2.25,
+
+        /*
+         * Mindestbewegung für einen Wechsel.
+         */
+
+        swipeThreshold:
+            0.16,
+
+        /*
+         * Dauer des Einrastens.
+         */
+
+        snapDuration:
+            320
+
+    },
+
+    /* ==========================================
        STATE
     ========================================== */
 
@@ -24,21 +85,35 @@ EF22.highlights = {
 
         events: [],
 
-        activeIndex: 0,
+        activeIndex:
+            0,
 
-        dragging: false,
+        dragging:
+            false,
 
-        animating: false,
+        animating:
+            false,
 
-        startX: 0,
+        pointerId:
+            null,
 
-        deltaX: 0,
+        startX:
+            0,
 
-        pointerId: null,
+        currentX:
+            0,
 
-        direction: null,
+        dragOffset:
+            0,
 
-        dragProgress: 0
+        moved:
+            false,
+
+        suppressClick:
+            false,
+
+        animationFrame:
+            null
 
     },
 
@@ -48,15 +123,20 @@ EF22.highlights = {
 
     elements: {
 
-        section: null,
+        section:
+            null,
 
-        root: null,
+        root:
+            null,
 
-        viewport: null,
+        viewport:
+            null,
 
-        track: null,
+        track:
+            null,
 
-        indicators: null
+        indicators:
+            null
 
     },
 
@@ -66,15 +146,20 @@ EF22.highlights = {
 
     handlers: {
 
-        pointerDown: null,
+        pointerDown:
+            null,
 
-        pointerMove: null,
+        pointerMove:
+            null,
 
-        pointerUp: null,
+        pointerUp:
+            null,
 
-        pointerCancel: null,
+        pointerCancel:
+            null,
 
-        resize: null
+        resize:
+            null
 
     },
 
@@ -182,7 +267,7 @@ EF22.highlights = {
 
             () => {
 
-                this.renderCards();
+                this.updateCards();
 
             };
 
@@ -209,7 +294,8 @@ EF22.highlights = {
             this.handlers.pointerMove,
 
             {
-                passive: false
+                passive:
+                    false
             }
 
         );
@@ -252,6 +338,8 @@ EF22.highlights = {
 
         }
 
+        this.stopAnimation();
+
         this.state.events =
 
             Array.isArray(events)
@@ -260,7 +348,8 @@ EF22.highlights = {
 
                 : [];
 
-        this.state.activeIndex = 0;
+        this.state.activeIndex =
+            0;
 
         this.resetInteraction();
 
@@ -282,54 +371,7 @@ EF22.highlights = {
 
         this.updateVisibility();
 
-    },
-
-    /* ==========================================
-       INDEX NORMALISIEREN
-    ========================================== */
-
-    normalizeIndex(index) {
-
-        const count =
-
-            this.state.events.length;
-
-        if (!count) {
-
-            return 0;
-
-        }
-
-        return (
-
-            (
-                index % count
-            ) +
-            count
-
-        ) % count;
-
-    },
-
-    /* ==========================================
-       EVENT HOLEN
-    ========================================== */
-
-    getEvent(index) {
-
-        if (!this.state.events.length) {
-
-            return null;
-
-        }
-
-        return this.state.events[
-
-            this.normalizeIndex(
-                index
-            )
-
-        ];
+        this.updateCards();
 
     },
 
@@ -348,200 +390,20 @@ EF22.highlights = {
         this.elements.track.innerHTML =
             "";
 
-        const count =
+        this.state.events.forEach(
 
-            this.state.events.length;
-
-        if (!count) {
-
-            return;
-
-        }
-
-        /* ======================================
-           EIN HIGHLIGHT
-        ====================================== */
-
-        if (count === 1) {
-
-            this.elements.track.append(
-
-                this.createCard(
-
-                    this.state.events[0],
-
-                    0,
-
-                    "active"
-
-                )
-
-            );
-
-            return;
-
-        }
-
-        /* ======================================
-           ZWEI HIGHLIGHTS
-        ====================================== */
-
-        if (count === 2) {
-
-            if (
-
-                this.state.activeIndex ===
-                0
-
-            ) {
+            (event, index) => {
 
                 this.elements.track.append(
 
                     this.createCard(
-
-                        this.state.events[0],
-
-                        0,
-
-                        "active"
-
-                    ),
-
-                    this.createCard(
-
-                        this.state.events[1],
-
-                        1,
-
-                        "right"
-
+                        event,
+                        index
                     )
 
                 );
 
             }
-
-            else {
-
-                this.elements.track.append(
-
-                    this.createCard(
-
-                        this.state.events[0],
-
-                        0,
-
-                        "left"
-
-                    ),
-
-                    this.createCard(
-
-                        this.state.events[1],
-
-                        1,
-
-                        "active"
-
-                    )
-
-                );
-
-            }
-
-            return;
-
-        }
-
-        /* ======================================
-           DREI ODER MEHR
-
-           Drei sichtbare Karten:
-
-           LEFT | ACTIVE | RIGHT
-
-           plus unsichtbarer BACK-Slot.
-
-           BACK bekommt seinen endgültigen
-           Inhalt erst beim Drag.
-        ====================================== */
-
-        const previousIndex =
-
-            this.normalizeIndex(
-
-                this.state.activeIndex -
-                1
-
-            );
-
-        const nextIndex =
-
-            this.normalizeIndex(
-
-                this.state.activeIndex +
-                1
-
-            );
-
-        const backIndex =
-
-            this.normalizeIndex(
-
-                this.state.activeIndex +
-                2
-
-            );
-
-        this.elements.track.append(
-
-            this.createCard(
-
-                this.getEvent(
-                    previousIndex
-                ),
-
-                previousIndex,
-
-                "left"
-
-            ),
-
-            this.createCard(
-
-                this.getEvent(
-                    this.state.activeIndex
-                ),
-
-                this.state.activeIndex,
-
-                "active"
-
-            ),
-
-            this.createCard(
-
-                this.getEvent(
-                    nextIndex
-                ),
-
-                nextIndex,
-
-                "right"
-
-            ),
-
-            this.createCard(
-
-                this.getEvent(
-                    backIndex
-                ),
-
-                backIndex,
-
-                "back"
-
-            )
 
         );
 
@@ -551,11 +413,7 @@ EF22.highlights = {
        KARTE ERSTELLEN
     ========================================== */
 
-    createCard(
-        event,
-        index,
-        position
-    ) {
+    createCard(event, index) {
 
         const props =
 
@@ -573,34 +431,18 @@ EF22.highlights = {
             "button";
 
         card.className =
-
-            `highlight-card highlight-card--${position}`;
+            "highlight-card";
 
         card.dataset.highlightIndex =
             String(index);
-
-        card.dataset.highlightPosition =
-            position;
 
         card.setAttribute(
 
             "aria-label",
 
-            `Details zu ${event?.title ?? "Highlight"}`
+            `Details zu ${event.title ?? "Highlight"}`
 
         );
-
-        if (position === "active") {
-
-            card.setAttribute(
-
-                "aria-current",
-
-                "true"
-
-            );
-
-        }
 
         /* ======================================
            MEDIA
@@ -723,13 +565,7 @@ EF22.highlights = {
 
             (clickEvent) => {
 
-                if (
-
-                    Math.abs(
-                        this.state.deltaX
-                    ) > 8
-
-                ) {
+                if (this.state.suppressClick) {
 
                     clickEvent.preventDefault();
 
@@ -737,23 +573,43 @@ EF22.highlights = {
 
                 }
 
-                if (position === "left") {
+                const relative =
 
-                    this.goPrevious();
+                    this.getRelativeIndex(
+                        index
+                    );
+
+                /*
+                 * Direkter Nachbar:
+                 * Karte aktivieren.
+                 */
+
+                if (relative === 1) {
+
+                    this.snapToNeighbour(
+                        1
+                    );
 
                     return;
 
                 }
 
-                if (position === "right") {
+                if (relative === -1) {
 
-                    this.goNext();
+                    this.snapToNeighbour(
+                        -1
+                    );
 
                     return;
 
                 }
 
-                if (position !== "active") {
+                /*
+                 * Nur aktive Karte
+                 * öffnet das Modal.
+                 */
+
+                if (relative !== 0) {
 
                     return;
 
@@ -768,212 +624,6 @@ EF22.highlights = {
         );
 
         return card;
-
-    },
-
-    /* ==========================================
-       KARTE AKTUALISIEREN
-    ========================================== */
-
-    updateCardContent(
-        card,
-        event,
-        index
-    ) {
-
-        if (
-
-            !card ||
-
-            !event
-
-        ) {
-
-            return;
-
-        }
-
-        const props =
-
-            EF22.utils.getProps(
-                event
-            );
-
-        card.dataset.highlightIndex =
-            String(index);
-
-        card.setAttribute(
-
-            "aria-label",
-
-            `Details zu ${event.title ?? "Highlight"}`
-
-        );
-
-        const media =
-
-            card.querySelector(
-                ".highlight-card-media"
-            );
-
-        const image =
-
-            props.image &&
-
-            String(
-                props.image
-            ).trim() !== ""
-
-                ? String(
-                    props.image
-                )
-
-                : EF22.config
-                    ?.images
-                    ?.heroFallbackLandscape;
-
-        if (media) {
-
-            media.style.backgroundImage =
-
-                image
-
-                    ? `url("${image}")`
-
-                    : "";
-
-        }
-
-        const type =
-
-            card.querySelector(
-                ".highlight-card-title"
-            );
-
-        if (type) {
-
-            type.textContent =
-
-                props.type ??
-
-                props.category ??
-
-                "";
-
-            type.hidden =
-
-                !type.textContent.trim();
-
-        }
-
-        const date =
-
-            card.querySelector(
-                ".highlight-card-date"
-            );
-
-        if (date) {
-
-            date.textContent =
-
-                this.formatMonthYear(
-                    event.start
-                );
-
-        }
-
-    },
-
-    /* ==========================================
-       SCHRÖDINGERS HIGHLIGHT
-
-       Der BACK-Slot wird erst dann eindeutig,
-       wenn die Drag-Richtung feststeht.
-    ========================================== */
-
-    prepareBackCard(direction) {
-
-        if (
-
-            this.state.events.length < 3 ||
-
-            !this.elements.track
-
-        ) {
-
-            return;
-
-        }
-
-        const back =
-
-            this.elements.track.querySelector(
-                ".highlight-card--back"
-            );
-
-        if (!back) {
-
-            return;
-
-        }
-
-        let index;
-
-        /*
-         * NEXT:
-         *
-         * LEFT   = active - 1
-         * ACTIVE = active
-         * RIGHT  = active + 1
-         * BACK   = active + 2
-         */
-
-        if (direction === "next") {
-
-            index =
-
-                this.normalizeIndex(
-
-                    this.state.activeIndex +
-                    2
-
-                );
-
-        }
-
-        /*
-         * PREVIOUS:
-         *
-         * BACK   = active - 2
-         * LEFT   = active - 1
-         * ACTIVE = active
-         * RIGHT  = active + 1
-         */
-
-        else {
-
-            index =
-
-                this.normalizeIndex(
-
-                    this.state.activeIndex -
-                    2
-
-                );
-
-        }
-
-        this.updateCardContent(
-
-            back,
-
-            this.getEvent(
-                index
-            ),
-
-            index
-
-        );
 
     },
 
@@ -1021,64 +671,542 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       DARF ZURÜCK
+       INDEX NORMALISIEREN
     ========================================== */
 
-    canGoPrevious() {
+    normalizeIndex(index) {
 
         const count =
 
             this.state.events.length;
 
-        if (count <= 1) {
+        if (!count) {
 
-            return false;
-
-        }
-
-        if (count === 2) {
-
-            return (
-
-                this.state.activeIndex ===
-                1
-
-            );
+            return 0;
 
         }
 
-        return true;
+        return (
+
+            (
+                index % count
+            ) +
+            count
+
+        ) % count;
 
     },
 
     /* ==========================================
-       DARF VOR
+       RELATIVER INDEX
+
+       Liefert die kürzeste Entfernung einer
+       Karte zur aktiven Karte im Ring.
+
+       Beispiel bei 5 Karten:
+
+       active = 0
+
+       Karte 0 =  0
+       Karte 1 = +1
+       Karte 2 = +2
+       Karte 3 = -2
+       Karte 4 = -1
     ========================================== */
 
-    canGoNext() {
+    getRelativeIndex(index) {
 
         const count =
 
             this.state.events.length;
 
-        if (count <= 1) {
+        if (!count) {
 
-            return false;
+            return 0;
 
         }
+
+        /*
+         * Zwei Karten sind kein Ring.
+         */
 
         if (count === 2) {
 
             return (
 
-                this.state.activeIndex ===
-                0
+                index -
+                this.state.activeIndex
 
             );
 
         }
 
-        return true;
+        let difference =
+
+            index -
+            this.state.activeIndex;
+
+        const half =
+
+            count /
+            2;
+
+        while (difference > half) {
+
+            difference -=
+                count;
+
+        }
+
+        while (difference < -half) {
+
+            difference +=
+                count;
+
+        }
+
+        /*
+         * Bei gerader Kartenanzahl liegt die
+         * exakt gegenüberliegende Karte
+         * mathematisch auf beiden Seiten.
+
+         * Wir halten ihre Richtung stabil.
+        */
+
+        if (
+
+            count % 2 === 0 &&
+
+            Math.abs(difference) === half
+
+        ) {
+
+            difference =
+
+                index >=
+                this.state.activeIndex
+
+                    ? half
+
+                    : -half;
+
+        }
+
+        return difference;
+
+    },
+
+    /* ==========================================
+       VIEWPORT BREITE
+    ========================================== */
+
+    getViewportWidth() {
+
+        return Math.max(
+
+            1,
+
+            this.elements.viewport
+                ?.clientWidth ??
+
+            1
+
+        );
+
+    },
+
+    /* ==========================================
+       KARTENABSTAND
+    ========================================== */
+
+    getCardSpacing() {
+
+        return (
+
+            this.getViewportWidth() *
+
+            this.config.spacing
+
+        );
+
+    },
+
+    /* ==========================================
+       DRAG IN KARTENPOSITIONEN
+
+       1.0 entspricht genau dem Abstand
+       zweier Karten.
+    ========================================== */
+
+    getDragPosition() {
+
+        const spacing =
+
+            this.getCardSpacing();
+
+        if (!spacing) {
+
+            return 0;
+
+        }
+
+        return (
+
+            this.state.dragOffset /
+            spacing
+
+        );
+
+    },
+
+    /* ==========================================
+       KARTEN AKTUALISIEREN
+    ========================================== */
+
+    updateCards() {
+
+        if (!this.elements.track) {
+
+            return;
+
+        }
+
+        const cards =
+
+            this.elements.track.querySelectorAll(
+                ".highlight-card"
+            );
+
+        const count =
+
+            cards.length;
+
+        if (!count) {
+
+            return;
+
+        }
+
+        /*
+         * Eine Karte steht einfach mittig.
+         */
+
+        if (count === 1) {
+
+            const card =
+                cards[0];
+
+            card.style.transform =
+
+                "translateX(-50%) scale(1)";
+
+            card.style.opacity =
+                "1";
+
+            card.style.zIndex =
+                "10";
+
+            card.style.pointerEvents =
+                "auto";
+
+            card.setAttribute(
+                "aria-current",
+                "true"
+            );
+
+            return;
+
+        }
+
+        const dragPosition =
+
+            this.getDragPosition();
+
+        cards.forEach(
+
+            (card, index) => {
+
+                /*
+                 * Finger nach links:
+                 *
+                 * dragPosition negativ.
+                 *
+                 * Rechte Karte bewegt sich
+                 * dadurch Richtung Mitte.
+                 */
+
+                const basePosition =
+
+                    this.getRelativeIndex(
+                        index
+                    );
+
+                const position =
+
+                    basePosition +
+                    dragPosition;
+
+                this.positionCard(
+
+                    card,
+
+                    position,
+
+                    index
+
+                );
+
+            }
+
+        );
+
+    },
+
+    /* ==========================================
+       EINZELNE KARTE POSITIONIEREN
+    ========================================== */
+
+    positionCard(
+        card,
+        position,
+        index
+    ) {
+
+        const absolute =
+
+            Math.abs(
+                position
+            );
+
+        /*
+         * X-Position.
+
+         * position 0  = Mitte
+         * position 1  = rechts
+         * position -1 = links
+        */
+
+        const x =
+
+            position *
+
+            this.config.spacing *
+
+            100;
+
+        /*
+         * Skalierung.
+
+         * Zwischen Mitte und Nachbar wird
+         * kontinuierlich interpoliert.
+        */
+
+        let scale;
+
+        if (absolute <= 1) {
+
+            scale =
+
+                this.lerp(
+
+                    1,
+
+                    this.config.sideScale,
+
+                    absolute
+
+                );
+
+        }
+
+        else {
+
+            scale =
+
+                this.lerp(
+
+                    this.config.sideScale,
+
+                    this.config.farScale,
+
+                    Math.min(
+                        1,
+                        absolute - 1
+                    )
+
+                );
+
+        }
+
+        /*
+         * Opacity.
+
+         * Direkte Nachbarn bleiben sichtbar.
+         * Weiter entfernte Karten verschwinden
+         * weich außerhalb des Viewports.
+        */
+
+        let opacity;
+
+        if (absolute <= 1) {
+
+            opacity =
+
+                this.lerp(
+
+                    1,
+
+                    this.config.sideOpacity,
+
+                    absolute
+
+                );
+
+        }
+
+        else {
+
+            opacity =
+
+                this.lerp(
+
+                    this.config.sideOpacity,
+
+                    0,
+
+                    Math.min(
+
+                        1,
+
+                        (
+                            absolute - 1
+                        ) /
+                        (
+                            this.config.visibilityRange -
+                            1
+                        )
+
+                    )
+
+                );
+
+        }
+
+        if (
+
+            absolute >=
+            this.config.visibilityRange
+
+        ) {
+
+            opacity =
+                0;
+
+        }
+
+        /*
+         * Je näher zur Mitte,
+         * desto weiter vorne.
+        */
+
+        const zIndex =
+
+            Math.max(
+
+                1,
+
+                100 -
+                Math.round(
+                    absolute * 10
+                )
+
+            );
+
+        card.style.transform =
+
+            `translateX(calc(-50% + ${x}%)) scale(${scale})`;
+
+        card.style.opacity =
+
+            String(
+                opacity
+            );
+
+        card.style.zIndex =
+
+            String(
+                zIndex
+            );
+
+        /*
+         * Nur Karten im sichtbaren Bereich
+         * sollen anklickbar sein.
+        */
+
+        card.style.pointerEvents =
+
+            absolute <= 1.15
+
+                ? "auto"
+
+                : "none";
+
+        /*
+         * aria-current gehört nur zur
+         * tatsächlich eingerasteten Karte.
+        */
+
+        if (
+
+            index ===
+            this.state.activeIndex &&
+
+            !this.state.dragging
+
+        ) {
+
+            card.setAttribute(
+
+                "aria-current",
+
+                "true"
+
+            );
+
+        }
+
+        else {
+
+            card.removeAttribute(
+                "aria-current"
+            );
+
+        }
+
+    },
+
+    /* ==========================================
+       INTERPOLATION
+    ========================================== */
+
+    lerp(
+        start,
+        end,
+        progress
+    ) {
+
+        return (
+
+            start +
+
+            (
+                end -
+                start
+            ) *
+
+            progress
+
+        );
 
     },
 
@@ -1112,6 +1240,8 @@ EF22.highlights = {
 
         }
 
+        this.stopAnimation();
+
         this.state.dragging =
             true;
 
@@ -1121,20 +1251,19 @@ EF22.highlights = {
         this.state.startX =
             event.clientX;
 
-        this.state.deltaX =
+        this.state.currentX =
+            event.clientX;
+
+        this.state.dragOffset =
             0;
 
-        this.state.direction =
-            null;
+        this.state.moved =
+            false;
 
-        this.state.dragProgress =
-            0;
+        this.state.suppressClick =
+            false;
 
         this.elements.viewport.classList.add(
-            "is-dragging"
-        );
-
-        this.elements.track.classList.add(
             "is-dragging"
         );
 
@@ -1176,106 +1305,77 @@ EF22.highlights = {
 
         }
 
-        let delta =
+        this.state.currentX =
+            event.clientX;
 
-            event.clientX -
+        let offset =
+
+            this.state.currentX -
             this.state.startX;
 
         /*
-         * Richtung erst nach ein paar Pixeln
-         * festlegen. Dadurch reagiert das
-         * Carousel nicht auf jedes Zittern.
-         */
+         * Bei zwei Highlights gibt es
+         * echte Endpunkte.
+
+         * Dort federt die Bewegung außerhalb
+         * des erlaubten Bereichs nur leicht.
+        */
 
         if (
 
-            !this.state.direction &&
-
-            Math.abs(delta) >= 5
+            this.state.events.length === 2
 
         ) {
 
-            this.state.direction =
+            if (
 
-                delta < 0
+                this.state.activeIndex === 0 &&
 
-                    ? "next"
+                offset > 0
 
-                    : "previous";
+            ) {
 
-            this.prepareBackCard(
+                offset *=
+                    .16;
 
-                this.state.direction
+            }
 
-            );
+            if (
+
+                this.state.activeIndex === 1 &&
+
+                offset < 0
+
+            ) {
+
+                offset *=
+                    .16;
+
+            }
 
         }
 
-        /*
-         * Zwei Highlights besitzen echte Enden.
-         */
+        this.state.dragOffset =
+            offset;
 
         if (
 
-            delta > 0 &&
-
-            !this.canGoPrevious()
-
-        ) {
-
-            delta *=
-                .18;
-
-        }
-
-        if (
-
-            delta < 0 &&
-
-            !this.canGoNext()
+            Math.abs(offset) >
+            4
 
         ) {
 
-            delta *=
-                .18;
+            this.state.moved =
+                true;
 
-        }
-
-        this.state.deltaX =
-            delta;
-
-        const distance =
-
-            this.getRotationDistance();
-
-        this.state.dragProgress =
-
-            Math.min(
-
-                1,
-
-                Math.abs(delta) /
-                distance
-
-            );
-
-        this.applyCarouselProgress(
-
-            delta,
-
-            this.state.dragProgress
-
-        );
-
-        if (
-
-            Math.abs(delta) > 4
-
-        ) {
+            this.state.suppressClick =
+                true;
 
             event.preventDefault();
 
         }
+
+        this.updateCards();
 
     },
 
@@ -1298,18 +1398,6 @@ EF22.highlights = {
 
         }
 
-        const delta =
-
-            this.state.deltaX;
-
-        const progress =
-
-            this.state.dragProgress;
-
-        const direction =
-
-            this.state.direction;
-
         this.state.dragging =
             false;
 
@@ -1317,601 +1405,193 @@ EF22.highlights = {
             "is-dragging"
         );
 
-        this.elements.track.classList.remove(
+        const viewportWidth =
+
+            this.getViewportWidth();
+
+        const threshold =
+
+            viewportWidth *
+
+            this.config.swipeThreshold;
+
+        const offset =
+
+            this.state.dragOffset;
+
+        let direction =
+            0;
+
+        /*
+         * WICHTIG:
+
+         * Egal wie weit gezogen wurde:
+         * pro Geste maximal EIN Nachbar.
+        */
+
+        if (
+
+            offset <=
+            -threshold
+
+        ) {
+
+            direction =
+                1;
+
+        }
+
+        else if (
+
+            offset >=
+            threshold
+
+        ) {
+
+            direction =
+                -1;
+
+        }
+
+        /*
+         * Zwei Highlights besitzen Grenzen.
+        */
+
+        if (
+
+            this.state.events.length === 2
+
+        ) {
+
+            if (
+
+                this.state.activeIndex === 0 &&
+
+                direction === -1
+
+            ) {
+
+                direction =
+                    0;
+
+            }
+
+            if (
+
+                this.state.activeIndex === 1 &&
+
+                direction === 1
+
+            ) {
+
+                direction =
+                    0;
+
+            }
+
+        }
+
+        this.snap(
+            direction
+        );
+
+    },
+
+    /* ==========================================
+       DRAG ABBRECHEN
+    ========================================== */
+
+    cancelDrag() {
+
+        if (!this.state.dragging) {
+
+            return;
+
+        }
+
+        this.state.dragging =
+            false;
+
+        this.elements.viewport?.classList.remove(
             "is-dragging"
         );
 
-        /*
-         * Etwa ein Drittel einer Drehung
-         * reicht zum Einrasten.
-         */
-
-        const commit =
-
-            progress >= .32;
-
-        if (
-
-            commit &&
-
-            direction === "next" &&
-
-            this.canGoNext()
-
-        ) {
-
-            this.completeRotation(
-                "next"
-            );
-
-            return;
-
-        }
-
-        if (
-
-            commit &&
-
-            direction === "previous" &&
-
-            this.canGoPrevious()
-
-        ) {
-
-            this.completeRotation(
-                "previous"
-            );
-
-            return;
-
-        }
-
-        this.returnToCenter();
-
-    },
-
-    /* ==========================================
-       ROTATIONSDISTANZ
-    ========================================== */
-
-    getRotationDistance() {
-
-        if (!this.elements.viewport) {
-
-            return 300;
-
-        }
-
-        return Math.max(
-
-            220,
-
-            this.elements.viewport.clientWidth *
-                .62
-
+        this.snap(
+            0
         );
 
     },
 
     /* ==========================================
-       INTERPOLATION
+       ZUM NACHBARN EINRASTEN
     ========================================== */
 
-    lerp(
-        start,
-        end,
-        progress
-    ) {
+    snapToNeighbour(direction) {
 
-        return (
+        if (
 
-            start +
+            this.state.animating ||
 
-            (
-                end -
-                start
-            ) *
+            this.state.events.length <= 1
 
-            progress
+        ) {
 
+            return;
+
+        }
+
+        if (
+
+            this.state.events.length === 2
+
+        ) {
+
+            if (
+
+                direction === -1 &&
+
+                this.state.activeIndex === 0
+
+            ) {
+
+                return;
+
+            }
+
+            if (
+
+                direction === 1 &&
+
+                this.state.activeIndex === 1
+
+            ) {
+
+                return;
+
+            }
+
+        }
+
+        this.state.dragOffset =
+            0;
+
+        this.snap(
+            direction
         );
 
     },
 
     /* ==========================================
-       TRANSFORM SETZEN
+       SNAP
+
+       direction:
+
+        -1 = vorherige Karte
+         0 = zurück zur aktuellen
+        +1 = nächste Karte
     ========================================== */
 
-    setCardTransform(
-        card,
-        x,
-        scale,
-        opacity,
-        zIndex
-    ) {
-
-        if (!card) {
-
-            return;
-
-        }
-
-        card.style.transform =
-
-            `translateX(calc(-50% + ${x}%)) scale(${scale})`;
-
-        card.style.opacity =
-            String(opacity);
-
-        card.style.zIndex =
-            String(zIndex);
-
-    },
-
-    /* ==========================================
-       CAROUSEL PROGRESS
-
-       Hier passiert die eigentliche
-       "Würfeldrehung".
-    ========================================== */
-
-    applyCarouselProgress(
-        delta,
-        progress
-    ) {
-
-        if (!this.elements.track) {
-
-            return;
-
-        }
-
-        const left =
-
-            this.elements.track.querySelector(
-                ".highlight-card--left"
-            );
-
-        const active =
-
-            this.elements.track.querySelector(
-                ".highlight-card--active"
-            );
-
-        const right =
-
-            this.elements.track.querySelector(
-                ".highlight-card--right"
-            );
-
-        const back =
-
-            this.elements.track.querySelector(
-                ".highlight-card--back"
-            );
-
-        const count =
-
-            this.state.events.length;
-
-        /*
-         * ZWEI HIGHLIGHTS
-        ====================================== */
-
-        if (count === 2) {
-
-            if (delta < 0) {
-
-                /*
-                 * ACTIVE → LEFT
-                 * RIGHT  → ACTIVE
-                 */
-
-                this.setCardTransform(
-
-                    active,
-
-                    this.lerp(
-                        0,
-                        -54,
-                        progress
-                    ),
-
-                    this.lerp(
-                        1,
-                        .92,
-                        progress
-                    ),
-
-                    this.lerp(
-                        1,
-                        .78,
-                        progress
-                    ),
-
-                    progress < .5
-                        ? 10
-                        : 3
-
-                );
-
-                this.setCardTransform(
-
-                    right,
-
-                    this.lerp(
-                        54,
-                        0,
-                        progress
-                    ),
-
-                    this.lerp(
-                        .92,
-                        1,
-                        progress
-                    ),
-
-                    this.lerp(
-                        .78,
-                        1,
-                        progress
-                    ),
-
-                    progress < .5
-                        ? 3
-                        : 10
-
-                );
-
-            }
-
-            else {
-
-                /*
-                 * LEFT   → ACTIVE
-                 * ACTIVE → RIGHT
-                 */
-
-                this.setCardTransform(
-
-                    left,
-
-                    this.lerp(
-                        -54,
-                        0,
-                        progress
-                    ),
-
-                    this.lerp(
-                        .92,
-                        1,
-                        progress
-                    ),
-
-                    this.lerp(
-                        .78,
-                        1,
-                        progress
-                    ),
-
-                    progress < .5
-                        ? 3
-                        : 10
-
-                );
-
-                this.setCardTransform(
-
-                    active,
-
-                    this.lerp(
-                        0,
-                        54,
-                        progress
-                    ),
-
-                    this.lerp(
-                        1,
-                        .92,
-                        progress
-                    ),
-
-                    this.lerp(
-                        1,
-                        .78,
-                        progress
-                    ),
-
-                    progress < .5
-                        ? 10
-                        : 3
-
-                );
-
-            }
-
-            return;
-
-        }
-
-        /*
-         * DREHUNG ZUM NÄCHSTEN HIGHLIGHT
-        ====================================== */
-
-        if (this.state.direction === "next") {
-
-            /*
-             * LEFT → BACK
-             */
-
-            this.setCardTransform(
-
-                left,
-
-                this.lerp(
-                    -54,
-                    -88,
-                    progress
-                ),
-
-                this.lerp(
-                    .92,
-                    .82,
-                    progress
-                ),
-
-                this.lerp(
-                    .78,
-                    0,
-                    progress
-                ),
-
-                1
-
-            );
-
-            /*
-             * ACTIVE → LEFT
-             */
-
-            this.setCardTransform(
-
-                active,
-
-                this.lerp(
-                    0,
-                    -54,
-                    progress
-                ),
-
-                this.lerp(
-                    1,
-                    .92,
-                    progress
-                ),
-
-                this.lerp(
-                    1,
-                    .78,
-                    progress
-                ),
-
-                progress < .5
-                    ? 10
-                    : 4
-
-            );
-
-            /*
-             * RIGHT → ACTIVE
-             */
-
-            this.setCardTransform(
-
-                right,
-
-                this.lerp(
-                    54,
-                    0,
-                    progress
-                ),
-
-                this.lerp(
-                    .92,
-                    1,
-                    progress
-                ),
-
-                this.lerp(
-                    .78,
-                    1,
-                    progress
-                ),
-
-                progress < .5
-                    ? 4
-                    : 10
-
-            );
-
-            /*
-             * BACK → RIGHT
-             */
-
-            this.setCardTransform(
-
-                back,
-
-                this.lerp(
-                    88,
-                    54,
-                    progress
-                ),
-
-                this.lerp(
-                    .82,
-                    .92,
-                    progress
-                ),
-
-                this.lerp(
-                    0,
-                    .78,
-                    progress
-                ),
-
-                2
-
-            );
-
-            return;
-
-        }
-
-        /*
-         * DREHUNG ZUM VORHERIGEN HIGHLIGHT
-        ====================================== */
-
-        if (
-
-            this.state.direction ===
-            "previous"
-
-        ) {
-
-            /*
-             * RIGHT → BACK
-             */
-
-            this.setCardTransform(
-
-                right,
-
-                this.lerp(
-                    54,
-                    88,
-                    progress
-                ),
-
-                this.lerp(
-                    .92,
-                    .82,
-                    progress
-                ),
-
-                this.lerp(
-                    .78,
-                    0,
-                    progress
-                ),
-
-                1
-
-            );
-
-            /*
-             * ACTIVE → RIGHT
-             */
-
-            this.setCardTransform(
-
-                active,
-
-                this.lerp(
-                    0,
-                    54,
-                    progress
-                ),
-
-                this.lerp(
-                    1,
-                    .92,
-                    progress
-                ),
-
-                this.lerp(
-                    1,
-                    .78,
-                    progress
-                ),
-
-                progress < .5
-                    ? 10
-                    : 4
-
-            );
-
-            /*
-             * LEFT → ACTIVE
-             */
-
-            this.setCardTransform(
-
-                left,
-
-                this.lerp(
-                    -54,
-                    0,
-                    progress
-                ),
-
-                this.lerp(
-                    .92,
-                    1,
-                    progress
-                ),
-
-                this.lerp(
-                    .78,
-                    1,
-                    progress
-                ),
-
-                progress < .5
-                    ? 4
-                    : 10
-
-            );
-
-            /*
-             * BACK → LEFT
-             */
-
-            this.setCardTransform(
-
-                back,
-
-                this.lerp(
-                    -88,
-                    -54,
-                    progress
-                ),
-
-                this.lerp(
-                    .82,
-                    .92,
-                    progress
-                ),
-
-                this.lerp(
-                    0,
-                    .78,
-                    progress
-                ),
-
-                2
-
-            );
-
-        }
-
-    },
-
-    /* ==========================================
-       ROTATION ABSCHLIESSEN
-    ========================================== */
-
-    completeRotation(direction) {
+    snap(direction) {
 
         if (this.state.animating) {
 
@@ -1919,227 +1599,315 @@ EF22.highlights = {
 
         }
 
+        const startOffset =
+
+            this.state.dragOffset;
+
+        /*
+         * Zielposition relativ zur aktuell
+         * aktiven Karte.
+
+         * NEXT:
+         * Ring muss um einen Kartenabstand
+         * nach links.
+
+         * PREVIOUS:
+         * Ring muss nach rechts.
+        */
+
+        const targetOffset =
+
+            direction === 1
+
+                ? -this.getCardSpacing()
+
+                : direction === -1
+
+                    ? this.getCardSpacing()
+
+                    : 0;
+
         this.state.animating =
             true;
 
-        this.elements.track.classList.add(
-            "is-animating"
-        );
+        this.animateOffset(
 
-        this.state.direction =
-            direction;
+            startOffset,
 
-        this.applyCarouselProgress(
+            targetOffset,
 
-            direction === "next"
-                ? -1
-                : 1,
-
-            1
-
-        );
-
-        window.setTimeout(
+            this.config.snapDuration,
 
             () => {
 
-                if (direction === "next") {
+                /*
+                 * Erst NACH der sichtbaren
+                 * Bewegung wird activeIndex
+                 * geändert.
+                */
 
-                    this.state.activeIndex =
+                if (direction !== 0) {
 
-                        this.normalizeIndex(
+                    if (
 
-                            this.state.activeIndex +
-                            1
+                        this.state.events.length === 2
 
-                        );
+                    ) {
 
-                }
+                        this.state.activeIndex +=
+                            direction;
 
-                else {
+                    }
 
-                    this.state.activeIndex =
+                    else {
 
-                        this.normalizeIndex(
+                        this.state.activeIndex =
 
-                            this.state.activeIndex -
-                            1
+                            this.normalizeIndex(
 
-                        );
+                                this.state.activeIndex +
+                                direction
+
+                            );
+
+                    }
 
                 }
 
                 /*
-                 * Die Rotation ist fertig.
-                 * Jetzt ist der BACK-Slot
-                 * unsichtbar und wir dürfen
-                 * die vier DOM-Karten neu
-                 * belegen.
-                 */
+                 * Durch den neuen activeIndex
+                 * entspricht Offset 0 exakt
+                 * derselben visuellen Position.
 
-                this.elements.track.classList.remove(
-                    "is-animating"
-                );
+                 * Deshalb ist dieser Reset
+                 * unsichtbar.
+                */
 
-                this.clearInlineCardStyles();
+                this.state.dragOffset =
+                    0;
 
-                this.renderCards();
+                this.state.animating =
+                    false;
+
+                this.updateCards();
 
                 this.updateIndicators();
 
-                this.state.animating =
-                    false;
+                this.finishInteraction();
 
-                this.resetDragValues();
-
-            },
-
-            280
+            }
 
         );
 
     },
 
     /* ==========================================
-       ZUR MITTE ZURÜCK
+       OFFSET ANIMIEREN
     ========================================== */
 
-    returnToCenter() {
+    animateOffset(
+        from,
+        to,
+        duration,
+        callback
+    ) {
 
-        if (this.state.animating) {
+        this.stopAnimation();
 
-            return;
+        const startTime =
 
-        }
+            performance.now();
 
-        this.state.animating =
-            true;
+        const step =
 
-        this.elements.track.classList.add(
-            "is-animating"
-        );
+            (time) => {
 
-        this.clearInlineCardStyles();
+                const elapsed =
 
-        window.setTimeout(
+                    time -
+                    startTime;
 
-            () => {
+                const progress =
 
-                this.elements.track.classList.remove(
-                    "is-animating"
-                );
+                    Math.min(
 
-                this.renderCards();
+                        1,
 
-                this.state.animating =
-                    false;
+                        elapsed /
+                        duration
 
-                this.resetDragValues();
-
-            },
-
-            280
-
-        );
-
-    },
-
-    /* ==========================================
-       INLINE STYLES ENTFERNEN
-    ========================================== */
-
-    clearInlineCardStyles() {
-
-        this.elements.track
-            ?.querySelectorAll(
-                ".highlight-card"
-            )
-            .forEach(
-
-                (card) => {
-
-                    card.style.removeProperty(
-                        "transform"
                     );
 
-                    card.style.removeProperty(
-                        "opacity"
+                const eased =
+
+                    this.easeOutCubic(
+                        progress
                     );
 
-                    card.style.removeProperty(
-                        "z-index"
+                this.state.dragOffset =
+
+                    this.lerp(
+
+                        from,
+
+                        to,
+
+                        eased
+
                     );
+
+                this.updateCards();
+
+                if (progress < 1) {
+
+                    this.state.animationFrame =
+
+                        requestAnimationFrame(
+                            step
+                        );
+
+                    return;
 
                 }
 
+                this.state.animationFrame =
+                    null;
+
+                callback?.();
+
+            };
+
+        this.state.animationFrame =
+
+            requestAnimationFrame(
+                step
             );
 
     },
 
     /* ==========================================
-       DIREKT WEITER
+       EASING
     ========================================== */
 
-    goNext() {
+    easeOutCubic(value) {
 
-        if (
+        return (
 
-            this.state.animating ||
+            1 -
+            Math.pow(
+                1 - value,
+                3
+            )
 
-            !this.canGoNext()
-
-        ) {
-
-            return;
-
-        }
-
-        this.state.direction =
-            "next";
-
-        this.prepareBackCard(
-            "next"
-        );
-
-        this.completeRotation(
-            "next"
         );
 
     },
 
     /* ==========================================
-       DIREKT ZURÜCK
+       ANIMATION STOPPEN
     ========================================== */
 
-    goPrevious() {
+    stopAnimation() {
 
         if (
 
-            this.state.animating ||
-
-            !this.canGoPrevious()
+            this.state.animationFrame !==
+            null
 
         ) {
 
-            return;
+            cancelAnimationFrame(
+
+                this.state.animationFrame
+
+            );
+
+            this.state.animationFrame =
+                null;
 
         }
 
-        this.state.direction =
-            "previous";
+    },
 
-        this.prepareBackCard(
-            "previous"
-        );
+    /* ==========================================
+       INTERAKTION ABSCHLIESSEN
+    ========================================== */
 
-        this.completeRotation(
-            "previous"
+    finishInteraction() {
+
+        this.state.pointerId =
+            null;
+
+        this.state.startX =
+            0;
+
+        this.state.currentX =
+            0;
+
+        this.state.dragOffset =
+            0;
+
+        this.state.moved =
+            false;
+
+        /*
+         * Den Click noch kurz unterdrücken,
+         * damit pointerup nicht versehentlich
+         * das Modal öffnet.
+        */
+
+        window.setTimeout(
+
+            () => {
+
+                this.state.suppressClick =
+                    false;
+
+            },
+
+            80
+
         );
 
     },
 
     /* ==========================================
-       INDIKATOREN
+       INTERAKTION RESET
+    ========================================== */
+
+    resetInteraction() {
+
+        this.state.dragging =
+            false;
+
+        this.state.animating =
+            false;
+
+        this.state.pointerId =
+            null;
+
+        this.state.startX =
+            0;
+
+        this.state.currentX =
+            0;
+
+        this.state.dragOffset =
+            0;
+
+        this.state.moved =
+            false;
+
+        this.state.suppressClick =
+            false;
+
+        this.state.animationFrame =
+            null;
+
+    },
+
+    /* ==========================================
+       INDIKATOREN RENDERN
     ========================================== */
 
     renderIndicators() {
@@ -2196,14 +1964,44 @@ EF22.highlights = {
 
                 );
 
+                /*
+                 * Die Punkte sind Navigation.
+
+                 * Auch hier bewegen wir uns
+                 * absichtlich nur einen Schritt.
+                */
+
                 indicator.addEventListener(
 
                     "click",
 
                     () => {
 
-                        this.goTo(
-                            index
+                        if (
+
+                            index ===
+                            this.state.activeIndex
+
+                        ) {
+
+                            return;
+
+                        }
+
+                        const relative =
+
+                            this.getRelativeIndex(
+                                index
+                            );
+
+                        this.snapToNeighbour(
+
+                            relative > 0
+
+                                ? 1
+
+                                : -1
+
                         );
 
                     }
@@ -2252,7 +2050,9 @@ EF22.highlights = {
                         "aria-current",
 
                         active
+
                             ? "true"
+
                             : "false"
 
                     );
@@ -2260,89 +2060,6 @@ EF22.highlights = {
                 }
 
             );
-
-    },
-
-    /* ==========================================
-       ZU HIGHLIGHT
-    ========================================== */
-
-    goTo(index) {
-
-        if (
-
-            this.state.animating ||
-
-            index < 0 ||
-
-            index >=
-                this.state.events.length ||
-
-            index ===
-                this.state.activeIndex
-
-        ) {
-
-            return;
-
-        }
-
-        const count =
-
-            this.state.events.length;
-
-        if (count === 2) {
-
-            if (
-
-                index >
-                this.state.activeIndex
-
-            ) {
-
-                this.goNext();
-
-            }
-
-            else {
-
-                this.goPrevious();
-
-            }
-
-            return;
-
-        }
-
-        const forward =
-
-            this.normalizeIndex(
-
-                index -
-                this.state.activeIndex
-
-            );
-
-        const backward =
-
-            this.normalizeIndex(
-
-                this.state.activeIndex -
-                index
-
-            );
-
-        if (forward <= backward) {
-
-            this.goNext();
-
-        }
-
-        else {
-
-            this.goPrevious();
-
-        }
 
     },
 
@@ -2366,103 +2083,12 @@ EF22.highlights = {
     },
 
     /* ==========================================
-       DRAG ABBRECHEN
-    ========================================== */
-
-    cancelDrag() {
-
-        if (!this.state.dragging) {
-
-            return;
-
-        }
-
-        this.state.dragging =
-            false;
-
-        this.elements.viewport?.classList.remove(
-            "is-dragging"
-        );
-
-        this.elements.track?.classList.remove(
-            "is-dragging"
-        );
-
-        this.returnToCenter();
-
-    },
-
-    /* ==========================================
-       DRAG RESET
-    ========================================== */
-
-    resetDragValues() {
-
-        this.state.startX =
-            0;
-
-        this.state.direction =
-            null;
-
-        this.state.dragProgress =
-            0;
-
-        this.state.pointerId =
-            null;
-
-        window.setTimeout(
-
-            () => {
-
-                if (!this.state.dragging) {
-
-                    this.state.deltaX =
-                        0;
-
-                }
-
-            },
-
-            60
-
-        );
-
-    },
-
-    /* ==========================================
-       INTERAKTION RESET
-    ========================================== */
-
-    resetInteraction() {
-
-        this.state.dragging =
-            false;
-
-        this.state.animating =
-            false;
-
-        this.state.startX =
-            0;
-
-        this.state.deltaX =
-            0;
-
-        this.state.pointerId =
-            null;
-
-        this.state.direction =
-            null;
-
-        this.state.dragProgress =
-            0;
-
-    },
-
-    /* ==========================================
        DESTROY
     ========================================== */
 
     destroy() {
+
+        this.stopAnimation();
 
         this.elements.viewport
             ?.removeEventListener(
@@ -2519,7 +2145,8 @@ EF22.highlights = {
 
         }
 
-        this.state.events = [];
+        this.state.events =
+            [];
 
         this.state.activeIndex =
             0;

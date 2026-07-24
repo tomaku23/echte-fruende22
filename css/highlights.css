@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HIGHLIGHTS.CSS
- Version 1.2
+ Version 4.0
 =====================================================
 */
 
@@ -13,9 +13,11 @@
 
 .highlights {
 
-    width: 100%;
+    width:
+        100%;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
 }
 
@@ -26,11 +28,14 @@
 
 .highlights-viewport {
 
-    position: relative;
+    position:
+        relative;
 
-    width: 100%;
+    width:
+        100%;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
     touch-action:
         pan-y;
@@ -56,37 +61,29 @@
 
 /* ==========================================
    TRACK
+
+   Der Track scrollt nicht selbst.
+
+   Alle Karten werden absolut innerhalb
+   dieser Bühne positioniert.
 ========================================== */
 
 .highlights-track {
 
-    position: relative;
+    position:
+        relative;
 
-    width: 100%;
+    width:
+        100%;
 
-    min-height:
-        1px;
+    padding-top:
+        var(--space-md);
 
-    padding:
-        var(--space-md)
-        0
+    padding-bottom:
         var(--space-xl);
 
-    transform:
-        translateX(
-            var(--highlight-drag-x, 0px)
-        );
-
 }
 
-.highlights-track.is-animating {
-
-    transition:
-        transform
-        280ms
-        ease;
-
-}
 
 /* ==========================================
    KARTE
@@ -94,7 +91,8 @@
 
 .highlight-card {
 
-    position: absolute;
+    position:
+        absolute;
 
     top:
         var(--space-md);
@@ -102,14 +100,14 @@
     left:
         50%;
 
-    z-index: 1;
-
     width:
         85%;
 
-    padding: 0;
+    padding:
+        0;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
     border:
         1px solid
@@ -145,67 +143,44 @@
     -webkit-appearance:
         none;
 
-    opacity:
-        .78;
-
-    transform:
-        translateX(-50%)
-        scale(.92);
-
     transform-origin:
         center center;
 
-    transition:
-        transform
-        var(--transition-normal),
-        opacity
-        var(--transition-normal),
-        border-color
-        var(--transition-normal);
+    will-change:
+        transform,
+        opacity;
 
 }
 
 
 /* ==========================================
-   KARTENPOSITIONEN
+   HÖHENREFERENZ
+
+   Eine Karte bleibt zusätzlich im normalen
+   Dokumentfluss, damit der Track die Höhe
+   des Carousels kennt.
+
+   JS setzt alle Karten absolut.
+   Deshalb reservieren wir die Höhe über
+   ein unsichtbares Pseudo-Element.
 ========================================== */
 
-.highlight-card--previous {
+.highlights-track::before {
 
-    z-index: 2;
+    content:
+        "";
 
-    transform:
-        translateX(-104%)
-        scale(.92);
+    display:
+        block;
 
-}
+    width:
+        85%;
 
-.highlight-card--active {
+    margin:
+        0 auto;
 
-    position: relative;
-
-    top: auto;
-
-    left: 50%;
-
-    z-index: 10;
-
-    opacity:
-        1;
-
-    transform:
-        translateX(-50%)
-        scale(1);
-
-}
-
-.highlight-card--next {
-
-    z-index: 2;
-
-    transform:
-        translateX(4%)
-        scale(.92);
+    aspect-ratio:
+        16 / 9;
 
 }
 
@@ -216,7 +191,8 @@
 
 .highlight-card-media {
 
-    width: 100%;
+    width:
+        100%;
 
     aspect-ratio:
         16 / 9;
@@ -242,11 +218,14 @@
 
 .highlight-card-content {
 
-    display: flex;
+    display:
+        flex;
 
-    flex-direction: column;
+    flex-direction:
+        column;
 
-    align-items: center;
+    align-items:
+        center;
 
     gap:
         var(--space-sm);
@@ -265,22 +244,22 @@
 
 
 /* ==========================================
-   TITEL
+   TYPE
 ========================================== */
 
 .highlight-card-title {
 
-    display: inline-flex;
+    display:
+        inline-flex;
 
-    justify-content: center;
+    justify-content:
+        center;
 
-    align-items: center;
+    align-items:
+        center;
 
     min-height:
         36px;
-
-    max-width:
-        100%;
 
     padding:
         0
@@ -303,7 +282,7 @@
         700;
 
     line-height:
-        1.2;
+        1;
 
     letter-spacing:
         .12em;
@@ -342,6 +321,18 @@
 
 
 /* ==========================================
+   AKTIVE KARTE
+========================================== */
+
+.highlight-card[aria-current="true"] {
+
+    border-color:
+        rgba(111, 191, 115, .60);
+
+}
+
+
+/* ==========================================
    FOKUS
 ========================================== */
 
@@ -352,7 +343,7 @@
         var(--color-primary);
 
     outline-offset:
-        -3px;
+        3px;
 
 }
 
@@ -363,14 +354,17 @@
 
 .highlights-indicators {
 
-    display: flex;
+    display:
+        flex;
 
-    justify-content: center;
+    justify-content:
+        center;
 
-    align-items: center;
+    align-items:
+        center;
 
     gap:
-        6px;
+        var(--space-sm);
 
     margin-top:
         var(--space-md);
@@ -385,14 +379,16 @@
 .highlights-indicator {
 
     width:
-        16px;
+        8px;
 
     height:
-        3px;
+        8px;
 
-    padding: 0;
+    padding:
+        0;
 
-    border: none;
+    border:
+        none;
 
     border-radius:
         999px;
@@ -404,22 +400,15 @@
         pointer;
 
     transition:
-        width
-        var(--transition-normal),
-        background
-        var(--transition-normal);
+        width var(--transition-normal),
+        background var(--transition-normal);
 
 }
-
-
-/* ==========================================
-   AKTIVER INDIKATOR
-========================================== */
 
 .highlights-indicator.is-active {
 
     width:
-        32px;
+        24px;
 
     background:
         var(--color-primary);
@@ -444,30 +433,14 @@
 
 
 /* ==========================================
-   EINZELNES HIGHLIGHT
+   EIN HIGHLIGHT
 ========================================== */
 
+.highlights-track
 .highlight-card:only-child {
-
-    position: relative;
-
-    top: auto;
-
-    left:
-        50%;
-
-    width:
-        85%;
-
-    max-width:
-        680px;
 
     opacity:
         1;
-
-    transform:
-        translateX(-50%)
-        scale(1);
 
 }
 
@@ -478,33 +451,17 @@
 
 @media (min-width: 481px) {
 
-    .highlights-track {
-
-        padding-left:
-            15%;
-
-        padding-right:
-            15%;
-
-    }
-
     .highlight-card {
 
         width:
-            70%;
-
-        min-width:
-            70%;
-
-        flex-basis:
-            70%;
+            76%;
 
     }
 
-    .highlight-card + .highlight-card {
+    .highlights-track::before {
 
-        margin-left:
-            -14%;
+        width:
+            76%;
 
     }
 
@@ -517,25 +474,9 @@
 
 @media (min-width: 769px) {
 
-    .highlights-track {
-
-        padding-left:
-            20%;
-
-        padding-right:
-            20%;
-
-    }
-
     .highlight-card {
 
         width:
-            60%;
-
-        min-width:
-            60%;
-
-        flex-basis:
             60%;
 
         max-width:
@@ -543,23 +484,13 @@
 
     }
 
-    .highlight-card + .highlight-card {
-
-        margin-left:
-            -10%;
-
-    }
-
-    .highlight-card:only-child {
+    .highlights-track::before {
 
         width:
             60%;
 
-        min-width:
-            60%;
-
-        flex-basis:
-            60%;
+        max-width:
+            720px;
 
     }
 
