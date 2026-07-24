@@ -255,7 +255,7 @@ EF22.highlights = {
 
         );
 
-        /* ======================================
+                /* ======================================
            MEDIA
         ====================================== */
 
@@ -270,26 +270,22 @@ EF22.highlights = {
 
         const image =
 
-    props.image &&
+            props.image &&
 
-    String(props.image).trim() !== ""
+            String(props.image).trim() !== ""
 
-        ? String(props.image)
+                ? String(props.image)
 
-        : EF22.config?.images?.heroFallbackLandscape;
+                : EF22.config?.images?.heroFallbackLandscape;
 
-if (image) {
+        if (image) {
 
-    media.style.backgroundImage =
+            media.style.backgroundImage =
 
-        `url("${image}")`;
+                `url("${image}")`;
 
-}
-
-        media.style.backgroundImage =
-
-            `url("${image}")`;
-
+        }
+        
         /* ======================================
            CONTENT
         ====================================== */
