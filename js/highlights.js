@@ -1235,80 +1235,63 @@ updateTrackHeight() {
     },
 
     /* ==========================================
-       POINTER DOWN
-    ========================================== */
+   POINTER DOWN
+========================================== */
 
-    onPointerDown(event) {
+onPointerDown(event) {
 
-        if (
+    if (
 
-            this.state.animating ||
+        this.state.animating ||
 
-            this.state.events.length <= 1
+        this.state.events.length <= 1
 
-        ) {
+    ) {
 
-            return;
+        return;
 
-        }
+    }
 
-        if (
+    if (
 
-            event.pointerType === "mouse" &&
+        event.pointerType === "mouse" &&
 
-            event.button !== 0
+        event.button !== 0
 
-        ) {
+    ) {
 
-            return;
+        return;
 
-        }
+    }
 
-        this.stopAnimation();
+    this.stopAnimation();
 
-        this.state.dragging =
-            true;
+    this.state.dragging =
+        true;
 
-        this.state.pointerId =
-            event.pointerId;
+    this.state.pointerId =
+        event.pointerId;
 
-        this.state.startX =
-            event.clientX;
+    this.state.startX =
+        event.clientX;
 
-        this.state.currentX =
-            event.clientX;
+    this.state.currentX =
+        event.clientX;
 
-        this.state.dragOffset =
-            0;
+    this.state.dragOffset =
+        0;
 
-        this.state.moved =
-            false;
+    this.state.moved =
+        false;
 
-        this.state.suppressClick =
-            false;
+    this.state.suppressClick =
+        false;
 
-        this.elements.viewport.classList.add(
-            "is-dragging"
-        );
+    this.elements.viewport.classList.add(
+        "is-dragging"
+    );
 
-        try {
-
-            this.elements.viewport
-                .setPointerCapture(
-                    event.pointerId
-                );
-
-        }
-
-        catch (_) {
-
-            /*
-             * Pointer Capture ist optional.
-             */
-
-        }
-
-    },
+},
 
     /* ==========================================
        POINTER MOVE
