@@ -7,7 +7,7 @@ declare(strict_types=1);
  EF22 FRAMEWORK
  COMPONENT
  HERO
- Version 4.2
+ Version 4.3
 =====================================================
 */
 
@@ -21,8 +21,6 @@ $defaults = [
 
     "badge" => "",
 
-    "title" => "",
-
     "subtitle" => "",
 
     "description" => "",
@@ -32,6 +30,8 @@ $defaults = [
     "time" => "",
 
     "location" => "",
+
+    "meeting" => "",
 
     "countdown" => "",
 
@@ -137,20 +137,6 @@ $heroClass =
                 </div>
 
                 <!-- ==========================================
-                     TITEL
-                ========================================== -->
-
-                <h1
-                    class="hero-title"
-                    data-hero="title">
-
-                    <?= htmlspecialchars(
-                        $hero["title"]
-                    ) ?>
-
-                </h1>
-
-                <!-- ==========================================
                      SUBTITLE
                 ========================================== -->
 
@@ -248,6 +234,28 @@ $heroClass =
 
                             <?= htmlspecialchars(
                                 $hero["location"]
+                            ) ?>
+
+                        </span>
+
+                    </div>
+
+                    <!-- TREFFPUNKT -->
+
+                    <div
+                        class="hero-item"
+                        data-hero="meetingItem">
+
+                        <span class="hero-icon">
+
+                            <i class="fa-solid fa-people-group"></i>
+
+                        </span>
+
+                        <span data-hero="meeting">
+
+                            <?= htmlspecialchars(
+                                $hero["meeting"]
                             ) ?>
 
                         </span>

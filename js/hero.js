@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HERO.JS
- Version 4.2
+ Version 4.3
 =====================================================
 */
 
@@ -182,11 +182,6 @@ EF22.hero = {
         );
 
         this.setText(
-            this.elements.title,
-            data.title
-        );
-
-        this.setText(
             this.elements.subtitle,
             data.subtitle
         );
@@ -209,6 +204,11 @@ EF22.hero = {
         this.setText(
             this.elements.location,
             data.location
+        );
+
+        this.setText(
+            this.elements.meeting,
+            data.meeting
         );
 
         this.setText(
@@ -416,29 +416,57 @@ EF22.hero = {
 
         const items = [
 
-            this.elements.dateItem,
+            {
 
-            this.elements.timeItem,
+                item:
+                    this.elements.dateItem,
 
-            this.elements.locationItem
+                value:
+                    this.elements.date
+
+            },
+
+            {
+
+                item:
+                    this.elements.timeItem,
+
+                value:
+                    this.elements.time
+
+            },
+
+            {
+
+                item:
+                    this.elements.locationItem,
+
+                value:
+                    this.elements.location
+
+            },
+
+            {
+
+                item:
+                    this.elements.meetingItem,
+
+                value:
+                    this.elements.meeting
+
+            }
 
         ];
 
         items.forEach(
 
-            (item) => {
+            ({ item, value }) => {
 
                 if (!item) {
 
                     return;
 
                 }
-
-                const value =
-
-                    item.querySelector(
-                        "[data-hero]:not([data-hero=\"dateItem\"]):not([data-hero=\"timeItem\"]):not([data-hero=\"locationItem\"])"
-                    );
 
                 item.hidden =
 
@@ -454,7 +482,7 @@ EF22.hero = {
 
             items.some(
 
-                (item) =>
+                ({ item }) =>
 
                     item &&
 

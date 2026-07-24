@@ -1,8 +1,8 @@
-/*
+/*/*
 =====================================================
  ECHTE FRÜNDE '22
  CALENDAR.JS
- Version 3.2
+ Version 3.3
 =====================================================
 */
 
@@ -325,69 +325,69 @@ EF22.calendar = {
     },
 
     /* ==========================================
-       HERO
-    ========================================== */
+   HERO
+========================================== */
 
-    updateHero(event) {
+updateHero(event) {
 
-        if (!event) {
+    if (!event) {
 
-            EF22.hero.clear();
+        EF22.hero.clear();
 
-            return;
+        return;
 
-        }
+    }
 
-        const props =
+    const props =
 
-            EF22.utils.getProps(
+        EF22.utils.getProps(
+            event
+        );
+
+    EF22.hero.refresh({
+
+        image:
+            props.image,
+
+        badge:
+            props.category,
+
+        date:
+            EF22.utils.formatDate(
+                event.start
+            ),
+
+        time:
+            EF22.utils.formatTimeRange(
+                event.start,
+                event.end
+            ),
+
+        location:
+            props.location,
+
+        meeting:
+            props.meeting,
+
+        countdown:
+            this.getCountdown(
+                event.start
+            ),
+
+        hint:
+            "Für Details tippen",
+
+        action: () => {
+
+            EF22.modal.open(
                 event
             );
 
-        EF22.hero.refresh({
+        }
 
-            image:
-                props.image,
+    });
 
-            badge:
-                props.category,
-
-            title:
-                event.title,
-
-            date:
-                EF22.utils.formatDate(
-                    event.start
-                ),
-
-            time:
-                EF22.utils.formatTimeRange(
-                    event.start,
-                    event.end
-                ),
-
-            location:
-                props.location,
-
-            countdown:
-                this.getCountdown(
-                    event.start
-                ),
-
-            hint:
-                "Für Details tippen",
-
-            action: () => {
-
-                EF22.modal.open(
-                    event
-                );
-
-            }
-
-        });
-
-    },
+},
 
     /* ==========================================
        COUNTDOWN
