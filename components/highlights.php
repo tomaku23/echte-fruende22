@@ -3,7 +3,7 @@
 =====================================================
  EF22 FRAMEWORK
  HIGHLIGHTS.PHP
- Version 1.0
+ Version 1.1
 =====================================================
 */
 ?>
@@ -17,43 +17,39 @@
     class="component-section highlights-section"
     data-highlights-section>
 
-    <div class="container">
+    <div
+        id="highlights"
+        class="highlights"
+        data-highlights>
+
+        <!-- ==================================
+             VIEWPORT
+        =================================== -->
 
         <div
-            id="highlights"
-            class="highlights"
-            data-highlights>
+            class="highlights-viewport"
+            data-highlights-viewport>
 
-            <!-- ==================================
-                 VIEWPORT
-            =================================== -->
+            <!-- ==============================
+                 TRACK
+            =============================== -->
 
             <div
-                class="highlights-viewport"
-                data-highlights-viewport>
-
-                <!-- ==============================
-                     TRACK
-                =============================== -->
-
-                <div
-                    class="highlights-track"
-                    data-highlights-track>
-
-                </div>
+                class="highlights-track"
+                data-highlights-track>
 
             </div>
 
-            <!-- ==================================
-                 INDICATORS
-            =================================== -->
+        </div>
 
-            <div
-                class="highlights-indicators"
-                data-highlights-indicators
-                aria-label="Highlight auswählen">
+        <!-- ==================================
+             INDICATORS
+        =================================== -->
 
-            </div>
+        <div
+            class="highlights-indicators"
+            data-highlights-indicators
+            aria-label="Highlight auswählen">
 
         </div>
 
