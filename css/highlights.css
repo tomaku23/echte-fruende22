@@ -172,13 +172,19 @@
         no-repeat;
 
     background-size:
-        contain;
+        cover;
 
     background-color:
         var(--color-background-dark);
 
 }
 
+.highlight-card-media.is-16-9 {
+
+    background-size:
+        contain;
+
+}
 
 /* ==========================================
    CONTENT
