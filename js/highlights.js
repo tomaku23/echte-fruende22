@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HIGHLIGHTS.JS
- Version 1.0
+ Version 1.1
 =====================================================
 */
 
@@ -268,13 +268,19 @@ EF22.highlights = {
         media.className =
             "highlight-card-media";
 
-        if (props.image) {
+        const image =
 
-            media.style.backgroundImage =
+            props.image &&
 
-                `url("${props.image}")`;
+            String(props.image).trim() !== ""
 
-        }
+                ? String(props.image)
+
+                : "../images/hero-bgq.png";
+
+        media.style.backgroundImage =
+
+            `url("${image}")`;
 
         /* ======================================
            CONTENT
@@ -398,7 +404,7 @@ EF22.highlights = {
                 date.getFullYear()
             ).slice(-2);
 
-        return `${month} ’${year}`;
+        return `${month} ${year}`;
 
     },
 

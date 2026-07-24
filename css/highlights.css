@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HIGHLIGHTS.CSS
- Version 1.0
+ Version 1.1
 =====================================================
 */
 
@@ -29,7 +29,7 @@
 
     overflow-x: auto;
 
-    overflow-y: hidden;
+    overflow-y: visible;
 
     scroll-snap-type:
         x mandatory;
@@ -60,16 +60,12 @@
 
     display: flex;
 
-    align-items: stretch;
+    align-items: center;
 
-    gap:
-        var(--space-md);
-
-    padding-left:
-        7.5%;
-
-    padding-right:
-        7.5%;
+    padding:
+        var(--space-md)
+        7.5%
+        var(--space-xl);
 
 }
 
@@ -81,6 +77,8 @@
 .highlight-card {
 
     position: relative;
+
+    z-index: 1;
 
     width:
         85%;
@@ -130,6 +128,29 @@
 
     -webkit-appearance:
         none;
+
+    transform:
+        scale(.94);
+
+    opacity:
+        .78;
+
+    transition:
+        transform var(--transition-normal),
+        opacity var(--transition-normal),
+        border-color var(--transition-normal);
+
+}
+
+
+/* ==========================================
+   KARTEN ÜBERLAPPUNG
+========================================== */
+
+.highlight-card + .highlight-card {
+
+    margin-left:
+        -12%;
 
 }
 
@@ -267,6 +288,15 @@
 
 .highlight-card.is-active {
 
+    z-index:
+        10;
+
+    opacity:
+        1;
+
+    transform:
+        scale(1);
+
     border-color:
         rgba(111, 191, 115, .55);
 
@@ -278,6 +308,9 @@
 ========================================== */
 
 .highlight-card:focus-visible {
+
+    z-index:
+        11;
 
     outline:
         2px solid
@@ -305,7 +338,7 @@
         var(--space-sm);
 
     margin-top:
-        var(--space-lg);
+        var(--space-md);
 
 }
 
@@ -395,6 +428,12 @@
     max-width:
         680px;
 
+    opacity:
+        1;
+
+    transform:
+        none;
+
 }
 
 
@@ -405,9 +444,6 @@
 @media (min-width: 481px) {
 
     .highlights-track {
-
-        gap:
-            var(--space-lg);
 
         padding-left:
             12%;
@@ -424,6 +460,13 @@
 
         min-width:
             76%;
+
+    }
+
+    .highlight-card + .highlight-card {
+
+        margin-left:
+            -10%;
 
     }
 
@@ -456,6 +499,13 @@
 
         max-width:
             720px;
+
+    }
+
+    .highlight-card + .highlight-card {
+
+        margin-left:
+            -8%;
 
     }
 
