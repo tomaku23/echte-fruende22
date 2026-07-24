@@ -2,7 +2,7 @@
 =====================================================
  EF22 FRAMEWORK
  HIGHLIGHTS.JS
- Version 1.1
+ Version 1.2
 =====================================================
 */
 
@@ -24,7 +24,9 @@ EF22.highlights = {
 
         events: [],
 
-        activeIndex: 0
+        activeIndex: 0,
+
+        scrollFrame: null
 
     },
 
@@ -52,7 +54,9 @@ EF22.highlights = {
 
     handlers: {
 
-        scroll: null
+        scroll: null,
+
+        resize: null
 
     },
 
@@ -120,7 +124,35 @@ EF22.highlights = {
 
         this.handlers.scroll = () => {
 
-            this.updateActiveFromScroll();
+            if (this.state.scrollFrame) {
+
+                cancelAnimationFrame(
+                    this.state.scrollFrame
+                );
+
+            }
+
+            this.state.scrollFrame =
+
+                requestAnimationFrame(
+
+                    () => {
+
+                        this.updateActiveFromScroll();
+
+                        this.updateCardDepth();
+
+                        this.state.scrollFrame = null;
+
+                    }
+
+                );
+
+        };
+
+        this.handlers.resize = () => {
+
+            this.updateCardDepth();
 
         };
 
@@ -137,6 +169,18 @@ EF22.highlights = {
             "scroll",
 
             this.handlers.scroll,
+
+            {
+                passive: true
+            }
+
+        );
+
+        window.addEventListener(
+
+            "resize",
+
+            this.handlers.resize,
 
             {
                 passive: true
@@ -185,6 +229,21 @@ EF22.highlights = {
         this.updateVisibility();
 
         this.updateActiveState();
+
+        requestAnimationFrame(
+
+            () => {
+
+                this.scrollTo(
+                    0,
+                    false
+                );
+
+                this.updateCardDepth();
+
+            }
+
+        );
 
     },
 
@@ -239,7 +298,8 @@ EF22.highlights = {
                 "button"
             );
 
-        card.type = "button";
+        card.type =
+            "button";
 
         card.className =
             "highlight-card";
@@ -255,7 +315,7 @@ EF22.highlights = {
 
         );
 
-                /* ======================================
+        /* ======================================
            MEDIA
         ====================================== */
 
@@ -272,11 +332,17 @@ EF22.highlights = {
 
             props.image &&
 
-            String(props.image).trim() !== ""
+            String(
+                props.image
+            ).trim() !== ""
 
-                ? String(props.image)
+                ? String(
+                    props.image
+                )
 
-                : EF22.config?.images?.heroFallbackLandscape;
+                : EF22.config
+                    ?.images
+                    ?.heroFallbackLandscape;
 
         if (image) {
 
@@ -285,7 +351,7 @@ EF22.highlights = {
                 `url("${image}")`;
 
         }
-        
+
         /* ======================================
            CONTENT
         ====================================== */
@@ -337,6 +403,7 @@ EF22.highlights = {
         content.append(
 
             title,
+
             date
 
         );
@@ -344,6 +411,7 @@ EF22.highlights = {
         card.append(
 
             media,
+
             content
 
         );
@@ -357,6 +425,31 @@ EF22.highlights = {
             "click",
 
             () => {
+
+                /*
+                 * Nicht aktive Karte:
+                 * zuerst in den Vordergrund holen.
+                 */
+
+                if (
+
+                    index !==
+                    this.state.activeIndex
+
+                ) {
+
+                    this.scrollTo(
+                        index
+                    );
+
+                    return;
+
+                }
+
+                /*
+                 * Aktive Karte:
+                 * Modal öffnen.
+                 */
 
                 EF22.modal.open(
                     event
@@ -395,7 +488,8 @@ EF22.highlights = {
                 EF22.config.locale,
 
                 {
-                    month: "long"
+                    month:
+                        "long"
                 }
 
             ).format(
@@ -406,7 +500,9 @@ EF22.highlights = {
 
             String(
                 date.getFullYear()
-            ).slice(-2);
+            ).slice(
+                -2
+            );
 
         return `${month} ${year}`;
 
@@ -426,15 +522,21 @@ EF22.highlights = {
 
         this.elements.indicators.innerHTML = "";
 
-        if (this.state.events.length <= 1) {
+        if (
 
-            this.elements.indicators.hidden = true;
+            this.state.events.length <= 1
+
+        ) {
+
+            this.elements.indicators.hidden =
+                true;
 
             return;
 
         }
 
-        this.elements.indicators.hidden = false;
+        this.elements.indicators.hidden =
+            false;
 
         this.state.events.forEach(
 
@@ -540,29 +642,40 @@ EF22.highlights = {
 
         }
 
+        const viewportRect =
+
+            this.elements.viewport
+                .getBoundingClientRect();
+
         const viewportCenter =
 
-            this.elements.viewport.scrollLeft +
+            viewportRect.left +
 
             (
-                this.elements.viewport.clientWidth /
+                viewportRect.width /
                 2
             );
 
-        let closestIndex = 0;
+        let closestIndex =
+            0;
 
-        let closestDistance = Infinity;
+        let closestDistance =
+            Infinity;
 
         cards.forEach(
 
             (card, index) => {
 
+                const rect =
+
+                    card.getBoundingClientRect();
+
                 const cardCenter =
 
-                    card.offsetLeft +
+                    rect.left +
 
                     (
-                        card.offsetWidth /
+                        rect.width /
                         2
                     );
 
@@ -575,7 +688,12 @@ EF22.highlights = {
 
                     );
 
-                if (distance < closestDistance) {
+                if (
+
+                    distance <
+                    closestDistance
+
+                ) {
 
                     closestDistance =
                         distance;
@@ -608,6 +726,129 @@ EF22.highlights = {
     },
 
     /* ==========================================
+       TIEFENWIRKUNG
+
+       Die Karte, die der Mitte am nächsten ist,
+       liegt über ihren Nachbarn.
+
+       Die Bewegung bleibt vollständig an das
+       native Scrollen gekoppelt.
+    ========================================== */
+
+    updateCardDepth() {
+
+        if (
+
+            !this.elements.viewport ||
+
+            !this.elements.track
+
+        ) {
+
+            return;
+
+        }
+
+        const cards =
+
+            Array.from(
+
+                this.elements.track.querySelectorAll(
+                    ".highlight-card"
+                )
+
+            );
+
+        if (!cards.length) {
+
+            return;
+
+        }
+
+        const viewportRect =
+
+            this.elements.viewport
+                .getBoundingClientRect();
+
+        const viewportCenter =
+
+            viewportRect.left +
+
+            (
+                viewportRect.width /
+                2
+            );
+
+        cards.forEach(
+
+            (card) => {
+
+                const rect =
+
+                    card.getBoundingClientRect();
+
+                const cardCenter =
+
+                    rect.left +
+
+                    (
+                        rect.width /
+                        2
+                    );
+
+                const distance =
+
+                    Math.abs(
+
+                        viewportCenter -
+                        cardCenter
+
+                    );
+
+                const normalizedDistance =
+
+                    Math.min(
+
+                        distance /
+                        Math.max(
+                            rect.width,
+                            1
+                        ),
+
+                        1
+
+                    );
+
+                /*
+                 * Karte nahe der Mitte:
+                 * hoher z-index.
+                 */
+
+                const depth =
+
+                    Math.round(
+
+                        (
+                            1 -
+                            normalizedDistance
+                        ) *
+                        100
+
+                    );
+
+                card.style.zIndex =
+
+                    String(
+                        100 + depth
+                    );
+
+            }
+
+        );
+
+    },
+
+    /* ==========================================
        AKTIVEN STATUS AKTUALISIEREN
     ========================================== */
 
@@ -621,12 +862,28 @@ EF22.highlights = {
 
                 (card, index) => {
 
+                    const active =
+
+                        index ===
+                        this.state.activeIndex;
+
                     card.classList.toggle(
 
                         "is-active",
 
-                        index ===
-                            this.state.activeIndex
+                        active
+
+                    );
+
+                    card.setAttribute(
+
+                        "aria-current",
+
+                        active
+
+                            ? "true"
+
+                            : "false"
 
                     );
 
@@ -677,9 +934,18 @@ EF22.highlights = {
        ZU KARTE SCROLLEN
     ========================================== */
 
-    scrollTo(index) {
+    scrollTo(
+        index,
+        smooth = true
+    ) {
 
-        if (!this.elements.track) {
+        if (
+
+            !this.elements.viewport ||
+
+            !this.elements.track
+
+        ) {
 
             return;
 
@@ -699,13 +965,34 @@ EF22.highlights = {
 
         }
 
-        card.scrollIntoView({
+        const viewportWidth =
 
-            behavior: "smooth",
+            this.elements.viewport.clientWidth;
 
-            block: "nearest",
+        const target =
 
-            inline: "center"
+            card.offsetLeft -
+
+            (
+                (
+                    viewportWidth -
+                    card.offsetWidth
+                ) /
+                2
+            );
+
+        this.elements.viewport.scrollTo({
+
+            left:
+                target,
+
+            behavior:
+
+                smooth
+
+                    ? "smooth"
+
+                    : "auto"
 
         });
 
@@ -717,29 +1004,52 @@ EF22.highlights = {
 
     destroy() {
 
-        this.elements.viewport?.removeEventListener(
+        this.elements.viewport
+            ?.removeEventListener(
 
-            "scroll",
+                "scroll",
 
-            this.handlers.scroll
+                this.handlers.scroll
+
+            );
+
+        window.removeEventListener(
+
+            "resize",
+
+            this.handlers.resize
 
         );
 
+        if (this.state.scrollFrame) {
+
+            cancelAnimationFrame(
+                this.state.scrollFrame
+            );
+
+        }
+
         if (this.elements.track) {
 
-            this.elements.track.innerHTML = "";
+            this.elements.track.innerHTML =
+                "";
 
         }
 
         if (this.elements.indicators) {
 
-            this.elements.indicators.innerHTML = "";
+            this.elements.indicators.innerHTML =
+                "";
 
         }
 
         this.state.events = [];
 
-        this.state.activeIndex = 0;
+        this.state.activeIndex =
+            0;
+
+        this.state.scrollFrame =
+            null;
 
         this.elements = {
 
@@ -757,7 +1067,9 @@ EF22.highlights = {
 
         this.handlers = {
 
-            scroll: null
+            scroll: null,
+
+            resize: null
 
         };
 
