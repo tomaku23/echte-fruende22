@@ -1,335 +1,893 @@
-/* =====================================================
-   ECHTE FRÜNDE '22
-   MODAL.CSS
-   Version 2.0
-===================================================== */
+/*
+=====================================================
+ ECHTE FRÜNDE '22
+ MODAL.CSS
+ Version 3.0
+=====================================================
+
+Styles für das Event-Modal.
+
+Verantwortung:
+- Overlay
+- Modal-Fenster
+- Hero
+- Header
+- Metadaten
+- Beschreibung
+- Aktionen
+- Responsive Verhalten
+
+=====================================================
+*/
 
 
-/* =====================================================
+/* ==========================================
    MODAL
-===================================================== */
+========================================== */
 
-.modal{
+.modal {
 
-    position:fixed;
-    inset:0;
+    position:
+        fixed;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    inset:
+        0;
 
-    padding:2rem;
+    display:
+        flex;
 
-    background:rgba(0,0,0,.75);
-    backdrop-filter:blur(10px);
+    justify-content:
+        center;
 
-    opacity:0;
-    visibility:hidden;
+    align-items:
+        center;
+
+    padding:
+        var(--space-xl);
+
+    background:
+        rgba(0, 0, 0, .76);
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
 
     transition:
-        opacity .3s ease,
-        visibility .3s ease;
+        opacity var(--transition-normal),
+        visibility var(--transition-normal);
 
-    z-index:2000;
-
-}
-
-.modal.show{
-
-    opacity:1;
-    visibility:visible;
+    z-index:
+        var(--z-modal);
 
 }
 
 
-/* =====================================================
+/* ==========================================
+   MODAL SICHTBAR
+========================================== */
+
+.modal.show {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    pointer-events:
+        auto;
+
+}
+
+
+/* ==========================================
    OVERLAY
-===================================================== */
+========================================== */
 
-.modal-overlay{
+.modal-overlay {
 
-    position:absolute;
-    inset:0;
+    position:
+        absolute;
+
+    inset:
+        0;
 
 }
 
 
-/* =====================================================
+/* ==========================================
    WINDOW
-===================================================== */
+========================================== */
 
-.modal-window{
+.modal-window {
 
-    position:relative;
+    position:
+        relative;
 
-    width:min(100%,720px);
-    max-height:90vh;
+    width:
+        min(100%, 720px);
 
-    overflow:hidden;
-    overflow-y:auto;
+    max-height:
+        min(90vh, 900px);
 
-    background:var(--white);
+    overflow-x:
+        hidden;
 
-    border-radius:var(--radius);
+    overflow-y:
+        auto;
 
-    box-shadow:0 25px 60px rgba(0,0,0,.35);
+    overscroll-behavior:
+        contain;
 
-    transform:translateY(30px);
+    -webkit-overflow-scrolling:
+        touch;
 
-    transition:transform .3s ease;
+    background:
+        var(--color-background-light);
 
-    z-index:1;
+    border-radius:
+        var(--radius-xl);
 
-}
+    box-shadow:
+        var(--shadow-lg);
 
-.modal.show .modal-window{
+    transform:
+        translateY(30px)
+        scale(.98);
 
-    transform:translateY(0);
-
-}
-
-
-/* =====================================================
-   CLOSE BUTTON
-===================================================== */
-
-.modal-close{
-
-    position:absolute;
-
-    top:1rem;
-    right:1rem;
-
-    width:42px;
-    height:42px;
-
-    border:none;
-    border-radius:50%;
-
-    background:rgba(255,255,255,.85);
-
-    color:var(--text-dark);
-
-    font-size:1.5rem;
-
-    cursor:pointer;
+    opacity:
+        0;
 
     transition:
-        background-color .25s ease,
-        transform .25s ease;
+        transform var(--transition-normal),
+        opacity var(--transition-normal);
 
-    z-index:20;
-
-}
-
-.modal-close:hover{
-
-    background:#ffffff;
-
-    transform:rotate(90deg);
+    z-index:
+        1;
 
 }
 
 
-/* =====================================================
+/* ==========================================
+   WINDOW SICHTBAR
+========================================== */
+
+.modal.show .modal-window {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    opacity:
+        1;
+
+}
+
+
+/* ==========================================
+   CLOSE BUTTON
+========================================== */
+
+.modal-close {
+
+    position:
+        absolute;
+
+    top:
+        var(--space-md);
+
+    right:
+        var(--space-md);
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        44px;
+
+    height:
+        44px;
+
+    padding:
+        0;
+
+    border:
+        1px solid rgba(0, 0, 0, .08);
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255, 255, 255, .92);
+
+    color:
+        var(--color-text-on-light);
+
+    box-shadow:
+        var(--shadow-sm);
+
+    font-family:
+        var(--font-family);
+
+    font-size:
+        1.65rem;
+
+    font-weight:
+        400;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    transition:
+        background-color var(--transition-fast),
+        transform var(--transition-fast);
+
+    z-index:
+        20;
+
+}
+
+.modal-close:hover {
+
+    background:
+        var(--color-white);
+
+    transform:
+        rotate(90deg);
+
+}
+
+.modal-close:focus-visible {
+
+    outline:
+        3px solid var(--color-primary);
+
+    outline-offset:
+        3px;
+
+}
+
+
+/* ==========================================
    HERO
-===================================================== */
+========================================== */
 
-.modal-hero{
+.modal-hero {
 
-    height:240px;
+    width:
+        100%;
 
-    background-position:center;
-    background-size:cover;
-    background-repeat:no-repeat;
+    aspect-ratio:
+        16 / 9;
 
-    background-color:var(--light);
+    min-height:
+        220px;
+
+    background-position:
+        center;
+
+    background-size:
+        cover;
+
+    background-repeat:
+        no-repeat;
+
+    background-color:
+        var(--color-background-medium);
 
 }
 
 
-/* =====================================================
+/* ==========================================
    HEADER
-===================================================== */
+========================================== */
 
-.modal-header{
+.modal-header {
 
-    padding:2rem;
-
-}
-
-.modal-badge{
-
-    display:inline-flex;
-
-    margin-bottom:1rem;
-
-}
-
-.modal-title{
-
-    margin:0;
-
-    color:var(--text-dark);
+    padding:
+        var(--space-xl)
+        var(--space-xl)
+        var(--space-lg);
 
 }
 
 
-/* =====================================================
-   META
-===================================================== */
+/* ==========================================
+   BADGE
+========================================== */
 
-.modal-meta{
+.modal-badge {
 
-    display:grid;
+    display:
+        inline-flex;
 
-    gap:1rem;
+    align-items:
+        center;
 
-    padding:0 2rem 2rem;
+    width:
+        fit-content;
 
-}
-
-.modal-meta-item{
-
-    display:flex;
-
-    gap:1rem;
-
-    align-items:flex-start;
+    margin:
+        0
+        0
+        var(--space-md);
 
 }
 
-.modal-meta-label{
+.modal-badge[hidden] {
 
-    min-width:120px;
-
-    font-weight:600;
-
-    color:var(--green);
-
-}
-
-.modal-meta-value{
-
-    flex:1;
-
-    color:var(--text-dark);
+    display:
+        none;
 
 }
 
 
-/* =====================================================
+/* ==========================================
+   TITEL
+========================================== */
+
+.modal-title {
+
+    margin:
+        0;
+
+    color:
+        var(--color-text-on-light);
+
+    font-size:
+        var(--font-size-2xl);
+
+    font-weight:
+        700;
+
+    line-height:
+        1.2;
+
+}
+
+
+/* ==========================================
+   METADATEN
+========================================== */
+
+.modal-meta {
+
+    display:
+        grid;
+
+    gap:
+        var(--space-md);
+
+    padding:
+        0
+        var(--space-xl)
+        var(--space-xl);
+
+}
+
+.modal-meta[hidden] {
+
+    display:
+        none;
+
+}
+
+
+/* ==========================================
+   META ITEM
+========================================== */
+
+.modal-meta-item {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        120px
+        minmax(0, 1fr);
+
+    gap:
+        var(--space-md);
+
+    align-items:
+        start;
+
+}
+
+
+/* ==========================================
+   META LABEL
+========================================== */
+
+.modal-meta-label {
+
+    color:
+        var(--color-primary-dark);
+
+    font-size:
+        var(--font-size-sm);
+
+    font-weight:
+        700;
+
+    line-height:
+        var(--line-height);
+
+}
+
+
+/* ==========================================
+   META VALUE
+========================================== */
+
+.modal-meta-value {
+
+    min-width:
+        0;
+
+    color:
+        var(--color-text-on-light);
+
+    font-size:
+        var(--font-size-md);
+
+    line-height:
+        var(--line-height);
+
+    overflow-wrap:
+        anywhere;
+
+}
+
+
+/* ==========================================
    CONTENT
-===================================================== */
+========================================== */
 
-.modal-content{
+.modal-content {
 
-    padding:0 2rem 2rem;
+    padding:
+        0
+        var(--space-xl)
+        var(--space-xl);
 
-    color:var(--text-dark);
+    color:
+        var(--color-text-on-light);
 
-    line-height:1.8;
+    font-size:
+        var(--font-size-md);
+
+    line-height:
+        1.75;
 
 }
 
-.modal-content p:last-child{
+.modal-content[hidden] {
 
-    margin-bottom:0;
+    display:
+        none;
+
+}
+
+.modal-content p {
+
+    margin:
+        0
+        0
+        var(--space-md);
+
+}
+
+.modal-content p:last-child {
+
+    margin-bottom:
+        0;
 
 }
 
 
-/* =====================================================
+/* ==========================================
    ACTIONS
-===================================================== */
+========================================== */
 
-.modal-actions{
+.modal-actions {
 
-    display:flex;
+    display:
+        flex;
 
-    gap:1rem;
+    flex-wrap:
+        wrap;
 
-    justify-content:flex-end;
+    gap:
+        var(--space-md);
 
-    padding:2rem;
+    justify-content:
+        flex-end;
 
-    border-top:1px solid rgba(0,0,0,.08);
+    padding:
+        var(--space-lg)
+        var(--space-xl)
+        var(--space-xl);
+
+    border-top:
+        1px solid rgba(0, 0, 0, .08);
+
+}
+
+.modal-actions[hidden] {
+
+    display:
+        none;
 
 }
 
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+/* ==========================================
+   ACTION BUTTONS
+========================================== */
 
-@media (max-width:768px){
+.modal-actions .btn {
 
-    .modal{
+    display:
+        inline-flex;
 
-        padding:1rem;
+    align-items:
+        center;
 
-        align-items:flex-end;
+    justify-content:
+        center;
 
-    }
+    min-height:
+        46px;
 
-    .modal-window{
+    padding:
+        .75rem
+        1.25rem;
 
-        width:100%;
+    border:
+        1px solid var(--color-primary);
 
-        max-height:92vh;
+    border-radius:
+        var(--radius-md);
 
-        border-radius:
-            var(--radius)
-            var(--radius)
-            0
+    background:
+        var(--color-primary);
+
+    color:
+        var(--color-white);
+
+    font-family:
+        var(--font-family);
+
+    font-size:
+        var(--font-size-sm);
+
+    font-weight:
+        700;
+
+    line-height:
+        1;
+
+    text-decoration:
+        none;
+
+    cursor:
+        pointer;
+
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast);
+
+}
+
+.modal-actions .btn:hover {
+
+    background:
+        var(--color-primary-dark);
+
+    border-color:
+        var(--color-primary-dark);
+
+    transform:
+        translateY(-1px);
+
+}
+
+.modal-actions .btn-outline {
+
+    background:
+        transparent;
+
+    color:
+        var(--color-primary-dark);
+
+}
+
+.modal-actions .btn-outline:hover {
+
+    background:
+        var(--color-primary);
+
+    border-color:
+        var(--color-primary);
+
+    color:
+        var(--color-white);
+
+}
+
+.modal-actions .btn:focus-visible {
+
+    outline:
+        3px solid var(--color-primary);
+
+    outline-offset:
+        3px;
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+
+    .modal {
+
+        align-items:
+            flex-end;
+
+        padding:
+            var(--space-md)
+            var(--space-md)
             0;
 
     }
 
-    .modal-hero{
+    .modal-window {
 
-        height:180px;
+        width:
+            100%;
 
-    }
+        max-height:
+            92dvh;
 
-    .modal-header,
-    .modal-meta,
-    .modal-content,
-    .modal-actions{
+        border-radius:
+            var(--radius-xl)
+            var(--radius-xl)
+            0
+            0;
 
-        padding-left:1.5rem;
-        padding-right:1.5rem;
-
-    }
-
-    .modal-actions{
-
-        flex-direction:column;
+        transform:
+            translateY(40px);
 
     }
 
-    .modal-actions a,
-    .modal-actions button{
+    .modal.show .modal-window {
 
-        width:100%;
+        transform:
+            translateY(0);
+
+    }
+
+    .modal-hero {
+
+        min-height:
+            0;
+
+        aspect-ratio:
+            16 / 9;
+
+    }
+
+    .modal-header {
+
+        padding:
+            var(--space-lg)
+            var(--space-lg)
+            var(--space-md);
+
+    }
+
+    .modal-title {
+
+        font-size:
+            var(--font-size-xl);
+
+    }
+
+    .modal-meta {
+
+        gap:
+            var(--space-md);
+
+        padding:
+            0
+            var(--space-lg)
+            var(--space-lg);
+
+    }
+
+    .modal-meta-item {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            var(--space-xs);
+
+    }
+
+    .modal-meta-label {
+
+        font-size:
+            var(--font-size-xs);
+
+        text-transform:
+            uppercase;
+
+        letter-spacing:
+            .04em;
+
+    }
+
+    .modal-content {
+
+        padding:
+            0
+            var(--space-lg)
+            var(--space-lg);
+
+    }
+
+    .modal-actions {
+
+        flex-direction:
+            column;
+
+        padding:
+            var(--space-lg);
+
+    }
+
+    .modal-actions .btn {
+
+        width:
+            100%;
 
     }
 
 }
 
 
-/* =====================================================
+/* ==========================================
+   KLEINE DISPLAYS
+========================================== */
+
+@media (max-width: 420px) {
+
+    .modal {
+
+        padding-left:
+            var(--space-sm);
+
+        padding-right:
+            var(--space-sm);
+
+    }
+
+    .modal-close {
+
+        top:
+            var(--space-sm);
+
+        right:
+            var(--space-sm);
+
+        width:
+            40px;
+
+        height:
+            40px;
+
+    }
+
+    .modal-header {
+
+        padding-left:
+            var(--space-md);
+
+        padding-right:
+            var(--space-md);
+
+    }
+
+    .modal-meta {
+
+        padding-left:
+            var(--space-md);
+
+        padding-right:
+            var(--space-md);
+
+    }
+
+    .modal-content {
+
+        padding-left:
+            var(--space-md);
+
+        padding-right:
+            var(--space-md);
+
+    }
+
+    .modal-actions {
+
+        padding:
+            var(--space-md);
+
+    }
+
+}
+
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .modal,
+    .modal-window,
+    .modal-close,
+    .modal-actions .btn {
+
+        transition:
+            none;
+
+    }
+
+}
+
+
+/* ==========================================
    UTILITIES
-===================================================== */
+========================================== */
 
-.modal-hidden{
+.modal-hidden {
 
-    display:none !important;
+    display:
+        none !important;
 
 }
 
-.no-scroll{
+.no-scroll {
 
-    overflow:hidden;
+    overflow:
+        hidden;
 
 }

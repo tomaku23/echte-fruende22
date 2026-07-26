@@ -2,219 +2,583 @@
 =====================================================
  ECHTE FRÜNDE '22
  UTILITIES.JS
- Version 2.0
+ Version 3.1
 =====================================================
 */
 
 "use strict";
 
-EF22.utils = {
+window.EF22 ??= {};
 
-        /* ==========================================
-   DATUM & UHRZEIT
+/* ==========================================
+   UTILITIES
 ========================================== */
 
-toDate(value) {
+EF22.utils = {
 
-    if (value instanceof Date) {
+    /* ==========================================
+       DATUM & UHRZEIT
+    ========================================== */
 
-        return value;
+    toDate(value) {
 
-    }
+        if (value instanceof Date) {
 
-    const date = new Date(value);
-
-    if (isNaN(date.getTime())) {
-
-        return null;
-
-    }
-
-    return date;
-
-},
-
-formatDate(value) {
-
-    const date = this.toDate(value);
-
-    if (!date) {
-
-        return "";
-
-    }
-
-    return date.toLocaleDateString(
-
-        EF22.config.locale,
-
-        {
-
-            weekday: "long",
-
-            day: "2-digit",
-
-            month: "long",
-
-            year: "numeric"
+            return value;
 
         }
 
-    );
+        const date =
+            new Date(value);
 
-},
+        if (isNaN(date.getTime())) {
 
-formatTime(value) {
-
-    const date = this.toDate(value);
-
-    if (!date) {
-
-        return "";
-
-    }
-
-    return date.toLocaleTimeString(
-
-        EF22.config.locale,
-
-        {
-
-            hour: "2-digit",
-
-            minute: "2-digit"
+            return null;
 
         }
 
-    );
+        return date;
 
-},
+    },
 
-formatTimeRange(start, end) {
+    formatDate(value) {
 
-    const startDate = this.toDate(start);
+        const date =
+            this.toDate(value);
 
-    if (!startDate) {
+        if (!date) {
 
-        return "";
+            return "";
 
-    }
+        }
 
-    const endDate = this.toDate(end);
+        return date.toLocaleDateString(
 
-    if (!endDate) {
+            EF22.config.locale,
 
-        return this.formatTime(startDate);
+            {
 
-    }
+                weekday:
+                    "long",
 
-    return `${
+                day:
+                    "2-digit",
 
-        this.formatTime(startDate)
+                month:
+                    "long",
 
-    } – ${
+                year:
+                    "numeric"
 
-        this.formatTime(endDate)
+            }
 
-    }`;
+        );
 
-},
+    },
 
-formatEventTime(event) {
+    formatTime(value) {
 
-    if (!event) {
+        const date =
+            this.toDate(value);
 
-        return "";
+        if (!date) {
 
-    }
+            return "";
 
-    if (event.allDay) {
+        }
 
-        return "Ganztägig";
+        return date.toLocaleTimeString(
 
-    }
+            EF22.config.locale,
 
-    return this.formatTimeRange(
+            {
 
-        event.start,
+                hour:
+                    "2-digit",
 
-        event.end
+                minute:
+                    "2-digit"
 
-    );
+            }
 
-},
+        );
 
-getCountdown(value) {
+    },
 
-    const date = this.toDate(value);
+    formatTimeRange(start, end) {
 
-    if (!date) {
+        const startDate =
+            this.toDate(start);
 
-        return "";
+        if (!startDate) {
 
-    }
+            return "";
 
-    const MS_PER_DAY = 86400000;
+        }
 
-    const today = new Date();
+        const endDate =
+            this.toDate(end);
 
-    today.setHours(
+        if (!endDate) {
 
-        0,
+            return this.formatTime(
+                startDate
+            );
 
-        0,
+        }
 
-        0,
+        return `${
 
-        0
+            this.formatTime(
+                startDate
+            )
 
-    );
+        } – ${
 
-    const target = new Date(date);
+            this.formatTime(
+                endDate
+            )
 
-    target.setHours(
+        }`;
 
-        0,
+    },
 
-        0,
+    formatEventTime(event) {
 
-        0,
+        if (!event) {
 
-        0
+            return "";
 
-    );
+        }
 
-    const days = Math.ceil(
+        if (event.allDay) {
 
-        (target - today) /
+            return "Ganztägig";
 
-        MS_PER_DAY
+        }
 
-    );
+        return this.formatTimeRange(
 
-    if (days < 0) {
+            event.start,
 
-        return "Termin vorbei";
+            event.end
 
-    }
+        );
 
-    if (days === 0) {
+    },
 
-        return "Heute";
+    /* ==========================================
+       MEHRTÄGIGES EVENT
 
-    }
+       EF22-Regel:
 
-    if (days === 1) {
+       start = erster Veranstaltungstag
+       end   = letzter Veranstaltungstag
 
-        return "Morgen";
+       Beide Tage gehören vollständig zum
+       Veranstaltungszeitraum.
 
-    }
+       allDay beeinflusst diese Regel nicht.
+    ========================================== */
 
-    return `Noch ${days} Tage`;
+    isMultiDayEvent(event) {
 
-},
+        if (
 
-        /* ==========================================
+            !event?.start ||
+
+            !event?.end
+
+        ) {
+
+            return false;
+
+        }
+
+        const start =
+            this.toDate(
+                event.start
+            );
+
+        const end =
+            this.toDate(
+                event.end
+            );
+
+        if (
+
+            !start ||
+
+            !end
+
+        ) {
+
+            return false;
+
+        }
+
+        return (
+
+            start.getFullYear() !==
+                end.getFullYear() ||
+
+            start.getMonth() !==
+                end.getMonth() ||
+
+            start.getDate() !==
+                end.getDate()
+
+        );
+
+    },
+
+    /* ==========================================
+       EVENT-DATUM
+
+       EF22 verwendet Start- und Enddatum
+       grundsätzlich inklusive.
+
+       Beispiele:
+
+       Freitag, 31. Juli 2026
+
+       18.–20. September 2026
+
+       30. September – 2. Oktober 2026
+
+       30. Dezember 2026 – 2. Januar 2027
+    ========================================== */
+
+    formatEventDate(event) {
+
+        if (!event?.start) {
+
+            return "";
+
+        }
+
+        const start =
+            this.toDate(
+                event.start
+            );
+
+        if (!start) {
+
+            return "";
+
+        }
+
+        /*
+         * EINZELNER TAG
+         */
+
+        if (
+
+            !this.isMultiDayEvent(
+                event
+            )
+
+        ) {
+
+            return start.toLocaleDateString(
+
+                EF22.config.locale,
+
+                {
+
+                    weekday:
+                        "long",
+
+                    day:
+                        "numeric",
+
+                    month:
+                        "long",
+
+                    year:
+                        "numeric"
+
+                }
+
+            );
+
+        }
+
+        /*
+         * MEHRTÄGIG
+         */
+
+        const end =
+            this.toDate(
+                event.end
+            );
+
+        if (!end) {
+
+            return this.formatDate(
+                start
+            );
+
+        }
+
+        const sameYear =
+
+            start.getFullYear() ===
+            end.getFullYear();
+
+        const sameMonth =
+
+            sameYear &&
+
+            start.getMonth() ===
+            end.getMonth();
+
+        /*
+         * GLEICHER MONAT
+
+         * 18.–20. September 2026
+         */
+
+        if (sameMonth) {
+
+            const monthYear =
+
+                end.toLocaleDateString(
+
+                    EF22.config.locale,
+
+                    {
+
+                        month:
+                            "long",
+
+                        year:
+                            "numeric"
+
+                    }
+
+                );
+
+            return `${
+
+                start.getDate()
+
+            }.–${
+
+                end.getDate()
+
+            }. ${
+
+                monthYear
+
+            }`;
+
+        }
+
+        /*
+         * GLEICHES JAHR,
+         * UNTERSCHIEDLICHE MONATE
+
+         * 30. September – 2. Oktober 2026
+         */
+
+        if (sameYear) {
+
+            const startPart =
+
+                start.toLocaleDateString(
+
+                    EF22.config.locale,
+
+                    {
+
+                        day:
+                            "numeric",
+
+                        month:
+                            "long"
+
+                    }
+
+                );
+
+            const endPart =
+
+                end.toLocaleDateString(
+
+                    EF22.config.locale,
+
+                    {
+
+                        day:
+                            "numeric",
+
+                        month:
+                            "long",
+
+                        year:
+                            "numeric"
+
+                    }
+
+                );
+
+            return `${
+
+                startPart
+
+            } – ${
+
+                endPart
+
+            }`;
+
+        }
+
+        /*
+         * UNTERSCHIEDLICHE JAHRE
+
+         * 30. Dezember 2026 – 2. Januar 2027
+         */
+
+        const startPart =
+
+            start.toLocaleDateString(
+
+                EF22.config.locale,
+
+                {
+
+                    day:
+                        "numeric",
+
+                    month:
+                        "long",
+
+                    year:
+                        "numeric"
+
+                }
+
+            );
+
+        const endPart =
+
+            end.toLocaleDateString(
+
+                EF22.config.locale,
+
+                {
+
+                    day:
+                        "numeric",
+
+                    month:
+                        "long",
+
+                    year:
+                        "numeric"
+
+                }
+
+            );
+
+        return `${
+
+            startPart
+
+        } – ${
+
+            endPart
+
+        }`;
+
+    },
+
+    /* ==========================================
+       COUNTDOWN
+    ========================================== */
+
+    getCountdown(value) {
+
+        const date =
+            this.toDate(value);
+
+        if (!date) {
+
+            return "";
+
+        }
+
+        const MS_PER_DAY =
+            86400000;
+
+        const today =
+            new Date();
+
+        today.setHours(
+
+            0,
+
+            0,
+
+            0,
+
+            0
+
+        );
+
+        const target =
+            new Date(date);
+
+        target.setHours(
+
+            0,
+
+            0,
+
+            0,
+
+            0
+
+        );
+
+        const days =
+
+            Math.ceil(
+
+                (
+                    target -
+                    today
+                ) /
+
+                MS_PER_DAY
+
+            );
+
+        if (days < 0) {
+
+            return "Termin vorbei";
+
+        }
+
+        if (days === 0) {
+
+            return "Heute";
+
+        }
+
+        if (days === 1) {
+
+            return "Morgen";
+
+        }
+
+        return `Noch ${days} Tage`;
+
+    },
+    
+    /* ==========================================
        EVENTS
     ========================================== */
 
@@ -222,25 +586,41 @@ getCountdown(value) {
 
         return {
 
-            image: "",
+            image:
+                "",
 
-            category: "Termin",
+            category:
+                "Termin",
 
-            location: "",
+            type:
+                "",
 
-            address: "",
+            location:
+                "",
 
-            description: "",
+            address:
+                "",
 
-            dresscode: "",
+            description:
+                "",
 
-            meeting: "",
+            dresscode:
+                "",
 
-            contact: "",
+            meeting:
+                "",
 
-            ticket: "",
+            contact:
+                "",
 
-            highlight: false,
+            ticket:
+                "",
+
+            highlight:
+                false,
+
+            hero:
+                false,
 
             ...(event?.extendedProps ?? {})
 
@@ -251,16 +631,73 @@ getCountdown(value) {
     getNextEvent(events) {
 
         return this
-            .sortEvents(events)
-            .find(event => this.isFutureEvent(event)) ?? null;
+            .sortEvents(
+                events
+            )
+            .find(
+
+                (event) =>
+
+                    this.isFutureEvent(
+                        event
+                    )
+
+            ) ?? null;
 
     },
 
     sortEvents(events) {
 
-        return [...events].sort(
+        return [
 
-            (a, b) => new Date(a.start) - new Date(b.start)
+            ...events
+
+        ].sort(
+
+            (a, b) => {
+
+                const startA =
+                    this.toDate(
+                        a?.start
+                    );
+
+                const startB =
+                    this.toDate(
+                        b?.start
+                    );
+
+                if (
+
+                    !startA &&
+
+                    !startB
+
+                ) {
+
+                    return 0;
+
+                }
+
+                if (!startA) {
+
+                    return 1;
+
+                }
+
+                if (!startB) {
+
+                    return -1;
+
+                }
+
+                return (
+
+                    startA.getTime() -
+                    startB.getTime()
+
+                );
+
+            }
 
         );
 
@@ -268,33 +705,91 @@ getCountdown(value) {
 
     filterCalendar(events) {
 
-        return this.sortEvents(events);
+        if (!Array.isArray(events)) {
+
+            return [];
+
+        }
+
+        return this.sortEvents(
+            events
+        );
 
     },
 
     filterHighlights(events) {
 
+        if (!Array.isArray(events)) {
+
+            return [];
+
+        }
+
         return this
-            .sortEvents(events)
-            .filter(event => this.getProps(event).highlight);
+            .sortEvents(
+                events
+            )
+            .filter(
+
+                (event) => {
+
+                    return Boolean(
+
+                        this
+                            .getProps(
+                                event
+                            )
+                            .highlight
+
+                    );
+
+                }
+
+            );
 
     },
 
     isFutureEvent(event) {
 
-        return new Date(event.start) >= new Date();
+        if (!event?.start) {
+
+            return false;
+
+        }
+
+        const start =
+            this.toDate(
+                event.start
+            );
+
+        if (!start) {
+
+            return false;
+
+        }
+
+        return (
+
+            start.getTime() >=
+            Date.now()
+
+        );
 
     },
-
+    
     /* ==========================================
        HTML
     ========================================== */
 
     escapeHtml(text) {
 
-        const div = document.createElement("div");
+        const div =
+            document.createElement(
+                "div"
+            );
 
-        div.textContent = text ?? "";
+        div.textContent =
+            text ?? "";
 
         return div.innerHTML;
 
@@ -304,7 +799,10 @@ getCountdown(value) {
        CSS
     ========================================== */
 
-    addBadgeClass(element, category) {
+    addBadgeClass(
+        element,
+        category
+    ) {
 
         if (!element) {
 
@@ -315,28 +813,52 @@ getCountdown(value) {
         element.classList.remove(
 
             "badge-fest",
+
             "badge-meeting",
+
             "badge-intern",
+
             "badge-public",
+
             "badge-royal"
 
         );
 
         const classes = {
 
-            "schützenfest": "badge-fest",
-            "versammlung": "badge-meeting",
-            "intern": "badge-intern",
-            "öffentlich": "badge-public",
-            "zugkönig": "badge-royal"
+            "schützenfest":
+                "badge-fest",
+
+            "versammlung":
+                "badge-meeting",
+
+            "intern":
+                "badge-intern",
+
+            "öffentlich":
+                "badge-public",
+
+            "zugkönig":
+                "badge-royal"
 
         };
 
-        const badge = classes[(category ?? "").toLowerCase()];
+        const badge =
+
+            classes[
+
+                (
+                    category ??
+                    ""
+                ).toLowerCase()
+
+            ];
 
         if (badge) {
 
-            element.classList.add(badge);
+            element.classList.add(
+                badge
+            );
 
         }
 
