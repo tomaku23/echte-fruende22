@@ -326,15 +326,20 @@ Design:
 /* ==========================================
    HERO
 
-   Wichtig:
+   Die Modalbreite bleibt unverändert.
 
-   Die Geometrie der Bildfläche wird nicht
-   durch den Titel verändert.
+   Die Höhe des Hero wird durch das
+   Seitenverhältnis des geladenen Bildes
+   bestimmt.
 
-   Die JS-Bildlogik entscheidet weiterhin:
+   Beispiel:
 
-   16:9-nahe Bilder = contain
-   andere Bilder    = cover
+   16:9 -> flacher Hero
+   3:2  -> etwas höher
+   4:3  -> noch etwas höher
+
+   Extreme Hochformate werden über
+   max-height begrenzt.
 ========================================== */
 
 .modal-hero {
@@ -345,20 +350,26 @@ Design:
     width:
         100%;
 
-    aspect-ratio:
-        16 / 8;
+    height:
+        auto;
 
     min-height:
         210px;
 
-    height:
-        auto;
+    max-height:
+        min(
+            52dvh,
+            520px
+        );
 
     overflow:
         hidden;
 
     background-position:
         center;
+
+    background-size:
+        cover;
 
     background-repeat:
         no-repeat;
@@ -376,29 +387,45 @@ Design:
 
 
 /* ==========================================
-   HERO BILDLOGIK
+   KEIN BILD
+
+   Ohne Bild bleibt eine kontrollierte
+   Hero-Fläche bestehen.
 ========================================== */
-
-.modal-hero--contain {
-
-    background-size:
-        contain;
-
-}
-
-
-.modal-hero--cover {
-
-    background-size:
-        cover;
-
-}
-
 
 .modal-hero--empty {
 
-    background-size:
-        cover;
+    aspect-ratio:
+        16 / 8;
+
+    min-height:
+        210px;
+
+    background:
+
+        radial-gradient(
+            circle at 85% 10%,
+            rgba(255, 194, 96, .10),
+            transparent 38%
+        ),
+
+        linear-gradient(
+            145deg,
+            rgba(35, 35, 33, 1),
+            rgba(18, 18, 18, 1)
+        );
+
+}
+
+
+/* ==========================================
+   FALLBACK BEI UNBEKANNTEM BILDFORMAT
+========================================== */
+
+.modal-hero--limited {
+
+    aspect-ratio:
+        16 / 9;
 
 }
 
@@ -406,14 +433,14 @@ Design:
 /* ==========================================
    HERO VERLAUF
 
-   Der obere Bildbereich bleibt klar.
+   Der Verlauf beginnt weich im unteren
+   Bildbereich.
 
-   Der Verlauf beginnt erst in der unteren
-   Hälfte und endet in derselben dunklen
-   Grundfarbe wie der Modal-Body.
+   Das Bild geht dadurch optisch direkt in
+   den dunklen Modal-Body über.
 
-   Dadurch entsteht kein harter Schnitt
-   zwischen Bild und Informationen.
+   Der Titel liegt innerhalb dieser
+   Übergangszone.
 ========================================== */
 
 .modal-hero::after {
@@ -436,22 +463,25 @@ Design:
                 0%,
 
             rgba(13, 13, 13, 0)
-                40%,
+                38%,
 
-            rgba(13, 13, 13, .06)
-                50%,
+            rgba(13, 13, 13, .04)
+                48%,
 
-            rgba(13, 13, 13, .18)
-                60%,
+            rgba(13, 13, 13, .12)
+                57%,
 
-            rgba(13, 13, 13, .40)
-                70%,
+            rgba(13, 13, 13, .28)
+                66%,
 
-            rgba(13, 13, 13, .68)
-                80%,
+            rgba(13, 13, 13, .50)
+                75%,
 
-            rgba(13, 13, 13, .90)
-                91%,
+            rgba(13, 13, 13, .72)
+                84%,
+
+            rgba(13, 13, 13, .91)
+                93%,
 
             rgba(13, 13, 13, 1)
                 100%
@@ -469,11 +499,20 @@ Design:
 /* ==========================================
    HERO CONTENT
 
-   Der Titel sitzt ganz unten im Hero.
+   Der Titel sitzt im unteren dunklen
+   Bereich des Bildes.
 
-   Damit befindet er sich bereits im dunklen
-   Teil des Verlaufs und unmittelbar vor den
-   Informationen.
+   Dadurch entsteht optisch:
+
+   BILD
+     ↓
+   VERLAUF
+     ↓
+   TITEL
+     ↓
+   INFORMATIONEN
+
+   ohne sichtbaren harten Übergang.
 ========================================== */
 
 .modal-hero-content {
@@ -536,7 +575,6 @@ Design:
         rgba(0, 0, 0, .85);
 
 }
-
 
 /* ==========================================
    BODY
@@ -1705,15 +1743,13 @@ Design:
     /* ======================================
        HERO
 
-       Keine feste Pixelhöhe.
+       Auch mobil bestimmt das Bildformat
+       die Höhe.
 
-       Das Seitenverhältnis bestimmt die
-       Hero-Fläche.
+       Es wird KEIN festes aspect-ratio mehr
+       durch CSS vorgegeben.
 
-       Dadurch bleibt die JS-Bildlogik
-       contain / cover konsistent und cover
-       erzeugt keinen unnötigen Zoom durch
-       eine überhöhte Bildfläche.
+       Extreme Hochformate werden begrenzt.
     ====================================== */
 
     .modal-hero {
@@ -1727,11 +1763,17 @@ Design:
         min-height:
             180px;
 
-        aspect-ratio:
-            16 / 8.5;
+        max-height:
+            min(
+                48dvh,
+                440px
+            );
 
         background-position:
             center;
+
+        background-size:
+            cover;
 
         background-repeat:
             no-repeat;

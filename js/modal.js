@@ -410,24 +410,27 @@
            RESET
         ========================================== */
 
-        reset() {
+                if (this.elements.image) {
 
-            if (this.elements.image) {
+            this.elements.image.style.backgroundImage =
+                "";
 
-                this.elements.image.style.backgroundImage =
-                    "";
+            this.elements.image.style.aspectRatio =
+                "";
 
-                this.elements.image.classList.remove(
+            this.elements.image.classList.remove(
 
-                    "modal-hero--contain",
+                "modal-hero--contain",
 
-                    "modal-hero--cover",
+                "modal-hero--cover",
 
-                    "modal-hero--empty"
+                "modal-hero--empty",
 
-                );
+                "modal-hero--limited"
 
-            }
+            );
+
+        }
 
 
             if (this.elements.title) {
@@ -530,165 +533,179 @@
         },
 
 
-        /* ==========================================
-           HERO BILD
+            /* ==========================================
+       HERO BILD
 
-           Bildlogik:
+       Neue Bildlogik:
 
-           - Bild laden
-           - Verhältnis bestimmen
-           - 16:9-nahe Bilder -> contain
-           - andere Bilder -> cover
+       - Modalbreite bleibt unverändert
+       - Bild wird geladen
+       - Hero übernimmt das Seitenverhältnis
+         des Bildes
+       - dadurch kein unnötiger Beschnitt
+       - extreme Hochformate werden durch CSS
+         in der Höhe begrenzt
 
-           Die Toleranz verhindert Probleme durch
-           minimale Rundungsabweichungen.
-        ========================================== */
+       Die bisherige contain / cover Logik
+       wird nicht mehr benötigt.
+    ========================================== */
 
-        renderHeroImage(imageUrl) {
+    renderHeroImage(imageUrl) {
 
-            const hero =
-                this.elements.image;
-
-
-            if (!hero) {
-
-                return;
-
-            }
+        const hero =
+            this.elements.image;
 
 
-            hero.classList.remove(
+        if (!hero) {
 
-                "modal-hero--contain",
+            return;
 
-                "modal-hero--cover",
+        }
 
+
+        /* ======================================
+           ALTEN ZUSTAND ZURÜCKSETZEN
+        ====================================== */
+
+        hero.classList.remove(
+
+            "modal-hero--contain",
+
+            "modal-hero--cover",
+
+            "modal-hero--empty",
+
+            "modal-hero--limited"
+
+        );
+
+
+        hero.style.backgroundImage =
+            "";
+
+
+        hero.style.aspectRatio =
+            "";
+
+
+        /* ======================================
+           QUELLE
+
+           Wenn kein Eventbild vorhanden ist,
+           wird das Landscape-Fallback genutzt.
+        ====================================== */
+
+        const fallback =
+            EF22.config?.images
+                ?.heroFallbackLandscape ??
+            "";
+
+
+        const source =
+            imageUrl ||
+            fallback;
+
+
+        /* ======================================
+           KEIN BILD
+        ====================================== */
+
+        if (!source) {
+
+            hero.classList.add(
                 "modal-hero--empty"
-
             );
 
+            return;
 
-            /*
-             * Fallback-Bild verwenden, wenn
-             * beim Event kein eigenes Bild
-             * vorhanden ist.
-             */
-
-            const fallback =
-                EF22.config?.images
-                    ?.heroFallbackLandscape ??
-                "";
+        }
 
 
-            const source =
-                imageUrl ||
-                fallback;
+        /* ======================================
+           BILD LADEN
+        ====================================== */
+
+        const image =
+            new Image();
 
 
-            if (!source) {
+        image.onload =
+            () => {
+
+                if (
+
+                    !image.naturalWidth ||
+
+                    !image.naturalHeight
+
+                ) {
+
+                    hero.style.backgroundImage =
+                        `url("${source}")`;
+
+                    hero.classList.add(
+                        "modal-hero--limited"
+                    );
+
+                    return;
+
+                }
+
+
+                const width =
+                    image.naturalWidth;
+
+
+                const height =
+                    image.naturalHeight;
+
+
+                /* ==================================
+                   HERO ÜBERNIMMT BILDFORMAT
+                ================================== */
+
+                hero.style.aspectRatio =
+                    `${width} / ${height}`;
+
 
                 hero.style.backgroundImage =
+                    `url("${source}")`;
+
+            };
+
+
+        /* ======================================
+           FEHLER
+
+           Wenn das Eventbild nicht geladen
+           werden kann und ein anderes Fallback
+           existiert, verwenden wir dieses.
+
+           Andernfalls bleibt der Hero als
+           dunkle Fläche erhalten.
+        ====================================== */
+
+        image.onerror =
+            () => {
+
+                hero.style.backgroundImage =
+                    "";
+
+                hero.style.aspectRatio =
                     "";
 
                 hero.classList.add(
                     "modal-hero--empty"
                 );
 
-                return;
-
-            }
+            };
 
 
-            hero.style.backgroundImage =
-                `url("${source}")`;
+        image.src =
+            source;
 
-
-            const image =
-                new Image();
-
-
-            image.onload =
-                () => {
-
-                    if (
-
-                        !image.naturalWidth ||
-
-                        !image.naturalHeight
-
-                    ) {
-
-                        hero.classList.add(
-                            "modal-hero--cover"
-                        );
-
-                        return;
-
-                    }
-
-
-                    const ratio =
-
-                        image.naturalWidth /
-                        image.naturalHeight;
-
-
-                    const sixteenNine =
-
-                        16 /
-                        9;
-
-
-                    /*
-                     * Ca. 3 % Toleranz um 16:9.
-                     */
-
-                    const tolerance =
-                        sixteenNine * 0.03;
-
-
-                    if (
-
-                        Math.abs(
-                            ratio -
-                            sixteenNine
-                        ) <= tolerance
-
-                    ) {
-
-                        hero.classList.add(
-                            "modal-hero--contain"
-                        );
-
-                    }
-
-                    else {
-
-                        hero.classList.add(
-                            "modal-hero--cover"
-                        );
-
-                    }
-
-                };
-
-
-            image.onerror =
-                () => {
-
-                    hero.classList.add(
-                        "modal-hero--cover"
-                    );
-
-                };
-
-
-            image.src =
-                source;
-
-        },
-
-
+    },
+    
         /* ==========================================
            METADATEN
         ========================================== */
