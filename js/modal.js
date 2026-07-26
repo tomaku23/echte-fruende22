@@ -2,37 +2,18 @@
 =====================================================
  ECHTE FRÜNDE '22
  MODAL.JS
- Version 4.0
+ Version 4.1
 
  EF22 FRAMEWORK
 =====================================================
 
-Modal-Komponente des EF22 Frameworks.
-
 Verantwortung:
-- Event-Modal öffnen
-- Event-Modal schließen
+- Event-Modal öffnen / schließen
 - Eventdaten darstellen
-- Routenauswahl öffnen
-- Routenauswahl schließen
-- Kartenlinks erzeugen
-
-Nicht verantwortlich für:
-- API
-- Kalender
-- Hero
-- Highlights
-
-Ebenen:
-
-Ebene 1:
-- Website
-
-Ebene 2:
-- Event-Modal
-
-Ebene 3:
-- Routenauswahl
+- Metadaten aufbereiten
+- Adressen für Anzeige formatieren
+- Routenauswahl öffnen / schließen
+- Apple Karten / Google Maps bereitstellen
 
 =====================================================
 */
@@ -40,6 +21,7 @@ Ebene 3:
 "use strict";
 
 window.EF22 ??= {};
+
 
 /* ==========================================
    MODAL
@@ -57,12 +39,10 @@ EF22.modal = {
             null,
 
         routeOpen:
-            false,
-
-        previousFocus:
-            null
+            false
 
     },
+
 
     /* ==========================================
        ELEMENTE
@@ -85,9 +65,6 @@ EF22.modal = {
         image:
             null,
 
-        badge:
-            null,
-
         title:
             null,
 
@@ -106,36 +83,14 @@ EF22.modal = {
         routeOverlay:
             null,
 
-        routeWindow:
+        routeAppleMaps:
             null,
 
-        routeApple:
-            null,
-
-        routeGoogle:
+        routeGoogleMaps:
             null
 
     },
 
-    /* ==========================================
-       HANDLER
-    ========================================== */
-
-    handlers: {
-
-        modalOverlayClick:
-            null,
-
-        closeClick:
-            null,
-
-        routeOverlayClick:
-            null,
-
-        keyDown:
-            null
-
-    },
 
     /* ==========================================
        INITIALISIERUNG
@@ -143,115 +98,76 @@ EF22.modal = {
 
     init() {
 
-        /* ======================================
-           EVENT MODAL
-        ====================================== */
-
         this.elements.modal =
-
             document.getElementById(
                 "eventModal"
             );
 
         this.elements.overlay =
-
-            this.elements.modal
-                ?.querySelector(
-                    "[data-modal-close]"
-                ) ??
-            null;
+            this.elements.modal?.querySelector(
+                ".modal-overlay"
+            );
 
         this.elements.window =
-
-            this.elements.modal
-                ?.querySelector(
-                    ".modal-window"
-                ) ??
-            null;
+            this.elements.modal?.querySelector(
+                ".modal-window"
+            );
 
         this.elements.closeButton =
-
             document.getElementById(
                 "closeModalButton"
             );
 
         this.elements.image =
-
             document.getElementById(
                 "modalImage"
             );
 
-        this.elements.badge =
-
-            document.getElementById(
-                "modalBadge"
-            );
-
         this.elements.title =
-
             document.getElementById(
                 "modalTitle"
             );
 
         this.elements.meta =
-
             document.getElementById(
                 "modalMeta"
             );
 
         this.elements.content =
-
             document.getElementById(
                 "modalContent"
             );
 
         this.elements.actions =
-
             document.getElementById(
                 "modalActions"
             );
 
+
         /* ======================================
-           ROUTEN MODAL
+           ROUTENMODAL
         ====================================== */
 
         this.elements.routeModal =
-
             document.getElementById(
                 "routeModal"
             );
 
         this.elements.routeOverlay =
+            this.elements.routeModal?.querySelector(
+                ".route-modal-overlay"
+            );
 
-            this.elements.routeModal
-                ?.querySelector(
-                    "[data-route-close]"
-                ) ??
-            null;
-
-        this.elements.routeWindow =
-
-            this.elements.routeModal
-                ?.querySelector(
-                    ".route-modal-window"
-                ) ??
-            null;
-
-        this.elements.routeApple =
-
+        this.elements.routeAppleMaps =
             document.getElementById(
                 "routeAppleMaps"
             );
 
-        this.elements.routeGoogle =
-
+        this.elements.routeGoogleMaps =
             document.getElementById(
                 "routeGoogleMaps"
             );
 
-        /* ======================================
-           PRÜFUNG
-        ====================================== */
 
         if (!this.elements.modal) {
 
@@ -259,53 +175,11 @@ EF22.modal = {
 
         }
 
-        this.createHandlers();
 
         this.registerEvents();
 
     },
 
-    /* ==========================================
-       HANDLER ERSTELLEN
-    ========================================== */
-
-    createHandlers() {
-
-        this.handlers.modalOverlayClick =
-
-            () => {
-
-                this.close();
-
-            };
-
-        this.handlers.closeClick =
-
-            () => {
-
-                this.close();
-
-            };
-
-        this.handlers.routeOverlayClick =
-
-            () => {
-
-                this.closeRoute();
-
-            };
-
-        this.handlers.keyDown =
-
-            (event) => {
-
-                this.onKeyDown(
-                    event
-                );
-
-            };
-
-    },
 
     /* ==========================================
        EVENTS REGISTRIEREN
@@ -313,88 +187,102 @@ EF22.modal = {
 
     registerEvents() {
 
-        this.elements.overlay
-            ?.addEventListener(
+        /* ======================================
+           EVENT MODAL SCHLIESSEN
+        ====================================== */
 
-                "click",
+        this.elements.overlay?.addEventListener(
 
-                this.handlers.modalOverlayClick
+            "click",
 
-            );
+            () => {
 
-        this.elements.closeButton
-            ?.addEventListener(
+                this.close();
 
-                "click",
+            }
 
-                this.handlers.closeClick
+        );
 
-            );
 
-        this.elements.routeOverlay
-            ?.addEventListener(
+        this.elements.closeButton?.addEventListener(
 
-                "click",
+            "click",
 
-                this.handlers.routeOverlayClick
+            () => {
 
-            );
+                this.close();
+
+            }
+
+        );
+
+
+        /* ======================================
+           ROUTENMODAL SCHLIESSEN
+        ====================================== */
+
+        this.elements.routeOverlay?.addEventListener(
+
+            "click",
+
+            () => {
+
+                this.closeRoute();
+
+            }
+
+        );
+
+
+        /* ======================================
+           ESCAPE
+        ====================================== */
 
         document.addEventListener(
 
             "keydown",
 
-            this.handlers.keyDown
+            (event) => {
+
+                if (event.key !== "Escape") {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Ebene 3 zuerst schließen.
+                 */
+
+                if (this.state.routeOpen) {
+
+                    this.closeRoute();
+
+                    return;
+
+                }
+
+
+                /*
+                 * Danach Ebene 2.
+                 */
+
+                if (this.state.event) {
+
+                    this.close();
+
+                }
+
+            }
 
         );
 
     },
 
-    /* ==========================================
-       KEYBOARD
-    ========================================== */
-
-    onKeyDown(event) {
-
-        if (
-
-            event.key !==
-            "Escape"
-
-        ) {
-
-            return;
-
-        }
-
-        /*
-         * Ebene 3 ist geöffnet:
-         * Nur Ebene 3 schließen.
-        */
-
-        if (this.state.routeOpen) {
-
-            this.closeRoute();
-
-            return;
-
-        }
-
-        /*
-         * Ebene 2 ist geöffnet:
-         * Event-Modal schließen.
-        */
-
-        if (this.state.event) {
-
-            this.close();
-
-        }
-
-    },
 
     /* ==========================================
-       EVENT MODAL ÖFFNEN
+       ÖFFNEN
     ========================================== */
 
     open(event) {
@@ -411,30 +299,18 @@ EF22.modal = {
 
         }
 
-        /*
-         * Element merken, das vor dem Öffnen
-         * den Fokus hatte.
-        */
-
-        this.state.previousFocus =
-
-            document.activeElement instanceof HTMLElement
-
-                ? document.activeElement
-
-                : null;
 
         this.state.event =
             event;
 
-        this.state.routeOpen =
-            false;
 
         this.render();
+
 
         this.elements.modal.classList.add(
             "show"
         );
+
 
         this.elements.modal.setAttribute(
 
@@ -444,13 +320,16 @@ EF22.modal = {
 
         );
 
+
         document.body.classList.add(
             "no-scroll"
         );
 
+
         /*
-         * Beim Öffnen steht der Nutzer oben.
-        */
+         * Beim erneuten Öffnen immer oben
+         * im Modal beginnen.
+         */
 
         if (this.elements.window) {
 
@@ -459,18 +338,27 @@ EF22.modal = {
 
         }
 
-        /*
-         * Da es oben bewusst kein X mehr gibt,
-         * fokussieren wir nicht künstlich den
-         * unteren Schließen-Button.
-        */
 
-        this.elements.window?.focus?.();
+        /*
+         * Fokus auf Schließen.
+         *
+         * preventScroll verhindert, dass das
+         * Modal direkt bis zum unteren Button
+         * scrollt.
+         */
+
+        this.elements.closeButton?.focus({
+
+            preventScroll:
+                true
+
+        });
 
     },
 
+
     /* ==========================================
-       EVENT MODAL SCHLIESSEN
+       SCHLIESSEN
     ========================================== */
 
     close() {
@@ -481,21 +369,19 @@ EF22.modal = {
 
         }
 
-        /*
-         * Ebene 3 zuerst zurücksetzen.
-        */
 
-        this.closeRoute(
-            false
-        );
+        /*
+         * Falls Ebene 3 offen ist,
+         * ebenfalls schließen.
+         */
+
+        this.closeRoute();
+
 
         this.elements.modal.classList.remove(
             "show"
         );
 
-        this.elements.modal.classList.remove(
-            "route-is-open"
-        );
 
         this.elements.modal.setAttribute(
 
@@ -505,38 +391,84 @@ EF22.modal = {
 
         );
 
+
         document.body.classList.remove(
             "no-scroll"
         );
 
-        this.clear();
 
-        /*
-         * Fokus zum ursprünglichen Element
-         * zurückgeben.
-        */
-
-        if (
-
-            this.state.previousFocus &&
-
-            document.contains(
-                this.state.previousFocus
-            )
-
-        ) {
-
-            this.state.previousFocus.focus?.();
-
-        }
-
-        this.state.previousFocus =
+        this.state.event =
             null;
+
+
+        this.reset();
 
     },
 
+
     /* ==========================================
-       RENDERN
+       RESET
+    ========================================== */
+
+    reset() {
+
+        if (this.elements.image) {
+
+            this.elements.image.style.backgroundImage =
+                "";
+
+            this.elements.image.classList.remove(
+
+                "modal-hero--contain",
+
+                "modal-hero--cover",
+
+                "modal-hero--empty"
+
+            );
+
+        }
+
+
+        if (this.elements.title) {
+
+            this.elements.title.textContent =
+                "";
+
+        }
+
+
+        if (this.elements.meta) {
+
+            this.elements.meta.innerHTML =
+                "";
+
+        }
+
+
+        if (this.elements.content) {
+
+            this.elements.content.innerHTML =
+                "";
+
+            this.elements.content.hidden =
+                true;
+
+        }
+
+
+        if (this.elements.actions) {
+
+            this.elements.actions.innerHTML =
+                "";
+
+        }
+
+    },
+
+
+    /* ==========================================
+       RENDER
     ========================================== */
 
     render() {
@@ -547,7 +479,8 @@ EF22.modal = {
 
         }
 
-        this.renderHeader();
+
+        this.renderHero();
 
         this.renderMeta();
 
@@ -557,117 +490,22 @@ EF22.modal = {
 
     },
 
+
     /* ==========================================
-       HEADER
+       HERO
     ========================================== */
 
-    renderHeader() {
+    renderHero() {
 
         const event =
             this.state.event;
 
-        const props =
 
+        const props =
             EF22.utils.getProps(
                 event
             );
 
-        /* ======================================
-           BILD
-        ====================================== */
-
-        if (this.elements.image) {
-
-            const image =
-
-                props.image &&
-
-                String(
-                    props.image
-                ).trim() !== ""
-
-                    ? String(
-                        props.image
-                    )
-
-                    : EF22.config
-                        ?.images
-                        ?.heroFallbackLandscape ??
-                      "";
-
-            this.elements.image.style.backgroundImage =
-
-                image
-
-                    ? `url("${image}")`
-
-                    : "";
-
-        }
-
-        /* ======================================
-           BADGE
-
-           type = Badge-Inhalt
-
-           category wird hier bewusst NICHT
-           als sichtbarer Text verwendet.
-        ====================================== */
-
-        if (this.elements.badge) {
-
-            this.elements.badge.className =
-                "modal-badge";
-
-            const badgeText =
-
-                props.type &&
-
-                String(
-                    props.type
-                ).trim() !== ""
-
-                    ? String(
-                        props.type
-                    )
-
-                    : "";
-
-            if (badgeText) {
-
-                this.elements.badge.hidden =
-                    false;
-
-                this.elements.badge.textContent =
-                    badgeText;
-
-                /*
-                 * Für bestehende Badge-Farben
-                 * verwenden wir weiterhin die
-                 * vorhandene Klassenzuordnung.
-                */
-
-                EF22.utils.addBadgeClass(
-
-                    this.elements.badge,
-
-                    props.type
-
-                );
-
-            }
-
-            else {
-
-                this.elements.badge.hidden =
-                    true;
-
-                this.elements.badge.textContent =
-                    "";
-
-            }
-
-        }
 
         /* ======================================
            TITEL
@@ -676,13 +514,180 @@ EF22.modal = {
         if (this.elements.title) {
 
             this.elements.title.textContent =
-
-                event.title ??
-                "";
+                event.title ?? "";
 
         }
 
+
+        /* ======================================
+           BILD
+        ====================================== */
+
+        this.renderHeroImage(
+            props.image
+        );
+
     },
+
+
+    /* ==========================================
+       HERO BILD
+
+       Bildlogik:
+
+       - Bild laden
+       - Verhältnis bestimmen
+       - 16:9-nahe Bilder -> contain
+       - andere Bilder -> cover
+
+       Die Toleranz verhindert Probleme durch
+       minimale Rundungsabweichungen.
+    ========================================== */
+
+    renderHeroImage(imageUrl) {
+
+        const hero =
+            this.elements.image;
+
+
+        if (!hero) {
+
+            return;
+
+        }
+
+
+        hero.classList.remove(
+
+            "modal-hero--contain",
+
+            "modal-hero--cover",
+
+            "modal-hero--empty"
+
+        );
+
+
+        /*
+         * Fallback-Bild verwenden, wenn
+         * beim Event kein eigenes Bild
+         * vorhanden ist.
+         */
+
+        const fallback =
+            EF22.config?.images
+                ?.heroFallbackLandscape ??
+            "";
+
+
+        const source =
+            imageUrl ||
+            fallback;
+
+
+        if (!source) {
+
+            hero.style.backgroundImage =
+                "";
+
+            hero.classList.add(
+                "modal-hero--empty"
+            );
+
+            return;
+
+        }
+
+
+        hero.style.backgroundImage =
+            `url("${source}")`;
+
+
+        const image =
+            new Image();
+
+
+        image.onload =
+            () => {
+
+                if (
+
+                    !image.naturalWidth ||
+
+                    !image.naturalHeight
+
+                ) {
+
+                    hero.classList.add(
+                        "modal-hero--cover"
+                    );
+
+                    return;
+
+                }
+
+
+                const ratio =
+
+                    image.naturalWidth /
+                    image.naturalHeight;
+
+
+                const sixteenNine =
+
+                    16 /
+                    9;
+
+
+                /*
+                 * Ca. 3 % Toleranz um 16:9.
+                 */
+
+                const tolerance =
+                    sixteenNine * 0.03;
+
+
+                if (
+
+                    Math.abs(
+                        ratio -
+                        sixteenNine
+                    ) <= tolerance
+
+                ) {
+
+                    hero.classList.add(
+                        "modal-hero--contain"
+                    );
+
+                }
+
+                else {
+
+                    hero.classList.add(
+                        "modal-hero--cover"
+                    );
+
+                }
+
+            };
+
+
+        image.onerror =
+            () => {
+
+                hero.classList.add(
+                    "modal-hero--cover"
+                );
+
+            };
+
+
+        image.src =
+            source;
+
+    },
+
 
     /* ==========================================
        METADATEN
@@ -690,35 +695,44 @@ EF22.modal = {
 
     renderMeta() {
 
-        if (!this.elements.meta) {
+        if (
+
+            !this.elements.meta ||
+
+            !this.state.event
+
+        ) {
 
             return;
 
         }
 
+
         const event =
             this.state.event;
 
-        const props =
 
+        const props =
             EF22.utils.getProps(
                 event
             );
 
+
         const meta =
             [];
+
 
         /* ======================================
            DATUM
         ====================================== */
 
-        const eventDate =
-
+        const date =
             EF22.utils.formatEventDate(
                 event
             );
 
-        if (eventDate) {
+
+        if (date) {
 
             meta.push({
 
@@ -726,29 +740,48 @@ EF22.modal = {
                     "Datum",
 
                 value:
-                    eventDate
+                    date,
+
+                type:
+                    "default"
 
             });
 
         }
 
+
         /* ======================================
            UHRZEIT
 
-           Bei Ganztagsterminen brauchen wir
-           keine zusätzliche Zeile
-           "Ganztägig".
+           Regel:
+           Bei mehrtägigen Veranstaltungen
+           grundsätzlich keine Uhrzeit anzeigen.
+
+           Relevante Treffzeiten stehen dann
+           im Meetingpoint.
         ====================================== */
 
-        if (!event.allDay) {
+        const isMultiDay =
+            EF22.utils.isMultiDayEvent(
+                event
+            );
 
-            const eventTime =
 
+        if (!isMultiDay) {
+
+            const time =
                 EF22.utils.formatEventTime(
                     event
                 );
 
-            if (eventTime) {
+
+            if (
+
+                time &&
+
+                time !== "Ganztägig"
+
+            ) {
 
                 meta.push({
 
@@ -756,7 +789,10 @@ EF22.modal = {
                         "Uhrzeit",
 
                     value:
-                        eventTime
+                        time,
+
+                    type:
+                        "default"
 
                 });
 
@@ -764,24 +800,19 @@ EF22.modal = {
 
         }
 
+
         /* ======================================
-           ORT
-
-           Im Modal ausschließlich die
-           vollständige Adresse.
-
-           location bleibt für Hero usw.
+           ORT / ADRESSE
         ====================================== */
 
-        if (
+        const formattedAddress =
+            this.formatAddress(
+                props.address,
+                props.location
+            );
 
-            props.address &&
 
-            String(
-                props.address
-            ).trim() !== ""
-
-        ) {
+        if (formattedAddress.length) {
 
             meta.push({
 
@@ -789,27 +820,40 @@ EF22.modal = {
                     "Ort",
 
                 value:
-                    String(
-                        props.address
-                    )
+                    formattedAddress,
+
+                type:
+                    "address"
 
             });
 
         }
 
+        else if (props.location) {
+
+            meta.push({
+
+                label:
+                    "Ort",
+
+                value:
+                    [
+                        props.location
+                    ],
+
+                type:
+                    "address"
+
+            });
+
+        }
+
+
         /* ======================================
            TREFFPUNKT
         ====================================== */
 
-        if (
-
-            props.meeting &&
-
-            String(
-                props.meeting
-            ).trim() !== ""
-
-        ) {
+        if (props.meeting) {
 
             meta.push({
 
@@ -817,27 +861,21 @@ EF22.modal = {
                     "Treffpunkt",
 
                 value:
-                    String(
-                        props.meeting
-                    )
+                    props.meeting,
+
+                type:
+                    "default"
 
             });
 
         }
 
+
         /* ======================================
            DRESSCODE
         ====================================== */
 
-        if (
-
-            props.dresscode &&
-
-            String(
-                props.dresscode
-            ).trim() !== ""
-
-        ) {
+        if (props.dresscode) {
 
             meta.push({
 
@@ -845,27 +883,21 @@ EF22.modal = {
                     "Dresscode",
 
                 value:
-                    String(
-                        props.dresscode
-                    )
+                    props.dresscode,
+
+                type:
+                    "default"
 
             });
 
         }
 
+
         /* ======================================
            KONTAKT
         ====================================== */
 
-        if (
-
-            props.contact &&
-
-            String(
-                props.contact
-            ).trim() !== ""
-
-        ) {
+        if (props.contact) {
 
             meta.push({
 
@@ -873,16 +905,18 @@ EF22.modal = {
                     "Kontakt",
 
                 value:
-                    String(
-                        props.contact
-                    )
+                    props.contact,
+
+                type:
+                    "default"
 
             });
 
         }
 
+
         /* ======================================
-           HTML
+           HTML ERZEUGEN
         ====================================== */
 
         this.elements.meta.innerHTML =
@@ -892,34 +926,83 @@ EF22.modal = {
 
                     (item) => {
 
-                        const label =
+                        const itemClass =
 
-                            EF22.utils.escapeHtml(
-                                item.label
-                            );
+                            item.type ===
+                            "address"
 
-                        const value =
+                                ? "modal-meta-item modal-meta-item--address"
 
-                            EF22.utils.escapeHtml(
+                                : "modal-meta-item";
+
+
+                        let valueHtml;
+
+
+                        if (
+
+                            item.type ===
+                            "address" &&
+
+                            Array.isArray(
                                 item.value
-                            );
+                            )
+
+                        ) {
+
+                            valueHtml =
+
+                                item.value
+                                    .map(
+
+                                        (line) =>
+
+                                            `<span class="modal-address-line">${
+
+                                                EF22.utils.escapeHtml(
+                                                    line
+                                                )
+
+                                            }</span>`
+
+                                    )
+                                    .join("");
+
+                        }
+
+                        else {
+
+                            valueHtml =
+
+                                EF22.utils.escapeHtml(
+                                    item.value
+                                );
+
+                        }
+
 
                         return `
 
                             <div
-                                class="modal-meta-item">
+                                class="${itemClass}">
 
                                 <div
                                     class="modal-meta-label">
 
-                                    ${label}
+                                    ${
+
+                                        EF22.utils.escapeHtml(
+                                            item.label
+                                        )
+
+                                    }
 
                                 </div>
 
                                 <div
                                     class="modal-meta-value">
 
-                                    ${value}
+                                    ${valueHtml}
 
                                 </div>
 
@@ -932,11 +1015,253 @@ EF22.modal = {
                 )
                 .join("");
 
-        this.elements.meta.hidden =
+    },
 
-            meta.length === 0;
+
+    /* ==========================================
+       ADRESSE FORMATIEREN
+
+       Beispiel Deutschland:
+
+       Haus Hubertus
+       Am Niederfeld 4
+       41539 Dormagen
+
+       Beispiel Ausland:
+
+       Veranstaltungsort
+       Musterstraße 12
+       1010 Wien
+       Österreich
+
+       location wird verwendet, um die erste
+       Zeile zuverlässig vom Rest zu trennen.
+    ========================================== */
+
+    formatAddress(
+        address,
+        location
+    ) {
+
+        const rawAddress =
+
+            typeof address === "string"
+
+                ? address.trim()
+
+                : "";
+
+
+        const rawLocation =
+
+            typeof location === "string"
+
+                ? location.trim()
+
+                : "";
+
+
+        if (!rawAddress) {
+
+            return rawLocation
+
+                ? [rawLocation]
+
+                : [];
+
+        }
+
+
+        /*
+         * Kalenderadresse zunächst anhand
+         * der Kommata zerlegen.
+         */
+
+        let parts =
+
+            rawAddress
+                .split(",")
+                .map(
+
+                    (part) =>
+                        part.trim()
+
+                )
+                .filter(Boolean);
+
+
+        if (!parts.length) {
+
+            return [];
+
+        }
+
+
+        /* ======================================
+           LAND ERMITTELN
+        ====================================== */
+
+        let country =
+            "";
+
+
+        const lastPart =
+
+            parts[
+                parts.length -
+                1
+            ] ?? "";
+
+
+        const normalizedCountry =
+
+            lastPart
+                .toLocaleLowerCase(
+                    "de-DE"
+                )
+                .replace(/\./g, "")
+                .trim();
+
+
+        const germanCountryNames = [
+
+            "deutschland",
+
+            "germany",
+
+            "bundesrepublik deutschland"
+
+        ];
+
+
+        /*
+         * Wenn das letzte Element offensichtlich
+         * Deutschland ist, vollständig entfernen.
+         */
+
+        if (
+
+            germanCountryNames.includes(
+                normalizedCountry
+            )
+
+        ) {
+
+            parts.pop();
+
+        }
+
+        /*
+         * Bei einem anderen Land bleibt es
+         * als letzte Zeile erhalten.
+         */
+
+        else if (
+
+            parts.length >= 3
+
+        ) {
+
+            country =
+                parts.pop();
+
+        }
+
+
+        /* ======================================
+           LOCATION
+
+           Wenn die Adresse mit location beginnt,
+           wird location als eigene erste Zeile
+           ausgegeben.
+        ====================================== */
+
+        const lines =
+            [];
+
+
+        if (rawLocation) {
+
+            lines.push(
+                rawLocation
+            );
+
+
+            const firstPart =
+
+                parts[0] ?? "";
+
+
+            if (
+
+                firstPart
+                    .toLocaleLowerCase(
+                        "de-DE"
+                    ) ===
+
+                rawLocation
+                    .toLocaleLowerCase(
+                        "de-DE"
+                    )
+
+            ) {
+
+                parts.shift();
+
+            }
+
+        }
+
+
+        /* ======================================
+           RESTLICHE ADRESSE
+
+           Erwartete Google-/Kalenderstruktur:
+
+           Straße
+           PLZ Ort
+        ====================================== */
+
+        parts.forEach(
+
+            (part) => {
+
+                if (
+
+                    !lines.includes(
+                        part
+                    )
+
+                ) {
+
+                    lines.push(
+                        part
+                    );
+
+                }
+
+            }
+
+        );
+
+
+        /* ======================================
+           AUSLAND
+        ====================================== */
+
+        if (country) {
+
+            lines.push(
+                country
+            );
+
+        }
+
+
+        return lines;
 
     },
+
 
     /* ==========================================
        BESCHREIBUNG
@@ -950,21 +1275,22 @@ EF22.modal = {
 
         }
 
-        const props =
 
+        const props =
             EF22.utils.getProps(
                 this.state.event
             );
 
+
         const description =
 
-            props.description
+            typeof props.description ===
+            "string"
 
-                ? String(
-                    props.description
-                ).trim()
+                ? props.description.trim()
 
                 : "";
+
 
         if (!description) {
 
@@ -978,33 +1304,25 @@ EF22.modal = {
 
         }
 
+
+        this.elements.content.innerHTML = `
+
+            <p>${
+
+                EF22.utils.escapeHtml(
+                    description
+                )
+
+            }</p>
+
+        `;
+
+
         this.elements.content.hidden =
             false;
 
-        /*
-         * Beschreibung wird bewusst als Text
-         * behandelt.
-
-         * Zeilenumbrüche bleiben erhalten,
-         * fremdes HTML wird nicht ausgeführt.
-        */
-
-        const safeDescription =
-
-            EF22.utils
-                .escapeHtml(
-                    description
-                )
-                .replace(
-                    /\n/g,
-                    "<br>"
-                );
-
-        this.elements.content.innerHTML =
-
-            `<p>${safeDescription}</p>`;
-
     },
+
 
     /* ==========================================
        AKTIONEN
@@ -1018,48 +1336,81 @@ EF22.modal = {
 
         }
 
-        const props =
 
+        const props =
             EF22.utils.getProps(
                 this.state.event
             );
 
-        this.elements.actions.innerHTML =
-            "";
 
-        let hasActions =
-            false;
+        const actions =
+            [];
+
 
         /* ======================================
            ROUTE
         ====================================== */
 
-        if (
+        if (props.address) {
 
-            props.address &&
+            actions.push(`
 
-            String(
-                props.address
-            ).trim() !== ""
+                <button
+                    class="modal-action-button modal-route-button"
+                    type="button"
+                    data-modal-route>
 
-        ) {
+                    Route öffnen
 
-            const routeButton =
+                </button>
 
-                document.createElement(
-                    "button"
-                );
+            `);
 
-            routeButton.type =
-                "button";
+        }
 
-            routeButton.className =
-                "modal-action-button modal-route-button";
 
-            routeButton.textContent =
-                "Route öffnen";
+        /* ======================================
+           TICKETS
+        ====================================== */
 
-            routeButton.addEventListener(
+        if (props.ticket) {
+
+            actions.push(`
+
+                <a
+                    class="modal-action-button"
+                    href="${
+
+                        EF22.utils.escapeHtml(
+                            props.ticket
+                        )
+
+                    }"
+                    target="_blank"
+                    rel="noopener">
+
+                    Tickets
+
+                </a>
+
+            `);
+
+        }
+
+
+        this.elements.actions.innerHTML =
+            actions.join("");
+
+
+        /* ======================================
+           ROUTE EVENT
+        ====================================== */
+
+        this.elements.actions
+            .querySelector(
+                "[data-modal-route]"
+            )
+            ?.addEventListener(
 
                 "click",
 
@@ -1071,69 +1422,11 @@ EF22.modal = {
 
             );
 
-            this.elements.actions.append(
-                routeButton
-            );
-
-            hasActions =
-                true;
-
-        }
-
-        /* ======================================
-           TICKETS
-        ====================================== */
-
-        if (
-
-            props.ticket &&
-
-            String(
-                props.ticket
-            ).trim() !== ""
-
-        ) {
-
-            const ticketButton =
-
-                document.createElement(
-                    "a"
-                );
-
-            ticketButton.className =
-                "modal-action-button modal-ticket-button";
-
-            ticketButton.href =
-                String(
-                    props.ticket
-                );
-
-            ticketButton.target =
-                "_blank";
-
-            ticketButton.rel =
-                "noopener noreferrer";
-
-            ticketButton.textContent =
-                "Tickets";
-
-            this.elements.actions.append(
-                ticketButton
-            );
-
-            hasActions =
-                true;
-
-        }
-
-        this.elements.actions.hidden =
-            !hasActions;
-
     },
+
 
     /* ==========================================
        ROUTENAUSWAHL ÖFFNEN
-       EBENE 3
     ========================================== */
 
     openRoute() {
@@ -1150,21 +1443,22 @@ EF22.modal = {
 
         }
 
-        const props =
 
+        const props =
             EF22.utils.getProps(
                 this.state.event
             );
 
+
         const address =
 
-            props.address
+            typeof props.address ===
+            "string"
 
-                ? String(
-                    props.address
-                ).trim()
+                ? props.address.trim()
 
                 : "";
+
 
         if (!address) {
 
@@ -1172,26 +1466,55 @@ EF22.modal = {
 
         }
 
-        this.setRouteLinks(
-            address
-        );
+
+        const query =
+            encodeURIComponent(
+                address
+            );
+
+
+        /* ======================================
+           APPLE KARTEN
+
+           maps.apple.com funktioniert auch
+           als Web-Fallback.
+        ====================================== */
+
+        if (this.elements.routeAppleMaps) {
+
+            this.elements.routeAppleMaps.href =
+
+                `https://maps.apple.com/?q=${query}`;
+
+        }
+
+
+        /* ======================================
+           GOOGLE MAPS
+        ====================================== */
+
+        if (this.elements.routeGoogleMaps) {
+
+            this.elements.routeGoogleMaps.href =
+
+                `https://www.google.com/maps/search/?api=1&query=${query}`;
+
+        }
+
 
         this.state.routeOpen =
             true;
 
-        /*
-         * Event-Modal bekommt einen eigenen
-         * Zustand, damit CSS Ebene 2 unter
-         * Ebene 3 optisch zurücknehmen kann.
-        */
 
         this.elements.modal?.classList.add(
             "route-is-open"
         );
 
+
         this.elements.routeModal.classList.add(
             "show"
         );
+
 
         this.elements.routeModal.setAttribute(
 
@@ -1201,38 +1524,30 @@ EF22.modal = {
 
         );
 
-        /*
-         * Fokus auf die erste konkrete
-         * Auswahlmöglichkeit.
-        */
-
-        this.elements.routeApple?.focus();
-
     },
+
 
     /* ==========================================
        ROUTENAUSWAHL SCHLIESSEN
     ========================================== */
 
-    closeRoute(returnFocus = true) {
-
-        if (!this.elements.routeModal) {
-
-            return;
-
-        }
-
-        const wasOpen =
-            this.state.routeOpen;
+    closeRoute() {
 
         this.state.routeOpen =
             false;
 
-        this.elements.routeModal.classList.remove(
+
+        this.elements.modal?.classList.remove(
+            "route-is-open"
+        );
+
+
+        this.elements.routeModal?.classList.remove(
             "show"
         );
 
-        this.elements.routeModal.setAttribute(
+
+        this.elements.routeModal?.setAttribute(
 
             "aria-hidden",
 
@@ -1240,158 +1555,8 @@ EF22.modal = {
 
         );
 
-        this.elements.modal?.classList.remove(
-            "route-is-open"
-        );
-
-        if (this.elements.routeApple) {
-
-            this.elements.routeApple.href =
-                "#";
-
-        }
-
-        if (this.elements.routeGoogle) {
-
-            this.elements.routeGoogle.href =
-                "#";
-
-        }
-
-        /*
-         * Bei Klick außerhalb geht es zurück
-         * zum Event-Modal.
-
-         * Fokus landet sinnvollerweise wieder
-         * beim Route-Button.
-        */
-
-        if (
-
-            returnFocus &&
-
-            wasOpen
-
-        ) {
-
-            this.elements.actions
-                ?.querySelector(
-                    ".modal-route-button"
-                )
-                ?.focus();
-
-        }
-
     },
 
-    /* ==========================================
-       KARTENLINKS
-    ========================================== */
-
-    setRouteLinks(address) {
-
-        const query =
-
-            encodeURIComponent(
-                address
-            );
-
-        /*
-         * Apple Karten
-        */
-
-        if (this.elements.routeApple) {
-
-            this.elements.routeApple.href =
-
-                `https://maps.apple.com/?q=${query}`;
-
-        }
-
-        /*
-         * Google Maps
-        */
-
-        if (this.elements.routeGoogle) {
-
-            this.elements.routeGoogle.href =
-
-                `https://www.google.com/maps/search/?api=1&query=${query}`;
-
-        }
-
-    },
-
-    /* ==========================================
-       INHALTE LEEREN
-    ========================================== */
-
-    clear() {
-
-        this.state.event =
-            null;
-
-        this.state.routeOpen =
-            false;
-
-        if (this.elements.image) {
-
-            this.elements.image.style.backgroundImage =
-                "";
-
-        }
-
-        if (this.elements.badge) {
-
-            this.elements.badge.textContent =
-                "";
-
-            this.elements.badge.className =
-                "modal-badge";
-
-            this.elements.badge.hidden =
-                false;
-
-        }
-
-        if (this.elements.title) {
-
-            this.elements.title.textContent =
-                "";
-
-        }
-
-        if (this.elements.meta) {
-
-            this.elements.meta.innerHTML =
-                "";
-
-            this.elements.meta.hidden =
-                false;
-
-        }
-
-        if (this.elements.content) {
-
-            this.elements.content.innerHTML =
-                "";
-
-            this.elements.content.hidden =
-                false;
-
-        }
-
-        if (this.elements.actions) {
-
-            this.elements.actions.innerHTML =
-                "";
-
-            this.elements.actions.hidden =
-                false;
-
-        }
-
-    },
 
     /* ==========================================
        DESTROY
@@ -1399,87 +1564,7 @@ EF22.modal = {
 
     destroy() {
 
-        this.elements.overlay
-            ?.removeEventListener(
-
-                "click",
-
-                this.handlers.modalOverlayClick
-
-            );
-
-        this.elements.closeButton
-            ?.removeEventListener(
-
-                "click",
-
-                this.handlers.closeClick
-
-            );
-
-        this.elements.routeOverlay
-            ?.removeEventListener(
-
-                "click",
-
-                this.handlers.routeOverlayClick
-
-            );
-
-        document.removeEventListener(
-
-            "keydown",
-
-            this.handlers.keyDown
-
-        );
-
         this.close();
-
-        this.elements.modal =
-            null;
-
-        this.elements.overlay =
-            null;
-
-        this.elements.window =
-            null;
-
-        this.elements.closeButton =
-            null;
-
-        this.elements.image =
-            null;
-
-        this.elements.badge =
-            null;
-
-        this.elements.title =
-            null;
-
-        this.elements.meta =
-            null;
-
-        this.elements.content =
-            null;
-
-        this.elements.actions =
-            null;
-
-        this.elements.routeModal =
-            null;
-
-        this.elements.routeOverlay =
-            null;
-
-        this.elements.routeWindow =
-            null;
-
-        this.elements.routeApple =
-            null;
-
-        this.elements.routeGoogle =
-            null;
 
     }
 

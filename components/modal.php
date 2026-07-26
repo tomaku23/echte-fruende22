@@ -3,25 +3,9 @@
 =====================================================
  ECHTE FRÜNDE '22
  MODAL.PHP
- Version 4.0
+ Version 4.1
 
  EF22 FRAMEWORK
-=====================================================
-
-Struktur für:
-
-Ebene 1:
-- Website
-
-Ebene 2:
-- Event-Modal
-
-Ebene 3:
-- Routenauswahl
-
-Inhalte und Interaktionen werden durch
-modal.js gesteuert.
-
 =====================================================
 */
 ?>
@@ -42,16 +26,16 @@ modal.js gesteuert.
 
     <div
         class="modal-overlay"
-        data-modal-close
-        aria-hidden="true">
+        data-modal-close>
 
     </div>
 
+
     <!-- ======================================
-         EVENT WINDOW
+         WINDOW
     ======================================= -->
 
-    <article
+    <div
         class="modal-window"
         role="dialog"
         aria-modal="true"
@@ -63,10 +47,25 @@ modal.js gesteuert.
 
         <div
             id="modalImage"
-            class="modal-hero"
-            aria-hidden="true">
+            class="modal-hero">
+
+            <!-- ==============================
+                 HERO CONTENT
+            =============================== -->
+
+            <div
+                class="modal-hero-content">
+
+                <h2
+                    id="modalTitle"
+                    class="modal-title">
+
+                </h2>
+
+            </div>
 
         </div>
+
 
         <!-- ==================================
              BODY
@@ -76,36 +75,15 @@ modal.js gesteuert.
             class="modal-body">
 
             <!-- ==============================
-                 HEADER
-            =============================== -->
-
-            <header
-                class="modal-header">
-
-                <span
-                    id="modalBadge"
-                    class="modal-badge">
-
-                </span>
-
-                <h2
-                    id="modalTitle"
-                    class="modal-title">
-
-                </h2>
-
-            </header>
-
-            <!-- ==============================
                  METADATEN
             =============================== -->
 
             <section
                 id="modalMeta"
-                class="modal-meta"
-                aria-label="Termininformationen">
+                class="modal-meta">
 
             </section>
+
 
             <!-- ==============================
                  BESCHREIBUNG
@@ -113,9 +91,11 @@ modal.js gesteuert.
 
             <section
                 id="modalContent"
-                class="modal-content">
+                class="modal-content"
+                hidden>
 
             </section>
+
 
             <!-- ==============================
                  AKTIONEN
@@ -127,11 +107,9 @@ modal.js gesteuert.
 
             </div>
 
-            <!-- ==============================
-                 SCHLIESSEN
 
-                 Bewusst ausschließlich
-                 am Ende des Modals.
+            <!-- ==============================
+                 FOOTER
             =============================== -->
 
             <footer
@@ -150,7 +128,7 @@ modal.js gesteuert.
 
         </div>
 
-    </article>
+    </div>
 
 </div>
 
@@ -167,20 +145,17 @@ modal.js gesteuert.
 
     <!-- ======================================
          OVERLAY
-
-         Klick außerhalb führt zurück zum
-         Event-Modal.
     ======================================= -->
 
     <div
         class="route-modal-overlay"
-        data-route-close
-        aria-hidden="true">
+        data-route-modal-close>
 
     </div>
 
+
     <!-- ======================================
-         ROUTE WINDOW
+         WINDOW
     ======================================= -->
 
     <div
@@ -207,14 +182,15 @@ modal.js gesteuert.
                 id="routeModalTitle"
                 class="route-modal-title">
 
-                Route öffnen mit
+                Route öffnen
 
             </h3>
 
         </header>
 
+
         <!-- ==================================
-             ANBIETER
+             PROVIDER
         =================================== -->
 
         <div
@@ -225,7 +201,7 @@ modal.js gesteuert.
                 class="route-provider-button"
                 href="#"
                 target="_blank"
-                rel="noopener noreferrer">
+                rel="noopener">
 
                 <span
                     class="route-provider-name">
@@ -236,12 +212,13 @@ modal.js gesteuert.
 
             </a>
 
+
             <a
                 id="routeGoogleMaps"
                 class="route-provider-button"
                 href="#"
                 target="_blank"
-                rel="noopener noreferrer">
+                rel="noopener">
 
                 <span
                     class="route-provider-name">
