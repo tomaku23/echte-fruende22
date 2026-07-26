@@ -802,14 +802,20 @@ getCalendarOptions() {
     },
 
 
-    /* ==========================================
+        /* ==========================================
        EVENT AN EINEM KALENDERTAG
 
-       Prüft, ob ein Kalendertag innerhalb
-       des inklusiven Veranstaltungszeitraums
-       liegt.
+       EF22-Regel:
 
-       Uhrzeiten werden bewusst ignoriert.
+       start = erster Veranstaltungstag
+       end   = letzter Veranstaltungstag
+
+       Bei Ganztagsterminen kommt das Enddatum
+       technisch exklusiv an. Deshalb wird für
+       die Kalenderdarstellung ein Tag abgezogen.
+
+       Uhrzeiten spielen für die Tageszuordnung
+       keine Rolle.
     ========================================== */
 
     isEventOnDate(
@@ -842,21 +848,68 @@ getCalendarOptions() {
             );
 
 
-        /*
-         * Ohne Enddatum handelt es sich
-         * automatisch um einen eintägigen
-         * Termin.
-         */
+        let endKey =
+            startKey;
 
-        const endKey =
 
-            event.end
+        /* ======================================
+           ENDDATUM
+        ====================================== */
 
-                ? this.getDateKey(
+        if (event.end) {
+
+            const endDate =
+                new Date(
                     event.end
+                );
+
+
+            if (
+
+                !isNaN(
+                    endDate.getTime()
                 )
 
-                : startKey;
+            ) {
+
+                /*
+                 * Ganztagstermine besitzen
+                 * technisch ein exklusives
+                 * Enddatum.
+                 *
+                 * Beispiel:
+                 *
+                 * Veranstaltung:
+                 * 18.09. – 20.09.
+                 *
+                 * Technische Daten:
+                 * start = 18.09.
+                 * end   = 21.09.
+                 *
+                 * Für EF22 wird daraus wieder:
+                 * 18.09. – 20.09.
+                 */
+
+                if (event.allDay) {
+
+                    endDate.setDate(
+
+                        endDate.getDate() -
+                        1
+
+                    );
+
+                }
+
+
+                endKey =
+                    this.getDateKey(
+                        endDate
+                    );
+
+            }
+
+        }
 
 
         if (
@@ -873,13 +926,6 @@ getCalendarOptions() {
 
         }
 
-
-        /*
-         * YYYY-MM-DD lässt sich lexikografisch
-         * sicher vergleichen.
-
-         * Beide Grenzen sind inklusive.
-         */
 
         return (
 
