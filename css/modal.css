@@ -328,6 +328,15 @@ Design:
 
 /* ==========================================
    HERO
+
+   Die Bildfläche behält ihre ursprüngliche
+   Geometrie.
+
+   Der Titel liegt innerhalb des dunklen
+   Verlaufs am unteren Rand des Hero.
+
+   Die Bildlogik cover / contain bleibt
+   vollständig erhalten.
 ========================================== */
 
 .modal-hero {
@@ -343,6 +352,9 @@ Design:
 
     min-height:
         210px;
+
+    height:
+        auto;
 
     overflow:
         hidden;
@@ -367,8 +379,6 @@ Design:
 
 /* ==========================================
    HERO BILDLOGIK
-
-   Wird durch modal.js gesetzt.
 ========================================== */
 
 .modal-hero--contain {
@@ -398,11 +408,14 @@ Design:
 /* ==========================================
    HERO VERLAUF
 
-   Das Bild läuft weich in den dunklen
-   Modalbereich aus.
+   Der Verlauf liegt über dem Bild.
 
-   Der untere Bereich bildet gleichzeitig
-   die ruhige Fläche für den Titel.
+   Oben bleibt das Bild unverändert sichtbar.
+   Erst im unteren Bereich wird es zunehmend
+   abgedunkelt.
+
+   Ganz unten geht der Hero optisch in den
+   Modal-Body über.
 ========================================== */
 
 .modal-hero::after {
@@ -420,11 +433,27 @@ Design:
 
         linear-gradient(
             to bottom,
-            rgba(13, 13, 13, 0) 32%,
-            rgba(13, 13, 13, .08) 46%,
-            rgba(13, 13, 13, .32) 64%,
-            rgba(13, 13, 13, .74) 82%,
-            rgba(13, 13, 13, .98) 100%
+
+            rgba(13, 13, 13, 0)
+                0%,
+
+            rgba(13, 13, 13, 0)
+                38%,
+
+            rgba(13, 13, 13, .08)
+                50%,
+
+            rgba(13, 13, 13, .24)
+                61%,
+
+            rgba(13, 13, 13, .52)
+                73%,
+
+            rgba(13, 13, 13, .82)
+                86%,
+
+            rgba(13, 13, 13, 1)
+                100%
         );
 
     pointer-events:
@@ -438,6 +467,12 @@ Design:
 
 /* ==========================================
    HERO CONTENT
+
+   Der Titel sitzt innerhalb des Hero,
+   direkt über dem Infobereich.
+
+   Er liegt damit vollständig in der dunklen
+   Auslaufzone des Bildes.
 ========================================== */
 
 .modal-hero-content {
@@ -452,7 +487,7 @@ Design:
         var(--space-xl);
 
     bottom:
-        var(--space-lg);
+        1rem;
 
     z-index:
         3;
@@ -477,33 +512,39 @@ Design:
 
     font-size:
         clamp(
-            1.65rem,
+            1.8rem,
             5vw,
-            2.35rem
+            2.45rem
         );
 
     font-weight:
         750;
 
     line-height:
-        1.12;
+        1.08;
 
     letter-spacing:
         -.025em;
 
     text-shadow:
 
-        0 2px 10px
-        rgba(0, 0, 0, .58),
+        0 2px 12px
+        rgba(0, 0, 0, .70),
 
-        0 1px 2px
-        rgba(0, 0, 0, .75);
+        0 1px 3px
+        rgba(0, 0, 0, .85);
 
 }
 
 
 /* ==========================================
    BODY
+
+   Der Body beginnt unmittelbar unterhalb
+   des Hero.
+
+   Durch das dunkle Ende des Hero-Verlaufs
+   entsteht kein harter optischer Übergang.
 ========================================== */
 
 .modal-body {
@@ -511,10 +552,16 @@ Design:
     position:
         relative;
 
+    margin-top:
+        0;
+
     padding:
-        var(--space-md)
+        .65rem
         var(--space-xl)
         var(--space-xl);
+
+    background:
+        transparent;
 
     z-index:
         6;
@@ -545,12 +592,9 @@ Design:
 /* ==========================================
    META ITEM
 
-   Label und Wert besitzen unterschiedliche
-   Schriftgrößen.
-
-   Beide werden deshalb nicht an ihrer
-   Oberkante, sondern an ihrer gemeinsamen
-   vertikalen Mittelachse ausgerichtet.
+   Label und Wert werden auf einer
+   gemeinsamen vertikalen Mittelachse
+   ausgerichtet.
 ========================================== */
 
 .modal-meta-item {
@@ -585,11 +629,10 @@ Design:
 /* ==========================================
    ADRESSE
 
-   Ausnahme von der Mittelachsen-Regel.
+   Bei der Adresse gilt die Ausnahme:
 
-   "Ort" steht auf Höhe der ersten
-   Adresszeile und nicht mittig zum gesamten
-   mehrzeiligen Adressblock.
+   "Ort" steht auf derselben Höhe wie die
+   erste Zeile der Adresse.
 ========================================== */
 
 .modal-meta-item--address {
@@ -599,14 +642,6 @@ Design:
 
 }
 
-
-/* ==========================================
-   ADRESS-LABEL
-
-   Label und erste Adresszeile werden über
-   identische Zeilenhöhe optisch aufeinander
-   ausgerichtet.
-========================================== */
 
 .modal-meta-item--address
 .modal-meta-label {
@@ -722,10 +757,6 @@ Design:
 }
 
 
-/* ==========================================
-   BESCHREIBUNG ABSATZ
-========================================== */
-
 .modal-content p {
 
     margin:
@@ -759,13 +790,6 @@ Design:
 
 }
 
-
-/* ==========================================
-   LEERE AKTIONEN
-
-   Verhindert unnötigen Leerraum, wenn weder
-   Route noch Tickets vorhanden sind.
-========================================== */
 
 .modal-actions:empty {
 
@@ -850,10 +874,6 @@ Design:
 }
 
 
-/* ==========================================
-   ACTION HOVER
-========================================== */
-
 .modal-action-button:hover {
 
     background:
@@ -867,10 +887,6 @@ Design:
 
 }
 
-
-/* ==========================================
-   ACTION ACTIVE
-========================================== */
 
 .modal-action-button:active {
 
@@ -986,10 +1002,6 @@ Design:
 }
 
 
-/* ==========================================
-   SCHLIESSEN HOVER
-========================================== */
-
 .modal-close-button:hover {
 
     background:
@@ -997,10 +1009,6 @@ Design:
 
 }
 
-
-/* ==========================================
-   SCHLIESSEN ACTIVE
-========================================== */
 
 .modal-close-button:active {
 
@@ -1011,493 +1019,6 @@ Design:
 
 
 /* ==========================================
-   FOCUS
-========================================== */
-
-.modal-action-button:focus-visible,
-.modal-close-button:focus-visible,
-.route-provider-button:focus-visible {
-
-    outline:
-        2px solid
-        var(--color-primary);
-
-    outline-offset:
-        3px;
-
-}
-
-
-/* ==========================================
-   EBENE 2 ZURÜCKNEHMEN
-
-   Routenauswahl liegt als dritte Ebene über
-   dem Event-Modal.
-========================================== */
-
-.modal.route-is-open
-.modal-window {
-
-    transform:
-        scale(.975);
-
-    filter:
-        brightness(.72)
-        saturate(.82);
-
-}
-
-
-/* ==========================================
-   ROUTENAUSWAHL
-   EBENE 3
-========================================== */
-
-.route-modal {
-
-    position:
-        fixed;
-
-    inset:
-        0;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        var(--space-lg);
-
-    background:
-        rgba(0, 0, 0, .36);
-
-    backdrop-filter:
-        blur(8px);
-
-    -webkit-backdrop-filter:
-        blur(8px);
-
-    opacity:
-        0;
-
-    visibility:
-        hidden;
-
-    pointer-events:
-        none;
-
-    transition:
-        opacity var(--transition-normal),
-        visibility var(--transition-normal);
-
-    z-index:
-        calc(
-            var(--z-modal) +
-            10
-        );
-
-}
-
-
-/* ==========================================
-   ROUTENAUSWAHL SICHTBAR
-========================================== */
-
-.route-modal.show {
-
-    opacity:
-        1;
-
-    visibility:
-        visible;
-
-    pointer-events:
-        auto;
-
-}
-
-
-/* ==========================================
-   ROUTE OVERLAY
-========================================== */
-
-.route-modal-overlay {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-}
-
-
-/* ==========================================
-   ROUTE WINDOW
-========================================== */
-
-.route-modal-window {
-
-    position:
-        relative;
-
-    width:
-        min(
-            100%,
-            420px
-        );
-
-    padding:
-        var(--space-xl);
-
-    overflow:
-        hidden;
-
-    background:
-
-        radial-gradient(
-            circle at 92% 4%,
-            rgba(255, 202, 117, .25) 0%,
-            rgba(220, 145, 45, .09) 23%,
-            transparent 50%
-        ),
-
-        linear-gradient(
-            145deg,
-            rgba(37, 35, 32, .97),
-            rgba(18, 18, 17, .99)
-        );
-
-    border:
-        1px solid
-        rgba(255, 255, 255, .18);
-
-    border-radius:
-        var(--radius-xl);
-
-    box-shadow:
-
-        0 12px 28px
-        rgba(0, 0, 0, .40),
-
-        0 38px 90px
-        rgba(0, 0, 0, .68),
-
-        inset 1px 1px 0
-        rgba(255, 255, 255, .16);
-
-    backdrop-filter:
-        blur(32px)
-        saturate(125%);
-
-    -webkit-backdrop-filter:
-        blur(32px)
-        saturate(125%);
-
-    color:
-        var(--color-text-on-dark);
-
-    opacity:
-        0;
-
-    transform:
-        translateY(18px)
-        scale(.94);
-
-    transition:
-        opacity var(--transition-normal),
-        transform var(--transition-normal);
-
-    z-index:
-        1;
-
-}
-
-
-/* ==========================================
-   ROUTE WINDOW SICHTBAR
-========================================== */
-
-.route-modal.show
-.route-modal-window {
-
-    opacity:
-        1;
-
-    transform:
-        translateY(0)
-        scale(1);
-
-}
-
-
-/* ==========================================
-   ROUTE LICHTREFLEX
-========================================== */
-
-.route-modal-window::before {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    top:
-        -70px;
-
-    right:
-        -60px;
-
-    width:
-        190px;
-
-    height:
-        190px;
-
-    border-radius:
-        50%;
-
-    background:
-
-        radial-gradient(
-            circle,
-            rgba(255, 207, 132, .24),
-            rgba(220, 146, 48, .08) 44%,
-            transparent 72%
-        );
-
-    pointer-events:
-        none;
-
-}
-
-
-/* ==========================================
-   ROUTE HEADER
-========================================== */
-
-.route-modal-header {
-
-    position:
-        relative;
-
-    margin-bottom:
-        var(--space-lg);
-
-    z-index:
-        1;
-
-}
-
-
-/* ==========================================
-   ROUTE EYEBROW
-========================================== */
-
-.route-modal-eyebrow {
-
-    display:
-        block;
-
-    margin-bottom:
-        var(--space-sm);
-
-    color:
-        var(--color-primary);
-
-    font-size:
-        var(--font-size-xs);
-
-    font-weight:
-        700;
-
-    text-transform:
-        uppercase;
-
-    letter-spacing:
-        .09em;
-
-}
-
-
-/* ==========================================
-   ROUTE TITLE
-========================================== */
-
-.route-modal-title {
-
-    margin:
-        0;
-
-    color:
-        var(--color-text-on-dark);
-
-    font-size:
-        var(--font-size-xl);
-
-    line-height:
-        1.2;
-
-}
-
-
-/* ==========================================
-   ROUTE ACTIONS
-========================================== */
-
-.route-modal-actions {
-
-    position:
-        relative;
-
-    display:
-        grid;
-
-    grid-template-columns:
-        1fr
-        1fr;
-
-    gap:
-        var(--space-sm);
-
-    z-index:
-        1;
-
-}
-
-
-/* ==========================================
-   ROUTE PROVIDER
-========================================== */
-
-.route-provider-button {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    min-height:
-        58px;
-
-    padding:
-        1rem;
-
-    border:
-        1px solid
-        rgba(255, 255, 255, .14);
-
-    border-radius:
-        var(--radius-md);
-
-    background:
-        rgba(255, 255, 255, .075);
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255, 255, 255, .10);
-
-    color:
-        var(--color-text-on-dark);
-
-    text-decoration:
-        none;
-
-    cursor:
-        pointer;
-
-    transition:
-        transform var(--transition-fast),
-        background-color var(--transition-fast),
-        border-color var(--transition-fast);
-
-}
-
-
-/* ==========================================
-   ROUTE PROVIDER HOVER
-========================================== */
-
-.route-provider-button:hover {
-
-    background:
-        rgba(255, 255, 255, .13);
-
-    border-color:
-        rgba(255, 255, 255, .22);
-
-    transform:
-        translateY(-2px);
-
-}
-
-
-/* ==========================================
-   ROUTE PROVIDER ACTIVE
-========================================== */
-
-.route-provider-button:active {
-
-    transform:
-        translateY(1px);
-
-}
-
-
-/* ==========================================
-   ROUTE PROVIDER NAME
-========================================== */
-
-.route-provider-name {
-
-    font-size:
-        var(--font-size-md);
-
-    font-weight:
-        650;
-
-    text-align:
-        center;
-
-}
-
-
-/* ==========================================
-   HIDDEN
-========================================== */
-
-.modal [hidden],
-.route-modal [hidden] {
-
-    display:
-        none !important;
-
-}
-
-
-/* ==========================================
-   BODY SCROLL SPERREN
-========================================== */
-
-.no-scroll {
-
-    overflow:
-        hidden;
-
-}
-
-
-/* ==========================================
    MOBILE
 ========================================== */
 
@@ -1506,327 +1027,33 @@ Design:
 ) {
 
     /* ======================================
-       EVENT MODAL
+       HERO
+
+       Wieder die ursprüngliche Geometrie.
+
+       Keine feste Höhe, die das Bild bei
+       cover unnötig vergrößert.
     ====================================== */
 
-    .modal {
-
-        padding:
-            14px;
-
-    }
-
-
-    /* ======================================
-       EVENT WINDOW
-    ====================================== */
-
-    .modal-window {
+    .modal-hero {
 
         width:
             100%;
 
-        max-height:
-            calc(
-                100dvh -
-                28px
-            );
-
-        border-radius:
-            var(--radius-lg);
-
-    }
-
-
-    /* ======================================
-       GLASREFLEXION
-    ====================================== */
-
-    .modal-window::after {
-
-        border-radius:
-            calc(
-                var(--radius-lg) -
-                1px
-            );
-
-    }
-
-
-    /* ==========================================
-   HERO
-========================================== */
-
-.modal-hero {
-
-    position:
-        relative;
-
-    width:
-        100%;
-
-    /*
-     * Der Hero bekommt etwas mehr vertikale
-     * Fläche als bisher.
-     *
-     * Der untere Teil davon gehört optisch
-     * bereits zum Übergang in den Content.
-     */
-
-    height:
-        clamp(
-            310px,
-            43vh,
-            390px
-        );
-
-    min-height:
-        0;
-
-    overflow:
-        hidden;
-
-    background-position:
-        center;
-
-    background-repeat:
-        no-repeat;
-
-    background-color:
-        var(--color-background-medium);
-
-    border-radius:
-        var(--radius-xl)
-        var(--radius-xl)
-        0
-        0;
-
-}
-
-
-/* ==========================================
-   HERO BILDLOGIK
-========================================== */
-
-.modal-hero--contain {
-
-    background-size:
-        contain;
-
-}
-
-
-.modal-hero--cover {
-
-    background-size:
-        cover;
-
-}
-
-
-.modal-hero--empty {
-
-    background-size:
-        cover;
-
-}
-
-
-/* ==========================================
-   HERO VERLAUF
-
-   Der Verlauf beginnt relativ spät.
-
-   Das Bild bleibt dadurch zunächst klar
-   sichtbar und läuft anschließend weich
-   in die Modalfläche aus.
-
-   Der Titel sitzt im dunklen unteren
-   Bereich dieses Verlaufs.
-========================================== */
-
-.modal-hero::after {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    background:
-
-        linear-gradient(
-            to bottom,
-
-            rgba(13, 13, 13, 0)
-                0%,
-
-            rgba(13, 13, 13, 0)
-                45%,
-
-            rgba(13, 13, 13, .10)
-                55%,
-
-            rgba(13, 13, 13, .32)
-                66%,
-
-            rgba(13, 13, 13, .68)
-                78%,
-
-            rgba(13, 13, 13, .92)
-                90%,
-
-            rgba(13, 13, 13, 1)
-                100%
-        );
-
-    pointer-events:
-        none;
-
-    z-index:
-        1;
-
-}
-
-
-/* ==========================================
-   HERO CONTENT
-
-   Der Titel sitzt bewusst sehr weit unten.
-
-   Dadurch gehört er optisch bereits zum
-   Infobereich, liegt technisch aber noch
-   innerhalb des Hero-Verlaufs.
-========================================== */
-
-.modal-hero-content {
-
-    position:
-        absolute;
-
-    left:
-        var(--space-xl);
-
-    right:
-        var(--space-xl);
-
-    bottom:
-        1.15rem;
-
-    z-index:
-        3;
-
-}
-
-
-/* ==========================================
-   TITEL
-========================================== */
-
-.modal-title {
-
-    margin:
-        0;
-
-    max-width:
-        100%;
-
-    color:
-        var(--color-text-on-dark);
-
-    font-size:
-        clamp(
-            1.8rem,
-            5vw,
-            2.45rem
-        );
-
-    font-weight:
-        750;
-
-    line-height:
-        1.08;
-
-    letter-spacing:
-        -.025em;
-
-    text-shadow:
-
-        0 2px 12px
-        rgba(0, 0, 0, .70),
-
-        0 1px 3px
-        rgba(0, 0, 0, .85);
-
-}
-
-
-/* ==========================================
-   BODY
-
-   Der Body schließt nahezu direkt an den
-   Titel an.
-
-   Dadurch entsteht:
-
-   Bild
-       ↓
-   Verlauf
-       ↓
-   Titel
-       ↓
-   Metadaten
-
-   als eine zusammenhängende Fläche.
-========================================== */
-
-.modal-body {
-
-    position:
-        relative;
-
-    margin-top:
-        0;
-
-    padding:
-        .65rem
-        var(--space-xl)
-        var(--space-xl);
-
-    background:
-        transparent;
-
-    z-index:
-        6;
-
-}
-
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (
-    max-width: 768px
-) {
-
-    .modal-hero {
-
         height:
-            clamp(
-                270px,
-                39vh,
-                335px
-            );
+            auto;
 
         min-height:
-            0;
+            180px;
 
         aspect-ratio:
-            auto;
+            16 / 8.5;
+
+        background-position:
+            center;
+
+        background-repeat:
+            no-repeat;
 
         border-radius:
             var(--radius-lg)
@@ -1837,6 +1064,10 @@ Design:
     }
 
 
+    /* ======================================
+       HERO CONTENT
+    ====================================== */
+
     .modal-hero-content {
 
         left:
@@ -1846,10 +1077,14 @@ Design:
             var(--space-lg);
 
         bottom:
-            1rem;
+            .9rem;
 
     }
 
+
+    /* ======================================
+       TITEL
+    ====================================== */
 
     .modal-title {
 
@@ -1863,6 +1098,10 @@ Design:
     }
 
 
+    /* ======================================
+       BODY
+    ====================================== */
+
     .modal-body {
 
         padding:
@@ -1872,67 +1111,8 @@ Design:
 
     }
 
-}
 
-
-/* ==========================================
-   KLEINE DISPLAYS
-========================================== */
-
-@media (
-    max-width: 420px
-) {
-
-    .modal-hero {
-
-        height:
-            clamp(
-                250px,
-                37vh,
-                310px
-            );
-
-    }
-
-
-    .modal-hero-content {
-
-        left:
-            var(--space-md);
-
-        right:
-            var(--space-md);
-
-        bottom:
-            .9rem;
-
-    }
-
-
-    .modal-title {
-
-        font-size:
-            clamp(
-                1.65rem,
-                7.5vw,
-                2rem
-            );
-
-    }
-
-
-    .modal-body {
-
-        padding:
-            .5rem
-            var(--space-md)
-            var(--space-md);
-
-    }
-
-}
-
-/* ======================================
+    /* ======================================
        META
     ====================================== */
 
@@ -1959,51 +1139,6 @@ Design:
 
     }
 
-
-    /* ======================================
-       ROUTE MODAL
-    ====================================== */
-
-    .route-modal {
-
-        padding:
-            var(--space-lg);
-
-    }
-
-
-    /* ======================================
-       ROUTE WINDOW
-    ====================================== */
-
-    .route-modal-window {
-
-        width:
-            min(
-                100%,
-                380px
-            );
-
-        padding:
-            var(--space-lg);
-
-        border-radius:
-            var(--radius-lg);
-
-    }
-
-
-    /* ======================================
-       ROUTE BUTTONS
-    ====================================== */
-
-    .route-modal-actions {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
 }
 
 
@@ -2015,32 +1150,14 @@ Design:
     max-width: 420px
 ) {
 
-    .modal {
-
-        padding:
-            10px;
-
-    }
-
-
-    .modal-window {
-
-        max-height:
-            calc(
-                100dvh -
-                20px
-            );
-
-    }
-
-
-    .modal-hero {
-
-        min-height:
-            165px;
-
-    }
-
+    /*
+     * KEINE eigene Hero-Höhe.
+     *
+     * Damit übernimmt der Hero weiterhin
+     * das Seitenverhältnis aus dem
+     * Mobile-Block und die Bildlogik bleibt
+     * identisch.
+     */
 
     .modal-hero-content {
 
@@ -2051,7 +1168,19 @@ Design:
             var(--space-md);
 
         bottom:
-            var(--space-md);
+            .8rem;
+
+    }
+
+
+    .modal-title {
+
+        font-size:
+            clamp(
+                1.65rem,
+                7.5vw,
+                2rem
+            );
 
     }
 
@@ -2059,21 +1188,12 @@ Design:
     .modal-body {
 
         padding:
-            var(--space-sm)
+            .5rem
             var(--space-md)
             var(--space-md);
 
     }
 
-
-    /*
-     * Anders als vorher bleibt die Tabelle
-     * auch auf kleinen Displays zweispaltig.
-
-     * Sonst ginge die gewünschte gemeinsame
-     * Mittelachse zwischen Bezeichnung und
-     * Information verloren.
-    */
 
     .modal-meta-item {
 
@@ -2094,24 +1214,7 @@ Design:
 
     }
 
-
-    .route-modal {
-
-        padding:
-            var(--space-md);
-
-    }
-
-
-    .route-modal-window {
-
-        padding:
-            var(--space-lg);
-
-    }
-
 }
-
 
 /* ==========================================
    REDUZIERTE BEWEGUNG
