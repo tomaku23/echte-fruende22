@@ -1553,17 +1553,280 @@ Design:
     }
 
 
-    /* ======================================
-       HERO
-    ====================================== */
+    /* ==========================================
+   HERO
+========================================== */
+
+.modal-hero {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    /*
+     * Der Hero bekommt etwas mehr vertikale
+     * Fläche als bisher.
+     *
+     * Der untere Teil davon gehört optisch
+     * bereits zum Übergang in den Content.
+     */
+
+    height:
+        clamp(
+            310px,
+            43vh,
+            390px
+        );
+
+    min-height:
+        0;
+
+    overflow:
+        hidden;
+
+    background-position:
+        center;
+
+    background-repeat:
+        no-repeat;
+
+    background-color:
+        var(--color-background-medium);
+
+    border-radius:
+        var(--radius-xl)
+        var(--radius-xl)
+        0
+        0;
+
+}
+
+
+/* ==========================================
+   HERO BILDLOGIK
+========================================== */
+
+.modal-hero--contain {
+
+    background-size:
+        contain;
+
+}
+
+
+.modal-hero--cover {
+
+    background-size:
+        cover;
+
+}
+
+
+.modal-hero--empty {
+
+    background-size:
+        cover;
+
+}
+
+
+/* ==========================================
+   HERO VERLAUF
+
+   Der Verlauf beginnt relativ spät.
+
+   Das Bild bleibt dadurch zunächst klar
+   sichtbar und läuft anschließend weich
+   in die Modalfläche aus.
+
+   Der Titel sitzt im dunklen unteren
+   Bereich dieses Verlaufs.
+========================================== */
+
+.modal-hero::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    background:
+
+        linear-gradient(
+            to bottom,
+
+            rgba(13, 13, 13, 0)
+                0%,
+
+            rgba(13, 13, 13, 0)
+                45%,
+
+            rgba(13, 13, 13, .10)
+                55%,
+
+            rgba(13, 13, 13, .32)
+                66%,
+
+            rgba(13, 13, 13, .68)
+                78%,
+
+            rgba(13, 13, 13, .92)
+                90%,
+
+            rgba(13, 13, 13, 1)
+                100%
+        );
+
+    pointer-events:
+        none;
+
+    z-index:
+        1;
+
+}
+
+
+/* ==========================================
+   HERO CONTENT
+
+   Der Titel sitzt bewusst sehr weit unten.
+
+   Dadurch gehört er optisch bereits zum
+   Infobereich, liegt technisch aber noch
+   innerhalb des Hero-Verlaufs.
+========================================== */
+
+.modal-hero-content {
+
+    position:
+        absolute;
+
+    left:
+        var(--space-xl);
+
+    right:
+        var(--space-xl);
+
+    bottom:
+        1.15rem;
+
+    z-index:
+        3;
+
+}
+
+
+/* ==========================================
+   TITEL
+========================================== */
+
+.modal-title {
+
+    margin:
+        0;
+
+    max-width:
+        100%;
+
+    color:
+        var(--color-text-on-dark);
+
+    font-size:
+        clamp(
+            1.8rem,
+            5vw,
+            2.45rem
+        );
+
+    font-weight:
+        750;
+
+    line-height:
+        1.08;
+
+    letter-spacing:
+        -.025em;
+
+    text-shadow:
+
+        0 2px 12px
+        rgba(0, 0, 0, .70),
+
+        0 1px 3px
+        rgba(0, 0, 0, .85);
+
+}
+
+
+/* ==========================================
+   BODY
+
+   Der Body schließt nahezu direkt an den
+   Titel an.
+
+   Dadurch entsteht:
+
+   Bild
+       ↓
+   Verlauf
+       ↓
+   Titel
+       ↓
+   Metadaten
+
+   als eine zusammenhängende Fläche.
+========================================== */
+
+.modal-body {
+
+    position:
+        relative;
+
+    margin-top:
+        0;
+
+    padding:
+        .65rem
+        var(--space-xl)
+        var(--space-xl);
+
+    background:
+        transparent;
+
+    z-index:
+        6;
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (
+    max-width: 768px
+) {
 
     .modal-hero {
 
+        height:
+            clamp(
+                270px,
+                39vh,
+                335px
+            );
+
         min-height:
-            180px;
+            0;
 
         aspect-ratio:
-            16 / 8.5;
+            auto;
 
         border-radius:
             var(--radius-lg)
@@ -1574,10 +1837,6 @@ Design:
     }
 
 
-    /* ======================================
-       HERO CONTENT
-    ====================================== */
-
     .modal-hero-content {
 
         left:
@@ -1587,42 +1846,93 @@ Design:
             var(--space-lg);
 
         bottom:
-            var(--space-lg);
+            1rem;
 
     }
 
-
-    /* ======================================
-       TITEL
-    ====================================== */
 
     .modal-title {
 
         font-size:
             clamp(
-                1.55rem,
+                1.7rem,
                 7vw,
+                2.15rem
+            );
+
+    }
+
+
+    .modal-body {
+
+        padding:
+            .55rem
+            var(--space-lg)
+            var(--space-lg);
+
+    }
+
+}
+
+
+/* ==========================================
+   KLEINE DISPLAYS
+========================================== */
+
+@media (
+    max-width: 420px
+) {
+
+    .modal-hero {
+
+        height:
+            clamp(
+                250px,
+                37vh,
+                310px
+            );
+
+    }
+
+
+    .modal-hero-content {
+
+        left:
+            var(--space-md);
+
+        right:
+            var(--space-md);
+
+        bottom:
+            .9rem;
+
+    }
+
+
+    .modal-title {
+
+        font-size:
+            clamp(
+                1.65rem,
+                7.5vw,
                 2rem
             );
 
     }
 
 
-    /* ======================================
-       BODY
-    ====================================== */
-
     .modal-body {
 
         padding:
-            var(--space-sm)
-            var(--space-lg)
-            var(--space-lg);
+            .5rem
+            var(--space-md)
+            var(--space-md);
 
     }
 
+}
 
-    /* ======================================
+/* ======================================
        META
     ====================================== */
 
