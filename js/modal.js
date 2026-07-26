@@ -406,11 +406,13 @@
         },
 
 
-        /* ==========================================
-           RESET
-        ========================================== */
+            /* ==========================================
+       RESET
+    ========================================== */
 
-                if (this.elements.image) {
+    reset() {
+
+        if (this.elements.image) {
 
             this.elements.image.style.backgroundImage =
                 "";
@@ -433,65 +435,65 @@
         }
 
 
-            if (this.elements.title) {
+        if (this.elements.title) {
 
-                this.elements.title.textContent =
-                    "";
+            this.elements.title.textContent =
+                "";
 
-            }
-
-
-            if (this.elements.meta) {
-
-                this.elements.meta.innerHTML =
-                    "";
-
-            }
+        }
 
 
-            if (this.elements.content) {
+        if (this.elements.meta) {
 
-                this.elements.content.innerHTML =
-                    "";
+            this.elements.meta.innerHTML =
+                "";
 
-                this.elements.content.hidden =
-                    true;
-
-            }
+        }
 
 
-            if (this.elements.actions) {
+        if (this.elements.content) {
 
-                this.elements.actions.innerHTML =
-                    "";
+            this.elements.content.innerHTML =
+                "";
 
-            }
+            this.elements.content.hidden =
+                true;
 
-        },
-
-
-        /* ==========================================
-           RENDER
-        ========================================== */
-
-        render() {
-
-            if (!this.state.event) {
-
-                return;
-
-            }
+        }
 
 
-            this.renderHero();
+        if (this.elements.actions) {
 
-            this.renderMeta();
+            this.elements.actions.innerHTML =
+                "";
 
-            this.renderContent();
+        }
 
-            this.renderActions();
+    },
 
-        },
+
+    /* ==========================================
+       RENDER
+    ========================================== */
+
+    render() {
+
+        if (!this.state.event) {
+
+            return;
+
+        }
+
+
+        this.renderHero();
+
+        this.renderMeta();
+
+        this.renderContent();
+
+        this.renderActions();
+
+    },
 
 
         /* ==========================================
