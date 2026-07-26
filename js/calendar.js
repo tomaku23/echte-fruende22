@@ -1,4 +1,4 @@
-/*/*
+/*
 =====================================================
  ECHTE FRÜNDE '22
  CALENDAR.JS
@@ -748,17 +748,32 @@ getCalendarOptions() {
 
     },
 
-    /* ==========================================
+        /* ==========================================
        EVENTS EINES TAGES
+
+       EF22-Regel für mehrtägige Termine:
+
+       start = erster Veranstaltungstag
+       end   = letzter Veranstaltungstag
+
+       Beide Grenzen sind inklusive.
+
+       Beispiel:
+
+       start = 18.09.2026
+       end   = 20.09.2026
+
+       Veranstaltungstage:
+
+       18.09.
+       19.09.
+       20.09.
+
+       allDay hat auf diese Zuordnung keinen
+       Einfluss.
     ========================================== */
 
     getEventsForDate(date) {
-
-        const key =
-
-            this.getDateKey(
-                date
-            );
 
         return this.state.events
 
@@ -766,18 +781,9 @@ getCalendarOptions() {
 
                 (event) => {
 
-                    if (!event.start) {
-
-                        return false;
-
-                    }
-
-                    return (
-
-                        this.getDateKey(
-                            event.start
-                        ) === key
-
+                    return this.isEventOnDate(
+                        event,
+                        date
                     );
 
                 }
@@ -795,8 +801,105 @@ getCalendarOptions() {
 
     },
 
+
+    /* ==========================================
+       EVENT AN EINEM KALENDERTAG
+
+       Prüft, ob ein Kalendertag innerhalb
+       des inklusiven Veranstaltungszeitraums
+       liegt.
+
+       Uhrzeiten werden bewusst ignoriert.
+    ========================================== */
+
+    isEventOnDate(
+        event,
+        date
+    ) {
+
+        if (
+
+            !event?.start ||
+
+            !date
+
+        ) {
+
+            return false;
+
+        }
+
+
+        const targetKey =
+            this.getDateKey(
+                date
+            );
+
+
+        const startKey =
+            this.getDateKey(
+                event.start
+            );
+
+
+        /*
+         * Ohne Enddatum handelt es sich
+         * automatisch um einen eintägigen
+         * Termin.
+         */
+
+        const endKey =
+
+            event.end
+
+                ? this.getDateKey(
+                    event.end
+                )
+
+                : startKey;
+
+
+        if (
+
+            !targetKey ||
+
+            !startKey ||
+
+            !endKey
+
+        ) {
+
+            return false;
+
+        }
+
+
+        /*
+         * YYYY-MM-DD lässt sich lexikografisch
+         * sicher vergleichen.
+
+         * Beide Grenzen sind inklusive.
+         */
+
+        return (
+
+            targetKey >= startKey &&
+
+            targetKey <= endKey
+
+        );
+
+    },
+
+
     /* ==========================================
        DATUM KEY
+
+       Erzeugt ausschließlich den lokalen
+       Kalendertag im Format YYYY-MM-DD.
+
+       Dadurch spielen Uhrzeiten für die
+       Tageszuordnung keine Rolle.
     ========================================== */
 
     getDateKey(value) {
@@ -809,8 +912,25 @@ getCalendarOptions() {
 
                 : new Date(value);
 
+
+        if (
+
+            !(date instanceof Date) ||
+
+            isNaN(
+                date.getTime()
+            )
+
+        ) {
+
+            return "";
+
+        }
+
+
         const year =
             date.getFullYear();
+
 
         const month =
 
@@ -821,6 +941,7 @@ getCalendarOptions() {
                 "0"
             );
 
+
         const day =
 
             String(
@@ -829,6 +950,7 @@ getCalendarOptions() {
                 2,
                 "0"
             );
+
 
         return `${year}-${month}-${day}`;
 
