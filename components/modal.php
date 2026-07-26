@@ -3,15 +3,24 @@
 =====================================================
  ECHTE FRÜNDE '22
  MODAL.PHP
- Version 3.1
+ Version 4.0
 
  EF22 FRAMEWORK
 =====================================================
 
-Struktur für das Event-Modal.
+Struktur für:
 
-Inhalte werden vollständig durch
-modal.js erzeugt.
+Ebene 1:
+- Website
+
+Ebene 2:
+- Event-Modal
+
+Ebene 3:
+- Routenauswahl
+
+Inhalte und Interaktionen werden durch
+modal.js gesteuert.
 
 =====================================================
 */
@@ -19,6 +28,7 @@ modal.js erzeugt.
 
 <!-- ==========================================
      EVENT MODAL
+     EBENE 2
 ========================================== -->
 
 <div
@@ -26,43 +36,30 @@ modal.js erzeugt.
     class="modal"
     aria-hidden="true">
 
-    <!-- ==========================================
+    <!-- ======================================
          OVERLAY
-    =========================================== -->
+    ======================================= -->
 
     <div
         class="modal-overlay"
+        data-modal-close
         aria-hidden="true">
 
     </div>
 
-    <!-- ==========================================
-         MODAL WINDOW
-    =========================================== -->
+    <!-- ======================================
+         EVENT WINDOW
+    ======================================= -->
 
-    <div
+    <article
         class="modal-window"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modalTitle">
 
-        <!-- ======================================
-             SCHLIESSEN
-        ======================================= -->
-
-        <button
-            id="closeModalButton"
-            class="modal-close"
-            type="button"
-            aria-label="Modal schließen">
-
-            &times;
-
-        </button>
-
-        <!-- ======================================
+        <!-- ==================================
              HERO
-        ======================================= -->
+        =================================== -->
 
         <div
             id="modalImage"
@@ -71,57 +68,191 @@ modal.js erzeugt.
 
         </div>
 
-        <!-- ======================================
+        <!-- ==================================
+             BODY
+        =================================== -->
+
+        <div
+            class="modal-body">
+
+            <!-- ==============================
+                 HEADER
+            =============================== -->
+
+            <header
+                class="modal-header">
+
+                <span
+                    id="modalBadge"
+                    class="modal-badge">
+
+                </span>
+
+                <h2
+                    id="modalTitle"
+                    class="modal-title">
+
+                </h2>
+
+            </header>
+
+            <!-- ==============================
+                 METADATEN
+            =============================== -->
+
+            <section
+                id="modalMeta"
+                class="modal-meta"
+                aria-label="Termininformationen">
+
+            </section>
+
+            <!-- ==============================
+                 BESCHREIBUNG
+            =============================== -->
+
+            <section
+                id="modalContent"
+                class="modal-content">
+
+            </section>
+
+            <!-- ==============================
+                 AKTIONEN
+            =============================== -->
+
+            <div
+                id="modalActions"
+                class="modal-actions">
+
+            </div>
+
+            <!-- ==============================
+                 SCHLIESSEN
+
+                 Bewusst ausschließlich
+                 am Ende des Modals.
+            =============================== -->
+
+            <footer
+                class="modal-footer">
+
+                <button
+                    id="closeModalButton"
+                    class="modal-close-button"
+                    type="button">
+
+                    Schließen
+
+                </button>
+
+            </footer>
+
+        </div>
+
+    </article>
+
+</div>
+
+
+<!-- ==========================================
+     ROUTENAUSWAHL
+     EBENE 3
+========================================== -->
+
+<div
+    id="routeModal"
+    class="route-modal"
+    aria-hidden="true">
+
+    <!-- ======================================
+         OVERLAY
+
+         Klick außerhalb führt zurück zum
+         Event-Modal.
+    ======================================= -->
+
+    <div
+        class="route-modal-overlay"
+        data-route-close
+        aria-hidden="true">
+
+    </div>
+
+    <!-- ======================================
+         ROUTE WINDOW
+    ======================================= -->
+
+    <div
+        class="route-modal-window"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="routeModalTitle">
+
+        <!-- ==================================
              HEADER
-        ======================================= -->
+        =================================== -->
 
         <header
-            class="modal-header">
+            class="route-modal-header">
 
             <span
-                id="modalBadge"
-                class="modal-badge">
+                class="route-modal-eyebrow">
+
+                Navigation
 
             </span>
 
-            <h2
-                id="modalTitle"
-                class="modal-title">
+            <h3
+                id="routeModalTitle"
+                class="route-modal-title">
 
-            </h2>
+                Route öffnen mit
+
+            </h3>
 
         </header>
 
-        <!-- ======================================
-             METADATEN
-        ======================================= -->
+        <!-- ==================================
+             ANBIETER
+        =================================== -->
 
-        <section
-            id="modalMeta"
-            class="modal-meta"
-            aria-label="Termininformationen">
+        <div
+            class="route-modal-actions">
 
-        </section>
+            <a
+                id="routeAppleMaps"
+                class="route-provider-button"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer">
 
-        <!-- ======================================
-             BESCHREIBUNG
-        ======================================= -->
+                <span
+                    class="route-provider-name">
 
-        <section
-            id="modalContent"
-            class="modal-content">
+                    Apple Karten
 
-        </section>
+                </span>
 
-        <!-- ======================================
-             AKTIONEN
-        ======================================= -->
+            </a>
 
-        <footer
-            id="modalActions"
-            class="modal-actions">
+            <a
+                id="routeGoogleMaps"
+                class="route-provider-button"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer">
 
-        </footer>
+                <span
+                    class="route-provider-name">
+
+                    Google Maps
+
+                </span>
+
+            </a>
+
+        </div>
 
     </div>
 

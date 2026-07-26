@@ -2,27 +2,34 @@
 =====================================================
  ECHTE FRÜNDE '22
  MODAL.CSS
- Version 3.0
+ Version 4.0
+
+ EF22 FRAMEWORK
 =====================================================
 
-Styles für das Event-Modal.
+Ebene 1:
+- Website
 
-Verantwortung:
-- Overlay
-- Modal-Fenster
-- Hero
-- Header
-- Metadaten
-- Beschreibung
-- Aktionen
-- Responsive Verhalten
+Ebene 2:
+- Event-Modal
+
+Ebene 3:
+- Routenauswahl
+
+Design:
+- Dark Liquid Glass
+- bernsteinfarbene Lichtquelle oben rechts
+- deutliche räumliche Abhebung
+- responsive
+- scrollbar nur wenn notwendig
 
 =====================================================
 */
 
 
 /* ==========================================
-   MODAL
+   EVENT MODAL
+   EBENE 2
 ========================================== */
 
 .modal {
@@ -36,23 +43,23 @@ Verantwortung:
     display:
         flex;
 
-    justify-content:
-        center;
-
     align-items:
         center;
 
+    justify-content:
+        center;
+
     padding:
-        var(--space-xl);
+        var(--space-lg);
 
     background:
-        rgba(0, 0, 0, .76);
+        rgba(0, 0, 0, .66);
 
     backdrop-filter:
-        blur(10px);
+        blur(12px);
 
     -webkit-backdrop-filter:
-        blur(10px);
+        blur(12px);
 
     opacity:
         0;
@@ -74,7 +81,7 @@ Verantwortung:
 
 
 /* ==========================================
-   MODAL SICHTBAR
+   EVENT MODAL SICHTBAR
 ========================================== */
 
 .modal.show {
@@ -92,7 +99,7 @@ Verantwortung:
 
 
 /* ==========================================
-   OVERLAY
+   EVENT OVERLAY
 ========================================== */
 
 .modal-overlay {
@@ -107,7 +114,7 @@ Verantwortung:
 
 
 /* ==========================================
-   WINDOW
+   EVENT WINDOW
 ========================================== */
 
 .modal-window {
@@ -116,10 +123,16 @@ Verantwortung:
         relative;
 
     width:
-        min(100%, 720px);
+        min(
+            100%,
+            680px
+        );
 
     max-height:
-        min(90vh, 900px);
+        calc(
+            100dvh -
+            3rem
+        );
 
     overflow-x:
         hidden;
@@ -130,37 +143,161 @@ Verantwortung:
     overscroll-behavior:
         contain;
 
-    -webkit-overflow-scrolling:
-        touch;
-
     background:
-        var(--color-background-light);
+
+        radial-gradient(
+            circle at 92% 4%,
+            rgba(255, 190, 92, .20) 0,
+            rgba(255, 176, 70, .10) 12%,
+            rgba(255, 176, 70, .035) 26%,
+            transparent 46%
+        ),
+
+        linear-gradient(
+            145deg,
+            rgba(42, 39, 34, .94) 0%,
+            rgba(23, 23, 22, .96) 42%,
+            rgba(14, 14, 14, .98) 100%
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .14);
 
     border-radius:
         var(--radius-xl);
 
     box-shadow:
-        var(--shadow-lg);
+
+        0 4px 8px
+        rgba(0, 0, 0, .28),
+
+        0 18px 38px
+        rgba(0, 0, 0, .42),
+
+        0 42px 90px
+        rgba(0, 0, 0, .58),
+
+        inset 1px 1px 0
+        rgba(255, 255, 255, .13),
+
+        inset -1px -1px 0
+        rgba(0, 0, 0, .30);
+
+    backdrop-filter:
+        blur(28px)
+        saturate(120%);
+
+    -webkit-backdrop-filter:
+        blur(28px)
+        saturate(120%);
+
+    color:
+        var(--color-text-on-dark);
 
     transform:
-        translateY(30px)
-        scale(.98);
+        translateY(26px)
+        scale(.965);
 
     opacity:
         0;
 
     transition:
         transform var(--transition-normal),
-        opacity var(--transition-normal);
+        opacity var(--transition-normal),
+        filter var(--transition-normal);
 
     z-index:
         1;
+
+    scrollbar-width:
+        thin;
 
 }
 
 
 /* ==========================================
-   WINDOW SICHTBAR
+   GLASLICHT
+========================================== */
+
+.modal-window::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    right:
+        0;
+
+    width:
+        52%;
+
+    height:
+        34%;
+
+    background:
+
+        radial-gradient(
+            ellipse at top right,
+            rgba(255, 204, 126, .24) 0%,
+            rgba(220, 147, 48, .09) 32%,
+            transparent 70%
+        );
+
+    pointer-events:
+        none;
+
+    z-index:
+        4;
+
+}
+
+
+/* ==========================================
+   GLASREFLEXION
+========================================== */
+
+.modal-window::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        1px;
+
+    border-radius:
+        calc(
+            var(--radius-xl) -
+            1px
+        );
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(255, 255, 255, .16),
+
+        inset 1px 0 0
+        rgba(255, 255, 255, .05);
+
+    pointer-events:
+        none;
+
+    z-index:
+        5;
+
+}
+
+
+/* ==========================================
+   EVENT WINDOW SICHTBAR
 ========================================== */
 
 .modal.show .modal-window {
@@ -176,112 +313,22 @@ Verantwortung:
 
 
 /* ==========================================
-   CLOSE BUTTON
-========================================== */
-
-.modal-close {
-
-    position:
-        absolute;
-
-    top:
-        var(--space-md);
-
-    right:
-        var(--space-md);
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    width:
-        44px;
-
-    height:
-        44px;
-
-    padding:
-        0;
-
-    border:
-        1px solid rgba(0, 0, 0, .08);
-
-    border-radius:
-        50%;
-
-    background:
-        rgba(255, 255, 255, .92);
-
-    color:
-        var(--color-text-on-light);
-
-    box-shadow:
-        var(--shadow-sm);
-
-    font-family:
-        var(--font-family);
-
-    font-size:
-        1.65rem;
-
-    font-weight:
-        400;
-
-    line-height:
-        1;
-
-    cursor:
-        pointer;
-
-    transition:
-        background-color var(--transition-fast),
-        transform var(--transition-fast);
-
-    z-index:
-        20;
-
-}
-
-.modal-close:hover {
-
-    background:
-        var(--color-white);
-
-    transform:
-        rotate(90deg);
-
-}
-
-.modal-close:focus-visible {
-
-    outline:
-        3px solid var(--color-primary);
-
-    outline-offset:
-        3px;
-
-}
-
-
-/* ==========================================
    HERO
 ========================================== */
 
 .modal-hero {
 
+    position:
+        relative;
+
     width:
         100%;
 
     aspect-ratio:
-        16 / 9;
+        16 / 8;
 
     min-height:
-        220px;
+        210px;
 
     background-position:
         center;
@@ -295,6 +342,62 @@ Verantwortung:
     background-color:
         var(--color-background-medium);
 
+    border-radius:
+        var(--radius-xl)
+        var(--radius-xl)
+        0
+        0;
+
+}
+
+
+/* ==========================================
+   HERO VERLAUF
+========================================== */
+
+.modal-hero::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    background:
+
+        linear-gradient(
+            to bottom,
+            transparent 48%,
+            rgba(14, 14, 14, .25) 72%,
+            rgba(14, 14, 14, .88) 100%
+        );
+
+    pointer-events:
+        none;
+
+}
+
+
+/* ==========================================
+   BODY
+========================================== */
+
+.modal-body {
+
+    position:
+        relative;
+
+    padding:
+        0
+        var(--space-xl)
+        var(--space-xl);
+
+    z-index:
+        6;
+
 }
 
 
@@ -304,10 +407,13 @@ Verantwortung:
 
 .modal-header {
 
+    position:
+        relative;
+
     padding:
-        var(--space-xl)
-        var(--space-xl)
-        var(--space-lg);
+        var(--space-lg)
+        0
+        var(--space-xl);
 
 }
 
@@ -324,20 +430,46 @@ Verantwortung:
     align-items:
         center;
 
-    width:
-        fit-content;
+    min-height:
+        30px;
 
     margin:
         0
         0
         var(--space-md);
 
-}
+    padding:
+        .35rem
+        .8rem;
 
-.modal-badge[hidden] {
+    border:
+        1px solid
+        rgba(255, 255, 255, .14);
 
-    display:
-        none;
+    border-radius:
+        999px;
+
+    background:
+        rgba(255, 255, 255, .09);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 255, 255, .08);
+
+    color:
+        var(--color-text-on-dark);
+
+    font-size:
+        var(--font-size-xs);
+
+    font-weight:
+        700;
+
+    line-height:
+        1;
+
+    letter-spacing:
+        .04em;
 
 }
 
@@ -352,16 +484,23 @@ Verantwortung:
         0;
 
     color:
-        var(--color-text-on-light);
+        var(--color-text-on-dark);
 
     font-size:
-        var(--font-size-2xl);
+        clamp(
+            1.65rem,
+            5vw,
+            2.35rem
+        );
 
     font-weight:
-        700;
+        750;
 
     line-height:
-        1.2;
+        1.12;
+
+    letter-spacing:
+        -.025em;
 
 }
 
@@ -376,19 +515,12 @@ Verantwortung:
         grid;
 
     gap:
-        var(--space-md);
+        var(--space-sm);
 
-    padding:
+    margin:
         0
-        var(--space-xl)
+        0
         var(--space-xl);
-
-}
-
-.modal-meta[hidden] {
-
-    display:
-        none;
 
 }
 
@@ -403,7 +535,7 @@ Verantwortung:
         grid;
 
     grid-template-columns:
-        120px
+        minmax(88px, 110px)
         minmax(0, 1fr);
 
     gap:
@@ -411,6 +543,26 @@ Verantwortung:
 
     align-items:
         start;
+
+    padding:
+        .85rem
+        0;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, .075);
+
+}
+
+
+/* ==========================================
+   LETZTES META ITEM
+========================================== */
+
+.modal-meta-item:last-child {
+
+    border-bottom:
+        0;
 
 }
 
@@ -422,7 +574,7 @@ Verantwortung:
 .modal-meta-label {
 
     color:
-        var(--color-primary-dark);
+        var(--color-primary);
 
     font-size:
         var(--font-size-sm);
@@ -431,7 +583,7 @@ Verantwortung:
         700;
 
     line-height:
-        var(--line-height);
+        1.5;
 
 }
 
@@ -446,13 +598,13 @@ Verantwortung:
         0;
 
     color:
-        var(--color-text-on-light);
+        var(--color-text-on-dark);
 
     font-size:
         var(--font-size-md);
 
     line-height:
-        var(--line-height);
+        1.5;
 
     overflow-wrap:
         anywhere;
@@ -461,95 +613,84 @@ Verantwortung:
 
 
 /* ==========================================
-   CONTENT
+   BESCHREIBUNG
 ========================================== */
 
 .modal-content {
 
-    padding:
+    margin:
         0
-        var(--space-xl)
+        0
         var(--space-xl);
 
-    color:
-        var(--color-text-on-light);
+    padding:
+        var(--space-lg);
 
-    font-size:
-        var(--font-size-md);
+    background:
+        rgba(255, 255, 255, .045);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .075);
+
+    border-radius:
+        var(--radius-lg);
+
+    color:
+        var(--color-text-muted-on-dark);
 
     line-height:
-        1.75;
+        1.7;
 
 }
 
-.modal-content[hidden] {
 
-    display:
-        none;
-
-}
+/* ==========================================
+   BESCHREIBUNG ABSATZ
+========================================== */
 
 .modal-content p {
 
     margin:
-        0
-        0
-        var(--space-md);
-
-}
-
-.modal-content p:last-child {
-
-    margin-bottom:
         0;
 
 }
 
 
 /* ==========================================
-   ACTIONS
+   AKTIONEN
 ========================================== */
 
 .modal-actions {
 
     display:
-        flex;
+        grid;
 
-    flex-wrap:
-        wrap;
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(150px, 1fr)
+        );
 
     gap:
-        var(--space-md);
+        var(--space-sm);
 
-    justify-content:
-        flex-end;
-
-    padding:
+    margin:
         var(--space-lg)
-        var(--space-xl)
-        var(--space-xl);
-
-    border-top:
-        1px solid rgba(0, 0, 0, .08);
-
-}
-
-.modal-actions[hidden] {
-
-    display:
-        none;
+        0
+        var(--space-sm);
 
 }
 
 
 /* ==========================================
-   ACTION BUTTONS
+   ACTION BUTTON
 ========================================== */
 
-.modal-actions .btn {
+.modal-action-button {
 
     display:
-        inline-flex;
+        flex;
 
     align-items:
         center;
@@ -558,32 +699,47 @@ Verantwortung:
         center;
 
     min-height:
-        46px;
+        50px;
 
     padding:
-        .75rem
-        1.25rem;
+        .85rem
+        1.2rem;
+
+    appearance:
+        none;
+
+    -webkit-appearance:
+        none;
 
     border:
-        1px solid var(--color-primary);
+        1px solid
+        rgba(255, 255, 255, .14);
 
     border-radius:
         var(--radius-md);
 
     background:
-        var(--color-primary);
+        rgba(255, 255, 255, .075);
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(255, 255, 255, .10),
+
+        0 5px 14px
+        rgba(0, 0, 0, .18);
 
     color:
-        var(--color-white);
+        var(--color-text-on-dark);
 
     font-family:
-        var(--font-family);
+        inherit;
 
     font-size:
-        var(--font-size-sm);
+        var(--font-size-md);
 
     font-weight:
-        700;
+        650;
 
     line-height:
         1;
@@ -595,53 +751,184 @@ Verantwortung:
         pointer;
 
     transition:
+        transform var(--transition-fast),
         background-color var(--transition-fast),
-        border-color var(--transition-fast),
-        color var(--transition-fast),
-        transform var(--transition-fast);
+        border-color var(--transition-fast);
 
 }
 
-.modal-actions .btn:hover {
+
+/* ==========================================
+   ACTION HOVER
+========================================== */
+
+.modal-action-button:hover {
 
     background:
-        var(--color-primary-dark);
+        rgba(255, 255, 255, .12);
 
     border-color:
-        var(--color-primary-dark);
+        rgba(255, 255, 255, .22);
 
     transform:
         translateY(-1px);
 
 }
 
-.modal-actions .btn-outline {
 
-    background:
-        transparent;
+/* ==========================================
+   ACTION ACTIVE
+========================================== */
 
-    color:
-        var(--color-primary-dark);
+.modal-action-button:active {
+
+    transform:
+        translateY(1px);
 
 }
 
-.modal-actions .btn-outline:hover {
+
+/* ==========================================
+   ROUTE BUTTON
+========================================== */
+
+.modal-route-button {
 
     background:
-        var(--color-primary);
+
+        linear-gradient(
+            135deg,
+            rgba(111, 191, 115, .20),
+            rgba(111, 191, 115, .08)
+        );
 
     border-color:
-        var(--color-primary);
-
-    color:
-        var(--color-white);
+        rgba(111, 191, 115, .30);
 
 }
 
-.modal-actions .btn:focus-visible {
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.modal-footer {
+
+    margin-top:
+        var(--space-sm);
+
+    padding-top:
+        var(--space-lg);
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, .08);
+
+}
+
+
+/* ==========================================
+   SCHLIESSEN BUTTON
+========================================== */
+
+.modal-close-button {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        100%;
+
+    min-height:
+        52px;
+
+    padding:
+        .9rem
+        1.25rem;
+
+    appearance:
+        none;
+
+    -webkit-appearance:
+        none;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .14);
+
+    border-radius:
+        var(--radius-md);
+
+    background:
+        rgba(255, 255, 255, .075);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 255, 255, .09);
+
+    color:
+        var(--color-text-on-dark);
+
+    font-family:
+        inherit;
+
+    font-size:
+        var(--font-size-md);
+
+    font-weight:
+        650;
+
+    cursor:
+        pointer;
+
+    transition:
+        background-color var(--transition-fast),
+        transform var(--transition-fast);
+
+}
+
+
+/* ==========================================
+   SCHLIESSEN HOVER
+========================================== */
+
+.modal-close-button:hover {
+
+    background:
+        rgba(255, 255, 255, .12);
+
+}
+
+
+/* ==========================================
+   SCHLIESSEN ACTIVE
+========================================== */
+
+.modal-close-button:active {
+
+    transform:
+        scale(.985);
+
+}
+
+
+/* ==========================================
+   FOCUS
+========================================== */
+
+.modal-action-button:focus-visible,
+.modal-close-button:focus-visible,
+.route-provider-button:focus-visible {
 
     outline:
-        3px solid var(--color-primary);
+        2px solid
+        var(--color-primary);
 
     outline-offset:
         3px;
@@ -650,22 +937,498 @@ Verantwortung:
 
 
 /* ==========================================
+   EBENE 2 WIRD ZURÜCKGENOMMEN
+
+   Wenn die Routenauswahl geöffnet wird,
+   bleibt das Event-Modal sichtbar, tritt
+   räumlich aber nach hinten.
+========================================== */
+
+.modal.route-is-open .modal-window {
+
+    transform:
+        scale(.975);
+
+    filter:
+        brightness(.72)
+        saturate(.82);
+
+}
+
+
+/* ==========================================
+   ROUTENAUSWAHL
+   EBENE 3
+========================================== */
+
+.route-modal {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        var(--space-lg);
+
+    background:
+        rgba(0, 0, 0, .36);
+
+    backdrop-filter:
+        blur(8px);
+
+    -webkit-backdrop-filter:
+        blur(8px);
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity var(--transition-normal),
+        visibility var(--transition-normal);
+
+    z-index:
+        calc(
+            var(--z-modal) +
+            10
+        );
+
+}
+
+
+/* ==========================================
+   ROUTENAUSWAHL SICHTBAR
+========================================== */
+
+.route-modal.show {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    pointer-events:
+        auto;
+
+}
+
+
+/* ==========================================
+   ROUTE OVERLAY
+========================================== */
+
+.route-modal-overlay {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+}
+
+
+/* ==========================================
+   ROUTE WINDOW
+========================================== */
+
+.route-modal-window {
+
+    position:
+        relative;
+
+    width:
+        min(
+            100%,
+            420px
+        );
+
+    padding:
+        var(--space-xl);
+
+    overflow:
+        hidden;
+
+    background:
+
+        radial-gradient(
+            circle at 90% 5%,
+            rgba(255, 198, 108, .28) 0%,
+            rgba(218, 145, 45, .11) 24%,
+            transparent 52%
+        ),
+
+        linear-gradient(
+            145deg,
+            rgba(48, 44, 38, .96),
+            rgba(19, 19, 18, .98)
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .18);
+
+    border-radius:
+        var(--radius-xl);
+
+    box-shadow:
+
+        0 12px 28px
+        rgba(0, 0, 0, .40),
+
+        0 38px 90px
+        rgba(0, 0, 0, .68),
+
+        inset 1px 1px 0
+        rgba(255, 255, 255, .16);
+
+    backdrop-filter:
+        blur(32px)
+        saturate(125%);
+
+    -webkit-backdrop-filter:
+        blur(32px)
+        saturate(125%);
+
+    color:
+        var(--color-text-on-dark);
+
+    opacity:
+        0;
+
+    transform:
+        translateY(18px)
+        scale(.94);
+
+    transition:
+        opacity var(--transition-normal),
+        transform var(--transition-normal);
+
+    z-index:
+        1;
+
+}
+
+
+/* ==========================================
+   ROUTE WINDOW SICHTBAR
+========================================== */
+
+.route-modal.show .route-modal-window {
+
+    opacity:
+        1;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+/* ==========================================
+   ROUTE LICHTREFLEX
+========================================== */
+
+.route-modal-window::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        -70px;
+
+    right:
+        -60px;
+
+    width:
+        190px;
+
+    height:
+        190px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 207, 132, .24),
+            rgba(220, 146, 48, .08) 44%,
+            transparent 72%
+        );
+
+    pointer-events:
+        none;
+
+}
+
+
+/* ==========================================
+   ROUTE HEADER
+========================================== */
+
+.route-modal-header {
+
+    position:
+        relative;
+
+    margin-bottom:
+        var(--space-lg);
+
+    z-index:
+        1;
+
+}
+
+
+/* ==========================================
+   ROUTE EYEBROW
+========================================== */
+
+.route-modal-eyebrow {
+
+    display:
+        block;
+
+    margin-bottom:
+        var(--space-sm);
+
+    color:
+        var(--color-primary);
+
+    font-size:
+        var(--font-size-xs);
+
+    font-weight:
+        700;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .09em;
+
+}
+
+
+/* ==========================================
+   ROUTE TITLE
+========================================== */
+
+.route-modal-title {
+
+    margin:
+        0;
+
+    color:
+        var(--color-text-on-dark);
+
+    font-size:
+        var(--font-size-xl);
+
+    line-height:
+        1.2;
+
+}
+
+
+/* ==========================================
+   ROUTE ACTIONS
+========================================== */
+
+.route-modal-actions {
+
+    position:
+        relative;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:
+        var(--space-sm);
+
+    z-index:
+        1;
+
+}
+
+
+/* ==========================================
+   ROUTE PROVIDER
+========================================== */
+
+.route-provider-button {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        58px;
+
+    padding:
+        1rem;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .14);
+
+    border-radius:
+        var(--radius-md);
+
+    background:
+        rgba(255, 255, 255, .075);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 255, 255, .10);
+
+    color:
+        var(--color-text-on-dark);
+
+    text-decoration:
+        none;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
+
+}
+
+
+/* ==========================================
+   ROUTE PROVIDER HOVER
+========================================== */
+
+.route-provider-button:hover {
+
+    background:
+        rgba(255, 255, 255, .13);
+
+    border-color:
+        rgba(255, 255, 255, .22);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* ==========================================
+   ROUTE PROVIDER ACTIVE
+========================================== */
+
+.route-provider-button:active {
+
+    transform:
+        translateY(1px);
+
+}
+
+
+/* ==========================================
+   ROUTE PROVIDER NAME
+========================================== */
+
+.route-provider-name {
+
+    font-size:
+        var(--font-size-md);
+
+    font-weight:
+        650;
+
+    text-align:
+        center;
+
+}
+
+
+/* ==========================================
+   VERSTECKTE ELEMENTE
+========================================== */
+
+.modal [hidden],
+.route-modal [hidden] {
+
+    display:
+        none !important;
+
+}
+
+
+/* ==========================================
+   BODY SCROLL SPERREN
+========================================== */
+
+.no-scroll {
+
+    overflow:
+        hidden;
+
+}
+
+
+/* ==========================================
    MOBILE
 ========================================== */
 
-@media (max-width: 768px) {
+@media (
+    max-width: 768px
+) {
+
+    /* ======================================
+       EVENT MODAL
+    ====================================== */
 
     .modal {
 
-        align-items:
-            flex-end;
-
         padding:
-            var(--space-md)
-            var(--space-md)
-            0;
+            14px;
 
     }
+
+
+    /* ======================================
+       EVENT WINDOW
+
+       Fast das gesamte Display,
+       aber bewusst nicht randlos.
+    ====================================== */
 
     .modal-window {
 
@@ -673,61 +1436,209 @@ Verantwortung:
             100%;
 
         max-height:
-            92dvh;
+            calc(
+                100dvh -
+                28px
+            );
 
         border-radius:
-            var(--radius-xl)
-            var(--radius-xl)
-            0
-            0;
-
-        transform:
-            translateY(40px);
+            var(--radius-lg);
 
     }
 
-    .modal.show .modal-window {
 
-        transform:
-            translateY(0);
+    /* ======================================
+       GLASREFLEXION
+    ====================================== */
+
+    .modal-window::after {
+
+        border-radius:
+            calc(
+                var(--radius-lg) -
+                1px
+            );
+
+    }
+
+
+    /* ======================================
+       HERO
+    ====================================== */
+
+    .modal-hero {
+
+        min-height:
+            180px;
+
+        aspect-ratio:
+            16 / 8.5;
+
+        border-radius:
+            var(--radius-lg)
+            var(--radius-lg)
+            0
+            0;
+
+    }
+
+
+    /* ======================================
+       BODY
+    ====================================== */
+
+    .modal-body {
+
+        padding:
+            0
+            var(--space-lg)
+            var(--space-lg);
+
+    }
+
+
+    /* ======================================
+       HEADER
+    ====================================== */
+
+    .modal-header {
+
+        padding:
+            var(--space-lg)
+            0;
+
+    }
+
+
+    /* ======================================
+       TITEL
+    ====================================== */
+
+    .modal-title {
+
+        font-size:
+            clamp(
+                1.55rem,
+                7vw,
+                2rem
+            );
+
+    }
+
+
+    /* ======================================
+       META
+    ====================================== */
+
+    .modal-meta-item {
+
+        grid-template-columns:
+            88px
+            minmax(0, 1fr);
+
+        gap:
+            var(--space-sm);
+
+    }
+
+
+    /* ======================================
+       ACTIONS
+    ====================================== */
+
+    .modal-actions {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    /* ======================================
+       ROUTE MODAL
+    ====================================== */
+
+    .route-modal {
+
+        padding:
+            var(--space-lg);
+
+    }
+
+
+    /* ======================================
+       ROUTE WINDOW
+    ====================================== */
+
+    .route-modal-window {
+
+        width:
+            min(
+                100%,
+                380px
+            );
+
+        padding:
+            var(--space-lg);
+
+        border-radius:
+            var(--radius-lg);
+
+    }
+
+
+    /* ======================================
+       ROUTE BUTTONS
+    ====================================== */
+
+    .route-modal-actions {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+/* ==========================================
+   KLEINE DISPLAYS
+========================================== */
+
+@media (
+    max-width: 420px
+) {
+
+    .modal {
+
+        padding:
+            10px;
+
+    }
+
+    .modal-window {
+
+        max-height:
+            calc(
+                100dvh -
+                20px
+            );
+
+    }
+
+    .modal-body {
+
+        padding:
+            0
+            var(--space-md)
+            var(--space-md);
 
     }
 
     .modal-hero {
 
         min-height:
-            0;
-
-        aspect-ratio:
-            16 / 9;
-
-    }
-
-    .modal-header {
-
-        padding:
-            var(--space-lg)
-            var(--space-lg)
-            var(--space-md);
-
-    }
-
-    .modal-title {
-
-        font-size:
-            var(--font-size-xl);
-
-    }
-
-    .modal-meta {
-
-        gap:
-            var(--space-md);
-
-        padding:
-            0
-            var(--space-lg)
-            var(--space-lg);
+            165px;
 
     }
 
@@ -746,37 +1657,19 @@ Verantwortung:
         font-size:
             var(--font-size-xs);
 
-        text-transform:
-            uppercase;
-
-        letter-spacing:
-            .04em;
-
     }
 
-    .modal-content {
+    .route-modal {
 
         padding:
-            0
-            var(--space-lg)
-            var(--space-lg);
+            var(--space-md);
 
     }
 
-    .modal-actions {
-
-        flex-direction:
-            column;
+    .route-modal-window {
 
         padding:
             var(--space-lg);
-
-    }
-
-    .modal-actions .btn {
-
-        width:
-            100%;
 
     }
 
@@ -784,110 +1677,24 @@ Verantwortung:
 
 
 /* ==========================================
-   KLEINE DISPLAYS
+   REDUZIERTE BEWEGUNG
 ========================================== */
 
-@media (max-width: 420px) {
-
-    .modal {
-
-        padding-left:
-            var(--space-sm);
-
-        padding-right:
-            var(--space-sm);
-
-    }
-
-    .modal-close {
-
-        top:
-            var(--space-sm);
-
-        right:
-            var(--space-sm);
-
-        width:
-            40px;
-
-        height:
-            40px;
-
-    }
-
-    .modal-header {
-
-        padding-left:
-            var(--space-md);
-
-        padding-right:
-            var(--space-md);
-
-    }
-
-    .modal-meta {
-
-        padding-left:
-            var(--space-md);
-
-        padding-right:
-            var(--space-md);
-
-    }
-
-    .modal-content {
-
-        padding-left:
-            var(--space-md);
-
-        padding-right:
-            var(--space-md);
-
-    }
-
-    .modal-actions {
-
-        padding:
-            var(--space-md);
-
-    }
-
-}
-
-
-/* ==========================================
-   REDUCED MOTION
-========================================== */
-
-@media (prefers-reduced-motion: reduce) {
+@media (
+    prefers-reduced-motion: reduce
+) {
 
     .modal,
     .modal-window,
-    .modal-close,
-    .modal-actions .btn {
+    .route-modal,
+    .route-modal-window,
+    .modal-action-button,
+    .modal-close-button,
+    .route-provider-button {
 
         transition:
             none;
 
     }
-
-}
-
-
-/* ==========================================
-   UTILITIES
-========================================== */
-
-.modal-hidden {
-
-    display:
-        none !important;
-
-}
-
-.no-scroll {
-
-    overflow:
-        hidden;
 
 }
